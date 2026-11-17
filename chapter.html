@@ -1,0 +1,868 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cost Accounting | MH ONE</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            line-height: 1.9;
+        }
+
+        .lesson-card {
+            margin-bottom: 25px;
+            padding: 25px;
+        }
+
+        .lesson-card h2 {
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+
+        .lesson-card h3 {
+            margin-top: 20px;
+        }
+
+        .lesson-card li {
+            margin-bottom: 8px;
+        }
+
+        .example {
+            background: rgba(124, 58, 237, 0.08);
+            border-right: 4px solid #D4AF37;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+        }
+
+        .quiz-option {
+            display: block;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #8885;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .quiz-option:hover {
+            border-color: #D4AF37;
+        }
+
+        .quiz-option input {
+            margin-left: 8px;
+        }
+
+        .quiz-button {
+            background: #D4AF37;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #quizResult {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .language-button {
+            background: #D4AF37;
+            color: white;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+            <h1>MH ONE</h1>
+            <span>BY MOHAMED HATEM</span>
+        </div>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="courses.html">Courses</a>
+        </nav>
+
+        <button id="languageButton" class="language-button">
+            English
+        </button>
+
+    </header>
+
+    <main>
+
+        <section class="welcome">
+            <h2 id="mainTitle">محاسبة التكاليف</h2>
+            <p id="mainSubtitle">الفصل الأول: مفهوم التكاليف وتبويباتها</p>
+        </section>
+
+        <section class="course-content" id="lessons">
+
+        </section>
+
+        <section class="card lesson-card">
+
+            <h2 id="quizTitle">اختبر معلوماتك</h2>
+
+            <p id="questionText"></p>
+
+            <div id="quizOptions"></div>
+
+            <button class="quiz-button" id="checkButton">
+                تأكيد الإجابة
+            </button>
+
+            <p id="quizResult"></p>
+
+            <button class="quiz-button" id="nextButton" style="display:none;">
+                السؤال التالي
+            </button>
+
+        </section>
+
+        <div style="text-align:center; margin:30px;">
+            <a href="courses.html" class="profile-back" id="backButton">
+                العودة إلى المواد
+            </a>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>© 2026 MH ONE - By Mohamed Hatem</p>
+    </footer>
+
+    <script>
+
+        const lessons = {
+
+            ar: [
+
+                {
+                    title: "الدرس الأول: الإلمام بمفهوم التكاليف",
+                    content: `
+                    <h3>أولاً: ما المقصود بالتكلفة؟</h3>
+
+                    <p>
+                    التكلفة هي مقدار الموارد الاقتصادية التي تضحي بها المنشأة
+                    أو تستخدمها من أجل تحقيق هدف معين، مثل إنتاج سلعة أو تقديم خدمة.
+                    </p>
+
+                    <p>
+                    بمعنى أبسط: أي مورد تستخدمه المنشأة في نشاطها وله قيمة مالية
+                    يمكن أن يمثل تكلفة.
+                    </p>
+
+                    <h3>ثانياً: مثال عملي</h3>
+
+                    <div class="example">
+                    تخيل أن مصنعاً ينتج الأثاث، واستخدم:
+                    <ul>
+                        <li>خشباً بقيمة 5,000 جنيه.</li>
+                        <li>أجور عمال بقيمة 2,000 جنيه.</li>
+                        <li>كهرباء بقيمة 1,000 جنيه.</li>
+                    </ul>
+
+                    إجمالي هذه التكاليف = 8,000 جنيه.
+                    </div>
+
+                    <h3>ثالثاً: أهمية معرفة التكلفة</h3>
+
+                    <ul>
+                        <li>تحديد تكلفة إنتاج المنتج.</li>
+                        <li>المساعدة في تحديد سعر البيع.</li>
+                        <li>الرقابة على الموارد وتقليل الهدر.</li>
+                        <li>مساعدة الإدارة في اتخاذ القرارات.</li>
+                        <li>المساعدة في قياس نتائج النشاط.</li>
+                    </ul>
+
+                    <h3>رابعاً: تكلفة الوحدة</h3>
+
+                    <p>
+                    تكلفة الوحدة = إجمالي التكاليف ÷ عدد الوحدات المنتجة.
+                    </p>
+
+                    <div class="example">
+                    إذا كانت تكلفة إنتاج 100 كرسي تساوي 8,000 جنيه:
+
+                    <p>8,000 ÷ 100 = 80 جنيهاً للكرسي الواحد.</p>
+                    </div>
+                    `
+                },
+
+                {
+                    title: "الدرس الثاني: التكلفة والنفقة والمصروف والخسارة والتضحية",
+                    content: `
+                    <h3>1- التكلفة</h3>
+                    <p>
+                    هي قيمة الموارد التي يتم استخدامها أو التضحية بها لتحقيق هدف معين.
+                    مثال: تكلفة المواد الخام المستخدمة في تصنيع منتج.
+                    </p>
+
+                    <h3>2- النفقة</h3>
+                    <p>
+                    هي قيمة ما تتحمله المنشأة للحصول على سلعة أو خدمة أو مورد.
+                    وقد تكون نقدية أو تنشأ عنها التزامات.
+                    </p>
+
+                    <h3>3- المصروف</h3>
+                    <p>
+                    هو تكلفة تم استهلاكها أو تحميلها على الفترة المحاسبية
+                    للمساهمة في تحقيق الإيراد.
+                    </p>
+
+                    <div class="example">
+                    مثال: إيجار المكتب الخاص بالفترة الحالية يعتبر مصروفاً
+                    لأنه يخص الفترة التي يتم إعداد الحسابات عنها.
+                    </div>
+
+                    <h3>4- الخسارة</h3>
+                    <p>
+                    هي انخفاض في المنافع الاقتصادية أو فقد موارد دون الحصول
+                    على منفعة مقابلة متوقعة.
+                    </p>
+
+                    <div class="example">
+                    مثال: تلف مواد مخزنة بسبب حادث، دون إمكانية الاستفادة منها.
+                    </div>
+
+                    <h3>5- التضحية</h3>
+                    <p>
+                    هي التخلي عن مورد أو منفعة من أجل الحصول على منفعة أخرى
+                    أو تحقيق هدف معين.
+                    </p>
+
+                    <h3>الفرق بينهم باختصار</h3>
+
+                    <ul>
+                        <li>التكلفة: قيمة الموارد المرتبطة بهدف.</li>
+                        <li>النفقة: ما تتحمله المنشأة للحصول على مورد أو خدمة.</li>
+                        <li>المصروف: تكلفة تخص الفترة وتم استهلاكها.</li>
+                        <li>الخسارة: فقد منفعة اقتصادية دون مقابل مناسب.</li>
+                        <li>التضحية: التخلي عن منفعة للحصول على منفعة أخرى.</li>
+                    </ul>
+
+                    <p>
+                    ملحوظة: قد تكون النفقة تكلفة، ثم تتحول إلى مصروف عند استهلاك
+                    المورد، لكن ليس كل ما تدفعه المنشأة يصبح مصروفاً فوراً.
+                    </p>
+                    `
+                },
+
+                {
+                    title: "الدرس الثالث: محاسبة التكاليف والمحاسبة المالية",
+                    content: `
+                    <h3>أولاً: محاسبة التكاليف</h3>
+
+                    <p>
+                    فرع محاسبي يهتم بتجميع وتحليل وتحديد تكلفة المنتجات
+                    والخدمات والأنشطة، وتوفير معلومات تساعد الإدارة.
+                    </p>
+
+                    <h3>ثانياً: المحاسبة المالية</h3>
+
+                    <p>
+                    تهتم بتسجيل العمليات المالية وتلخيصها وإعداد القوائم
+                    المالية التي توضح نتيجة النشاط والمركز المالي للمنشأة.
+                    </p>
+
+                    <h3>أوجه التشابه</h3>
+
+                    <ul>
+                        <li>كلتاهما تستخدمان البيانات المالية.</li>
+                        <li>كلتاهما تهتمان بتوفير معلومات مفيدة.</li>
+                        <li>كلتاهما تساعدان في تقييم أداء المنشأة.</li>
+                    </ul>
+
+                    <h3>أوجه الاختلاف</h3>
+
+                    <ul>
+                        <li>محاسبة التكاليف تهتم بتكلفة المنتجات والأنشطة.</li>
+                        <li>المحاسبة المالية تهتم بالنتائج والمركز المالي للمنشأة.</li>
+                        <li>محاسبة التكاليف تخدم الإدارة الداخلية بشكل أساسي.</li>
+                        <li>المحاسبة المالية تخدم مستخدمين داخليين وخارجيين.</li>
+                        <li>تقارير التكاليف يمكن إعدادها حسب حاجة الإدارة، أما القوائم المالية فلها قواعد ومعايير محددة.</li>
+                    </ul>
+
+                    <div class="example">
+                    مثال: محاسبة التكاليف تحدد تكلفة إنتاج الكرسي الواحد،
+                    أما المحاسبة المالية فتساعد في إعداد قائمة الدخل
+                    التي توضح الإيرادات والمصروفات والربح أو الخسارة.
+                    </div>
+                    `
+                },
+
+                {
+                    title: "الدرس الرابع: طرق تبويب التكاليف",
+                    content: `
+                    <p>
+                    تبويب التكاليف يعني تقسيمها إلى مجموعات وفقاً لأساس معين
+                    حتى يسهل فهمها وتحليلها والرقابة عليها.
+                    </p>
+
+                    <h3>1- حسب الوظيفة</h3>
+                    <ul>
+                        <li>تكاليف إنتاجية: مرتبطة بتصنيع المنتج.</li>
+                        <li>تكاليف تسويقية: مرتبطة بالبيع والتوزيع والإعلان.</li>
+                        <li>تكاليف إدارية: مرتبطة بإدارة المنشأة.</li>
+                    </ul>
+
+                    <h3>2- حسب إمكانية التتبع</h3>
+                    <ul>
+                        <li>تكاليف مباشرة: يمكن تتبعها وربطها بمنتج معين بسهولة.</li>
+                        <li>تكاليف غير مباشرة: لا يمكن ربطها بمنتج معين بسهولة أو بتكلفة اقتصادية مناسبة.</li>
+                    </ul>
+
+                    <div class="example">
+                    مثال:
+                    الخشب المستخدم في صناعة كرسي تكلفة مباشرة.
+                    أما إيجار المصنع الذي ينتج عدة منتجات فهو تكلفة غير مباشرة
+                    بالنسبة لكل منتج.
+                    </div>
+
+                    <h3>3- حسب سلوك التكلفة</h3>
+                    <ul>
+                        <li>تكاليف ثابتة: إجماليها لا يتغير داخل حدود النشاط الملائمة خلال فترة معينة.</li>
+                        <li>تكاليف متغيرة: إجماليها يتغير مع مستوى النشاط.</li>
+                        <li>تكاليف مختلطة: تحتوي على جزء ثابت وجزء متغير.</li>
+                    </ul>
+
+                    <div class="example">
+                    مثال:
+                    إيجار المصنع غالباً تكلفة ثابتة خلال فترة العقد.
+                    المواد الخام غالباً تكلفة متغيرة مع كمية الإنتاج.
+                    فاتورة الكهرباء قد تحتوي على جزء ثابت وجزء متغير.
+                    </div>
+
+                    <h3>أهمية التبويب</h3>
+                    <ul>
+                        <li>تسهيل الرقابة على التكاليف.</li>
+                        <li>المساعدة في التخطيط.</li>
+                        <li>دعم القرارات الإدارية.</li>
+                        <li>حساب تكلفة المنتجات والخدمات.</li>
+                    </ul>
+                    `
+                },
+
+                {
+                    title: "الدرس الخامس: القوائم المالية الصناعية والتجارية",
+                    content: `
+                    <h3>أولاً: المنشآت التجارية</h3>
+
+                    <p>
+                    المنشأة التجارية تشتري البضائع جاهزة ثم تعيد بيعها
+                    دون إجراء عملية تصنيع أساسية عليها.
+                    </p>
+
+                    <div class="example">
+                    مثال: محل يشتري أجهزة كهربائية جاهزة ثم يبيعها للعملاء.
+                    </div>
+
+                    <p>من أهم الحسابات:</p>
+                    <ul>
+                        <li>المشتريات.</li>
+                        <li>المخزون أو بضاعة آخر المدة.</li>
+                        <li>تكلفة البضاعة المباعة.</li>
+                        <li>المبيعات.</li>
+                    </ul>
+
+                    <h3>ثانياً: المنشآت الصناعية</h3>
+
+                    <p>
+                    المنشأة الصناعية تشتري المواد الخام وتستخدم العمالة
+                    والآلات لتحويلها إلى منتجات تامة قابلة للبيع.
+                    </p>
+
+                    <div class="example">
+                    مثال: مصنع يشتري الخشب ويستخدم العمال والآلات
+                    لإنتاج الأثاث.
+                    </div>
+
+                    <p>من أهم الحسابات:</p>
+                    <ul>
+                        <li>مخزون المواد الخام.</li>
+                        <li>الإنتاج تحت التشغيل.</li>
+                        <li>الإنتاج التام.</li>
+                        <li>تكلفة الإنتاج التام.</li>
+                        <li>تكلفة البضاعة المباعة.</li>
+                    </ul>
+
+                    <h3>الفرق الأساسي</h3>
+
+                    <p>
+                    المنشأة التجارية تشتري بضاعة جاهزة لإعادة بيعها،
+                    أما المنشأة الصناعية فتحول المواد الخام إلى منتجات تامة.
+                    </p>
+
+                    <p>
+                    لذلك تحتاج المنشأة الصناعية إلى حسابات تفصيلية
+                    لتحديد تكلفة التصنيع ومراحل الإنتاج.
+                    </p>
+                    `
+                }
+
+            ],
+
+            en: [
+
+                {
+                    title: "Lesson 1: Understanding Costs",
+                    content: `
+                    <h3>What is a Cost?</h3>
+                    <p>
+                    Cost is the monetary value of resources used or sacrificed
+                    to achieve a specific objective, such as producing goods
+                    or providing services.
+                    </p>
+
+                    <h3>Practical Example</h3>
+                    <div class="example">
+                    A furniture factory uses:
+                    <ul>
+                        <li>Wood: EGP 5,000</li>
+                        <li>Workers' wages: EGP 2,000</li>
+                        <li>Electricity: EGP 1,000</li>
+                    </ul>
+                    Total cost = EGP 8,000.
+                    </div>
+
+                    <h3>Why are costs important?</h3>
+                    <ul>
+                        <li>Determining product costs.</li>
+                        <li>Helping set selling prices.</li>
+                        <li>Controlling resources and reducing waste.</li>
+                        <li>Supporting management decisions.</li>
+                    </ul>
+
+                    <h3>Unit Cost</h3>
+                    <p>Unit cost = Total cost ÷ Number of units.</p>
+                    <div class="example">
+                    EGP 8,000 ÷ 100 chairs = EGP 80 per chair.
+                    </div>
+                    `
+                },
+
+                {
+                    title: "Lesson 2: Cost, Expenditure, Expense, Loss and Sacrifice",
+                    content: `
+                    <h3>1. Cost</h3>
+                    <p>The value of resources used to achieve an objective.</p>
+
+                    <h3>2. Expenditure</h3>
+                    <p>The amount incurred to acquire goods, services or resources. It may involve cash payment or an obligation.</p>
+
+                    <h3>3. Expense</h3>
+                    <p>A cost consumed or charged to an accounting period to help generate revenue.</p>
+
+                    <h3>4. Loss</h3>
+                    <p>A decrease in economic benefits without an expected corresponding benefit.</p>
+
+                    <h3>5. Sacrifice</h3>
+                    <p>Giving up a resource or benefit to obtain another benefit or achieve an objective.</p>
+
+                    <div class="example">
+                    Example: Materials purchased may initially be recorded as an asset.
+                    When consumed, their cost is charged to production.
+                    </div>
+                    `
+                },
+
+                {
+                    title: "Lesson 3: Cost Accounting and Financial Accounting",
+                    content: `
+                    <h3>Cost Accounting</h3>
+                    <p>Collects and analyzes information about product, service and activity costs to support internal management.</p>
+
+                    <h3>Financial Accounting</h3>
+                    <p>Records and summarizes financial transactions and prepares financial statements.</p>
+
+                    <h3>Similarities</h3>
+                    <ul>
+                        <li>Both use financial data.</li>
+                        <li>Both provide useful information.</li>
+                        <li>Both help evaluate business performance.</li>
+                    </ul>
+
+                    <h3>Differences</h3>
+                    <ul>
+                        <li>Cost accounting focuses on product and activity costs.</li>
+                        <li>Financial accounting focuses on financial position and business results.</li>
+                        <li>Cost reports mainly support internal management.</li>
+                        <li>Financial statements serve internal and external users.</li>
+                    </ul>
+                    `
+                },
+
+                {
+                    title: "Lesson 4: Cost Classification",
+                    content: `
+                    <p>Cost classification means grouping costs according to a specific basis.</p>
+
+                    <h3>1. By Function</h3>
+                    <ul>
+                        <li>Production costs.</li>
+                        <li>Selling and distribution costs.</li>
+                        <li>Administrative costs.</li>
+                    </ul>
+
+                    <h3>2. By Traceability</h3>
+                    <ul>
+                        <li>Direct costs: Easily traced to a specific cost object.</li>
+                        <li>Indirect costs: Not easily traced to a specific cost object.</li>
+                    </ul>
+
+                    <h3>3. By Behavior</h3>
+                    <ul>
+                        <li>Fixed costs: Total remains constant within the relevant range.</li>
+                        <li>Variable costs: Total changes with activity level.</li>
+                        <li>Mixed costs: Include fixed and variable components.</li>
+                    </ul>
+                    `
+                },
+
+                {
+                    title: "Lesson 5: Financial Statements in Manufacturing and Trading Businesses",
+                    content: `
+                    <h3>Trading Businesses</h3>
+                    <p>Purchase finished goods and resell them without a major manufacturing process.</p>
+
+                    <ul>
+                        <li>Purchases.</li>
+                        <li>Ending inventory.</li>
+                        <li>Cost of goods sold.</li>
+                        <li>Sales.</li>
+                    </ul>
+
+                    <h3>Manufacturing Businesses</h3>
+                    <p>Convert raw materials into finished products using labor and production resources.</p>
+
+                    <ul>
+                        <li>Raw materials inventory.</li>
+                        <li>Work in process.</li>
+                        <li>Finished goods inventory.</li>
+                        <li>Cost of goods manufactured.</li>
+                        <li>Cost of goods sold.</li>
+                    </ul>
+
+                    <div class="example">
+                    A trading business resells finished furniture.
+                    A manufacturing business uses wood and labor to produce furniture.
+                    </div>
+                    `
+                }
+
+            ]
+
+        };
+
+        const questions = {
+            ar: [
+                {
+                    q: "ما المقصود بالتكلفة؟",
+                    options: [
+                        "قيمة الموارد المستخدمة لتحقيق هدف",
+                        "الإيرادات فقط",
+                        "الأرباح فقط",
+                        "النقدية الموجودة بالخزينة"
+                    ],
+                    answer: 0
+                },
+                {
+                    q: "أي مما يلي يمثل مصروفاً؟",
+                    options: [
+                        "شراء آلة ستستخدم لسنوات",
+                        "إيجار المكتب الخاص بالفترة الحالية",
+                        "شراء أرض",
+                        "شراء مخزون لم يتم بيعه"
+                    ],
+                    answer: 1
+                },
+                {
+                    q: "ما الهدف الأساسي لمحاسبة التكاليف؟",
+                    options: [
+                        "حساب الضرائب فقط",
+                        "تحديد وتحليل تكلفة المنتجات والأنشطة",
+                        "إعداد الإعلانات",
+                        "تسجيل المبيعات فقط"
+                    ],
+                    answer: 1
+                },
+                {
+                    q: "أي مما يلي يعتبر تكلفة مباشرة في صناعة كرسي؟",
+                    options: [
+                        "إيجار المصنع",
+                        "راتب مدير المصنع",
+                        "الخشب المستخدم في الكرسي",
+                        "إعلان المصنع"
+                    ],
+                    answer: 2
+                },
+                {
+                    q: "ما الذي يميز المنشأة الصناعية؟",
+                    options: [
+                        "بيع بضائع جاهزة فقط",
+                        "تحويل المواد الخام إلى منتجات",
+                        "عدم وجود مخزون",
+                        "عدم استخدام العمالة"
+                    ],
+                    answer: 1
+                }
+            ],
+
+            en: [
+                {
+                    q: "What is a cost?",
+                    options: [
+                        "The value of resources used to achieve an objective",
+                        "Revenue only",
+                        "Profit only",
+                        "Cash in the treasury"
+                    ],
+                    answer: 0
+                },
+                {
+                    q: "Which item is an expense?",
+                    options: [
+                        "Buying a machine used for years",
+                        "Office rent for the current period",
+                        "Buying land",
+                        "Unsold inventory"
+                    ],
+                    answer: 1
+                },
+                {
+                    q: "What is a main purpose of cost accounting?",
+                    options: [
+                        "Calculating taxes only",
+                        "Determining and analyzing product and activity costs",
+                        "Creating advertisements",
+                        "Recording sales only"
+                    ],
+                    answer: 1
+                },
+                {
+                    q: "Which is a direct cost of making a chair?",
+                    options: [
+                        "Factory rent",
+                        "Factory manager salary",
+                        "Wood used in the chair",
+                        "Factory advertising"
+                    ],
+                    answer: 2
+                },
+                {
+                    q: "What distinguishes a manufacturing business?",
+                    options: [
+                        "Only reselling finished goods",
+                        "Converting raw materials into products",
+                        "Having no inventory",
+                        "Using no labor"
+                    ],
+                    answer: 1
+                }
+            ]
+        };
+
+        let language = localStorage.getItem("mhLanguage") || "ar";
+        let questionIndex = 0;
+        let answered = false;
+
+        const lessonsContainer = document.getElementById("lessons");
+        const languageButton = document.getElementById("languageButton");
+
+        function renderLessons() {
+
+            lessonsContainer.innerHTML = "";
+
+            lessons[language].forEach((lesson, index) => {
+
+                const card = document.createElement("div");
+                card.className = "card lesson-card";
+
+                const title = document.createElement("h2");
+                title.textContent = lesson.title;
+
+                const content = document.createElement("div");
+                content.innerHTML = lesson.content;
+
+                card.appendChild(title);
+                card.appendChild(content);
+
+                lessonsContainer.appendChild(card);
+
+            });
+
+        }
+
+        function renderQuestion() {
+
+            answered = false;
+
+            const current = questions[language][questionIndex];
+
+            document.getElementById("questionText").textContent =
+                (language === "ar" ? "السؤال " : "Question ") +
+                (questionIndex + 1) + ": " + current.q;
+
+            const optionsContainer =
+                document.getElementById("quizOptions");
+
+            optionsContainer.innerHTML = "";
+
+            current.options.forEach((option, index) => {
+
+                const label = document.createElement("label");
+                label.className = "quiz-option";
+
+                const input = document.createElement("input");
+                input.type = "radio";
+                input.name = "quizAnswer";
+                input.value = index;
+
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(option));
+
+                optionsContainer.appendChild(label);
+
+            });
+
+            document.getElementById("quizResult").textContent = "";
+            document.getElementById("nextButton").style.display = "none";
+            document.getElementById("checkButton").style.display = "inline-block";
+
+        }
+
+        function applyLanguage() {
+
+            document.documentElement.lang = language;
+            document.documentElement.dir =
+                language === "ar" ? "rtl" : "ltr";
+
+            document.getElementById("mainTitle").textContent =
+                language === "ar" ? "محاسبة التكاليف" : "Cost Accounting";
+
+            document.getElementById("mainSubtitle").textContent =
+                language === "ar"
+                ? "الفصل الأول: مفهوم التكاليف وتبويباتها"
+                : "Chapter 1: Cost Concepts and Classifications";
+
+            document.getElementById("quizTitle").textContent =
+                language === "ar" ? "اختبر معلوماتك" : "Test Your Knowledge";
+
+            document.getElementById("checkButton").textContent =
+                language === "ar" ? "تأكيد الإجابة" : "Check Answer";
+
+            document.getElementById("nextButton").textContent =
+                language === "ar" ? "السؤال التالي" : "Next Question";
+
+            document.getElementById("backButton").textContent =
+                language === "ar" ? "العودة إلى المواد" : "Back to Courses";
+
+            languageButton.textContent =
+                language === "ar" ? "English" : "العربية";
+
+            renderLessons();
+            renderQuestion();
+
+        }
+
+        languageButton.addEventListener("click", function() {
+
+            language = language === "ar" ? "en" : "ar";
+
+            localStorage.setItem("mhLanguage", language);
+
+            applyLanguage();
+
+        });
+
+        document.getElementById("checkButton").addEventListener("click", function() {
+
+            if (answered) return;
+
+            const selected = document.querySelector(
+                'input[name="quizAnswer"]:checked'
+            );
+
+            if (!selected) {
+
+                document.getElementById("quizResult").textContent =
+                    language === "ar"
+                    ? "من فضلك اختر إجابة أولاً."
+                    : "Please select an answer first.";
+
+                return;
+            }
+
+            answered = true;
+
+            const correct = questions[language][questionIndex].answer;
+            const result = document.getElementById("quizResult");
+
+            if (Number(selected.value) === correct) {
+
+                result.textContent =
+                    language === "ar"
+                    ? "إجابة صحيحة! أحسنت."
+                    : "Correct answer! Well done.";
+
+                result.style.color = "green";
+
+            } else {
+
+                result.textContent =
+                    language === "ar"
+                    ? "إجابة غير صحيحة. راجع الشرح وحاول مرة أخرى في المراجعة."
+                    : "Incorrect answer. Review the lesson.";
+
+                result.style.color = "red";
+
+            }
+
+            document.getElementById("nextButton").style.display = "inline-block";
+            document.getElementById("checkButton").style.display = "none";
+
+        });
+
+        document.getElementById("nextButton").addEventListener("click", function() {
+
+            questionIndex++;
+
+            if (questionIndex >= questions[language].length) {
+
+                questionIndex = 0;
+
+                document.getElementById("quizResult").textContent =
+                    language === "ar"
+                    ? "انتهى الاختبار! يمكنك إعادة المحاولة."
+                    : "Quiz completed! You can try again.";
+
+            }
+
+            renderQuestion();
+
+        });
+
+        applyLanguage();
+
+    </script>
+
+</body>
+</html>

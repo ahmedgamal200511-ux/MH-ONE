@@ -1,0 +1,615 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business English | MH ONE</title>
+<style>
+:root{
+--bg:#090909;--panel:#151515;--panel2:#201d18;
+--gold:#d8b15e;--light:#f5d994;--text:#f5f1e9;
+--muted:#b5ad9e;--border:#403522;--green:#62cf91;--red:#ed7777;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+header{padding:24px 5%;background:linear-gradient(120deg,#080808,#241b0b);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.logo{font-size:27px;font-weight:bold;color:var(--gold)}
+.logo span{color:white}
+header p{color:var(--muted);margin:7px 0}
+.tag{border:1px solid var(--gold);color:var(--light);padding:10px 15px;border-radius:25px}
+.layout{max-width:1550px;margin:auto;padding:22px;display:grid;grid-template-columns:285px 1fr;gap:22px}
+.sidebar{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:17px;height:calc(100vh - 35px);position:sticky;top:15px;overflow:auto}
+.sidebar h3{color:var(--gold)}
+.chapter-btn{display:block;width:100%;padding:11px;margin:5px 0;text-align:left;background:transparent;color:#ddd;border:1px solid transparent;border-radius:8px;cursor:pointer;font-size:13px;line-height:1.5}
+.chapter-btn:hover,.chapter-btn.active{background:#302619;border-color:var(--gold);color:var(--light)}
+.progress{background:#252016;padding:13px;border-radius:9px;margin-top:18px}
+.bar{height:7px;background:#484033;border-radius:9px;margin-top:9px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--gold);transition:.3s}
+main{min-width:0}
+.hero,.card{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:23px;margin-bottom:17px}
+.hero{background:linear-gradient(120deg,#17130d,#211a0d)}
+.hero small{color:var(--gold)}
+.hero h1{color:var(--light);font-size:27px}
+.hero p{line-height:1.8;color:#d0c8b9}
+.card h2{font-size:19px;color:var(--gold);margin-top:0}
+.card h3{color:var(--light);font-size:16px}
+.dual{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:15px 0}
+.lang{background:var(--panel2);padding:16px;border:1px solid #393124;border-radius:9px;line-height:1.9}
+.english{direction:ltr;text-align:left}
+.arabic{direction:rtl;text-align:right;line-height:2}
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.term{background:var(--panel2);padding:12px;border:1px solid var(--border);border-radius:8px}
+.term b{display:block;color:var(--light);margin-bottom:7px}
+.example{background:#172119;border-left:3px solid var(--green);padding:16px;border-radius:8px;line-height:1.9;margin:12px 0}
+.formula{background:#241e12;border:1px solid var(--gold);padding:14px;border-radius:8px;color:var(--light);font-weight:bold;line-height:1.9;margin:12px 0}
+.question{padding:16px;background:#1c1c1c;border:1px solid #383838;border-radius:9px;margin:13px 0}
+.question p{line-height:1.7}
+.option{display:block;width:100%;text-align:left;background:#292929;color:white;border:1px solid #444;padding:11px;border-radius:7px;margin:7px 0;cursor:pointer}
+.option:hover{border-color:var(--gold);color:var(--light)}
+.option:disabled{cursor:default}
+.feedback{font-weight:bold;margin-top:10px}
+.correct{color:var(--green)}
+.wrong{color:var(--red)}
+.solution{display:none;background:#172119;padding:12px;border-radius:8px;margin-top:10px;line-height:1.8}
+.btn{background:var(--gold);color:#17120a;border:0;padding:12px 17px;border-radius:8px;font-weight:bold;cursor:pointer;margin:4px}
+.btn.secondary{background:#252525;color:var(--light);border:1px solid var(--border)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.score{color:var(--light);font-weight:bold}
+.hidden{display:none}
+footer{text-align:center;color:var(--muted);padding:25px;border-top:1px solid var(--border)}
+@media(max-width:850px){
+.layout{grid-template-columns:1fr;padding:12px}
+.sidebar{position:relative;height:auto;max-height:350px}
+.dual{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div>
+<div class="logo">MH <span>ONE</span></div>
+<p>Business English — Complete Study Course</p>
+</div>
+<div class="tag">14 Chapters + Final Exam</div>
+</header>
+
+<div class="layout">
+<aside class="sidebar">
+<h3>Course Contents</h3>
+<div id="chapterList"></div>
+<div class="progress">
+<strong>My Progress</strong>
+<p id="progressText">0 / 14 completed</p>
+<div class="bar"><div class="fill" id="progressFill"></div></div>
+</div>
+<button class="btn secondary" style="width:100%;margin-top:12px" onclick="resetProgress()">Reset Progress</button>
+<button class="btn" style="width:100%;margin-top:8px" onclick="showExam()">Final Exam</button>
+</aside>
+
+<main>
+<div class="hero">
+<small>MH ONE LEARNING ACADEMY</small>
+<h1>Economics, Management & Business</h1>
+<p>Understand business concepts, learn important terminology, solve practical problems and prepare for your exam.</p>
+<p class="arabic">منهج متكامل لفهم مفاهيم الاقتصاد والإدارة والأعمال، مع شرح باللغة الإنجليزية وترجمة عربية وتطبيقات عملية ومسائل واختبارات.</p>
+</div>
+<div id="content"></div>
+</main>
+</div>
+<footer>MH ONE — Learn. Practice. Achieve.</footer>
+
+<script>
+const chapters=[
+{
+title:"The Role of Economics in Business",
+ar:"دور الاقتصاد في الأعمال",
+intro:"Economics is the study of how individuals, businesses and governments use limited resources to satisfy unlimited wants. It helps businesses decide what to produce, how to produce and for whom to produce.",
+introAr:"الاقتصاد هو دراسة كيفية استخدام الأفراد والشركات والحكومات للموارد المحدودة لإشباع الرغبات غير المحدودة. ويساعد الشركات في تحديد ماذا تنتج وكيف تنتج ولمن تنتج.",
+sections:[
+["1. Economic Essentials","The basic economic problem is scarcity. Resources are limited, but human wants are unlimited. Therefore, people must make choices. Every choice has an opportunity cost, which is the value of the next best alternative given up.","المشكلة الاقتصادية الأساسية هي الندرة. الموارد محدودة بينما رغبات الإنسان غير محدودة، لذلك يجب الاختيار. وكل اختيار له تكلفة فرصة بديلة، وهي قيمة أفضل بديل تم التخلي عنه."],
+["2. Types of Economic Systems","A market economy relies mainly on private ownership and supply and demand. A command economy relies on government planning. A mixed economy combines private business activity with government involvement.","اقتصاد السوق يعتمد أساسًا على الملكية الخاصة والعرض والطلب. والاقتصاد الموجه يعتمد على تخطيط الحكومة. أما الاقتصاد المختلط فيجمع بين نشاط القطاع الخاص وتدخل الحكومة."],
+["3. Business Terminologies","Supply is the quantity sellers are willing to offer. Demand is the quantity buyers are willing to purchase. Revenue is money received from sales. Profit is the amount remaining after costs are deducted.","العرض هو الكمية التي يرغب البائعون في تقديمها. والطلب هو الكمية التي يرغب المشترون في شرائها. الإيرادات هي الأموال الناتجة عن البيع. والربح هو ما يتبقى بعد خصم التكاليف."]
+],
+terms:[["Economics","علم الاقتصاد"],["Scarcity","الندرة"],["Opportunity Cost","تكلفة الفرصة البديلة"],["Supply","العرض"],["Demand","الطلب"],["Revenue","الإيرادات"],["Profit","الربح"],["Market","السوق"]],
+example:"A company has 100,000 EGP. It can buy new machines or open a new branch. If it chooses the machines, the benefit it could have received from opening the branch is the opportunity cost.",
+exampleAr:"لدى شركة 100,000 جنيه. يمكنها شراء آلات جديدة أو فتح فرع جديد. إذا اختارت شراء الآلات، فإن المنفعة التي كانت ستحصل عليها من فتح الفرع تمثل تكلفة الفرصة البديلة.",
+problem:"A business earns 80,000 EGP in revenue and has total costs of 55,000 EGP. Calculate its profit.",
+solution:"Profit = Revenue − Total Costs\nProfit = 80,000 − 55,000 = 25,000 EGP.",
+problemAr:"حققت شركة إيرادات 80,000 جنيه وتكاليف 55,000 جنيه. احسب الربح.",
+questions:[
+["What is the basic economic problem?",["Scarcity","Unlimited resources","Free goods"],0,"Scarcity exists because resources are limited."],
+["Which system combines markets and government?",["Command","Mixed","Pure barter"],1,"A mixed economy combines private decisions and government involvement."],
+["Profit equals:",["Costs minus revenue","Revenue plus costs","Revenue minus costs"],2,"Profit = Revenue − Costs."],
+["Opportunity cost means:",["The next best alternative given up","The total amount of money","A company's sales"],0,"It is the value of the next best alternative sacrificed."]
+]
+},
+{
+title:"Fundamentals of Economics and Production",
+ar:"أساسيات الاقتصاد والإنتاج",
+intro:"Production is the process of transforming resources into goods and services. Businesses use factors of production to create products that satisfy customer needs and wants.",
+introAr:"الإنتاج هو عملية تحويل الموارد إلى سلع وخدمات. وتستخدم الشركات عناصر الإنتاج لإنشاء منتجات تشبع احتياجات ورغبات العملاء.",
+sections:[
+["1. Scarcity and Choice","Scarcity means that resources such as land, labor, capital and time are limited. Choice is necessary because not all wants can be satisfied at the same time.","الندرة تعني أن الموارد مثل الأرض والعمل ورأس المال والوقت محدودة. ويصبح الاختيار ضروريًا لأننا لا نستطيع إشباع كل الرغبات في الوقت نفسه."],
+["2. Needs and Wants","Needs are basic requirements for living, such as food, water and shelter. Wants are things people desire to improve their lifestyle, such as expensive phones or luxury cars.","الاحتياجات هي متطلبات أساسية للحياة مثل الطعام والماء والسكن. أما الرغبات فهي أشياء يرغب الناس فيها لتحسين مستوى معيشتهم مثل الهواتف الغالية والسيارات الفاخرة."],
+["3. Production Process","The factors of production are land, labor, capital and entrepreneurship. Inputs are used in the production process to create outputs, which are goods or services.","عناصر الإنتاج هي الأرض والعمل ورأس المال والتنظيم. تستخدم المدخلات في عملية الإنتاج لإنتاج المخرجات، وهي السلع أو الخدمات."],
+["4. Interdependence and Stages","Businesses depend on suppliers, manufacturers, transport companies and customers. Production may involve primary activities, manufacturing and service activities.","تعتمد الشركات على الموردين والمصنعين وشركات النقل والعملاء. وقد تشمل مراحل الإنتاج الأنشطة الأولية والتصنيع والخدمات."]
+],
+terms:[["Needs","الاحتياجات"],["Wants","الرغبات"],["Inputs","المدخلات"],["Outputs","المخرجات"],["Land","الأرض"],["Labor","العمل"],["Capital","رأس المال"],["Entrepreneurship","التنظيم والمبادرة"],["Productivity","الإنتاجية"]],
+example:"A bakery uses flour, ovens, workers and electricity to produce bread. Flour, ovens and labor are inputs. Bread is the output.",
+exampleAr:"يستخدم المخبز الدقيق والأفران والعمال والكهرباء لإنتاج الخبز. الدقيق والأفران والعمل مدخلات، والخبز هو المخرج.",
+problem:"A factory produces 500 units using 100 labor hours. Calculate labor productivity.",
+solution:"Productivity = Output ÷ Input\nProductivity = 500 ÷ 100 = 5 units per labor hour.",
+problemAr:"ينتج مصنع 500 وحدة باستخدام 100 ساعة عمل. احسب إنتاجية العمل.",
+questions:[
+["Which is a factor of production?",["Advertising","Labor","Customer demand"],1,"Labor is one of the four factors of production."],
+["Which is an output?",["Raw materials","Workers","Finished bread"],2,"Finished bread is the product created by the process."],
+["A need is:",["Food","A luxury watch","A gaming console"],0,"Food is a basic human need."],
+["Productivity measures:",["Output relative to input","Only the selling price","Only expenses"],0,"Productivity compares output with resources used."]
+]
+},
+{
+title:"Companies Classification",
+ar:"تصنيف الشركات",
+intro:"Businesses can be classified according to ownership, legal structure, size and liability. The legal structure affects decision-making, financing and the responsibility of owners.",
+introAr:"يمكن تصنيف الشركات حسب الملكية والشكل القانوني والحجم والمسؤولية. ويؤثر الشكل القانوني على اتخاذ القرارات والتمويل ومسؤولية الملاك.",
+sections:[
+["1. Definition and Types","A business organization carries out activities to provide goods or services. Common forms include sole proprietorships, partnerships and incorporated companies.","منظمة الأعمال تمارس أنشطة لتقديم السلع أو الخدمات. ومن أشكالها المنشأة الفردية وشركات الأشخاص والشركات المؤسسة قانونيًا."],
+["2. Limited and Unlimited Liability","Limited liability generally restricts an owner's financial responsibility to the amount invested. Unlimited liability may make an owner personally responsible for business debts, depending on the legal form.","المسؤولية المحدودة تقصر مسؤولية المالك المالية عمومًا على قيمة استثماره. أما المسؤولية غير المحدودة فقد تجعل المالك مسؤولًا بأمواله الشخصية عن ديون النشاط وفقًا للشكل القانوني."],
+["3. Incorporated and Unincorporated","An incorporated company generally has a separate legal identity from its owners. An unincorporated business generally does not have the same separate legal identity.","الشركة المؤسسة قانونيًا يكون لها عادة شخصية قانونية مستقلة عن أصحابها. أما النشاط غير المؤسس كشركة فلا يتمتع عادة بنفس الاستقلال القانوني."]
+],
+terms:[["Sole Proprietorship","منشأة فردية"],["Partnership","شركة أشخاص"],["Shareholder","مساهم"],["Liability","المسؤولية"],["Limited Liability","مسؤولية محدودة"],["Unlimited Liability","مسؤولية غير محدودة"],["Incorporated","مؤسس كشركة"],["Ownership","الملكية"]],
+example:"Two people establish a partnership. They agree on how much each person invests, how profits are shared and who manages the business.",
+exampleAr:"يؤسس شخصان شركة أشخاص. ويتفقان على قيمة استثمار كل شخص وطريقة توزيع الأرباح ومن سيتولى إدارة النشاط.",
+problem:"Three partners invest 20,000, 30,000 and 50,000 EGP. Total investment is 100,000 EGP. Calculate each partner's percentage.",
+solution:"Partner A = 20,000 ÷ 100,000 × 100 = 20%\nPartner B = 30,000 ÷ 100,000 × 100 = 30%\nPartner C = 50,000 ÷ 100,000 × 100 = 50%.",
+problemAr:"استثمر ثلاثة شركاء 20,000 و30,000 و50,000 جنيه. احسب نسبة استثمار كل شريك من الإجمالي.",
+questions:[
+["A sole proprietorship is generally owned by:",["One person","A government department","All customers"],0,"A sole proprietorship is owned by one individual."],
+["Limited liability generally means:",["No financial responsibility ever","Responsibility limited to investment, subject to exceptions","Unlimited personal responsibility"],1,"Limited liability generally protects owners beyond their investment."],
+["An incorporated company generally has:",["No owners","No legal existence","A separate legal identity"],2,"It has a legal identity separate from its owners."],
+["A partnership usually involves:",["Two or more partners","Only one owner","Only customers"],0,"A partnership is formed by partners who operate a business together."]
+]
+},
+{
+title:"Specialization, Division of Labor and Job Design",
+ar:"التخصص وتقسيم العمل وتصميم الوظائف",
+intro:"Specialization and division of labor help organizations improve efficiency. Job design determines how work is divided, organized and performed.",
+introAr:"يساعد التخصص وتقسيم العمل المؤسسات على تحسين الكفاءة. ويحدد تصميم الوظائف كيفية تقسيم العمل وتنظيمه وتنفيذه.",
+sections:[
+["1. Barter System","Barter is the direct exchange of goods or services without money. One major difficulty is the double coincidence of wants: both parties must want what the other offers.","المقايضة هي التبادل المباشر للسلع أو الخدمات دون نقود. ومن مشكلاتها ضرورة توافق رغبات الطرفين؛ أي أن يرغب كل طرف فيما يقدمه الطرف الآخر."],
+["2. Specialization","Specialization means concentrating on a particular task or field. It helps workers develop expertise and may increase productivity.","التخصص يعني التركيز على مهمة أو مجال معين. ويساعد العاملين على اكتساب الخبرة وقد يزيد الإنتاجية."],
+["3. Division of Labor","Division of labor divides a production process into smaller tasks. Different employees perform different tasks, which can save time and improve efficiency.","تقسيم العمل يعني تقسيم عملية الإنتاج إلى مهام أصغر. وينفذ موظفون مختلفون مهام مختلفة، مما قد يوفر الوقت ويحسن الكفاءة."],
+["4. Job Design","Job design defines the tasks, responsibilities and methods associated with a job. It can include job rotation, job enlargement and job enrichment.","يحدد تصميم الوظيفة المهام والمسؤوليات والأساليب المرتبطة بها. وقد يشمل التدوير الوظيفي وتوسيع الوظيفة وإثراء الوظيفة."]
+],
+terms:[["Barter","المقايضة"],["Specialization","التخصص"],["Division of Labor","تقسيم العمل"],["Job Design","تصميم الوظيفة"],["Job Rotation","التدوير الوظيفي"],["Job Enlargement","توسيع الوظيفة"],["Job Enrichment","إثراء الوظيفة"],["Efficiency","الكفاءة"]],
+example:"In a car factory, one worker installs doors, another installs seats and another checks quality. Each worker specializes in a task.",
+exampleAr:"في مصنع سيارات، يقوم عامل بتركيب الأبواب وآخر بتركيب المقاعد وثالث بفحص الجودة. كل عامل متخصص في مهمة.",
+problem:"A worker produces 40 units in 8 hours. Another method allows the worker to produce 50 units in 8 hours. Calculate the productivity increase in percentage.",
+solution:"Old productivity = 40 ÷ 8 = 5 units/hour\nNew productivity = 50 ÷ 8 = 6.25 units/hour\nIncrease = (6.25 − 5) ÷ 5 × 100 = 25%.",
+problemAr:"ينتج عامل 40 وحدة في 8 ساعات. وبعد تحسين طريقة العمل أصبح ينتج 50 وحدة في 8 ساعات. احسب نسبة زيادة الإنتاجية.",
+questions:[
+["Barter means:",["Using a bank card","Exchanging goods without money","Borrowing money"],1,"Barter is direct exchange without money."],
+["Specialization can improve:",["Expertise","Waste only","Confusion"],0,"Specialization helps workers develop expertise."],
+["Division of labor means:",["All workers do everything","No tasks are assigned","Tasks are divided among workers"],2,"Different workers perform different tasks."],
+["Job rotation means:",["Moving employees between jobs","Reducing all wages","Closing departments"],0,"Job rotation moves employees between different tasks or positions."]
+]
+},
+{
+title:"Business Environment",
+ar:"بيئة الأعمال",
+intro:"The business environment includes internal and external factors that influence an organization. Understanding the environment helps managers identify opportunities, threats and changes.",
+introAr:"تشمل بيئة الأعمال العوامل الداخلية والخارجية التي تؤثر على المنظمة. ويساعد فهم البيئة المديرين على تحديد الفرص والتهديدات والتغيرات.",
+sections:[
+["1. Internal Environment","Internal factors include employees, management, company culture, resources and organizational structure. Management can usually influence these factors directly.","تشمل العوامل الداخلية الموظفين والإدارة وثقافة الشركة والموارد والهيكل التنظيمي. ويمكن للإدارة عادة التأثير في هذه العوامل بصورة مباشرة."],
+["2. External Environment","External factors include customers, competitors, suppliers, technology, laws, economic conditions and social changes.","تشمل العوامل الخارجية العملاء والمنافسين والموردين والتكنولوجيا والقوانين والظروف الاقتصادية والتغيرات الاجتماعية."],
+["3. PESTLE Analysis","PESTLE stands for Political, Economic, Social, Technological, Legal and Environmental factors. It helps analyze the external environment.","يرمز PESTLE إلى العوامل السياسية والاقتصادية والاجتماعية والتكنولوجية والقانونية والبيئية. ويساعد في تحليل البيئة الخارجية."],
+["4. SWOT Analysis","SWOT identifies Strengths, Weaknesses, Opportunities and Threats. Strengths and weaknesses are internal. Opportunities and threats are external.","يحدد تحليل SWOT نقاط القوة والضعف والفرص والتهديدات. القوة والضعف عوامل داخلية، والفرص والتهديدات عوامل خارجية."]
+],
+terms:[["Internal Environment","البيئة الداخلية"],["External Environment","البيئة الخارجية"],["PESTLE","تحليل البيئة الخارجية"],["SWOT","تحليل القوة والضعف والفرص والتهديدات"],["Strength","نقطة قوة"],["Weakness","نقطة ضعف"],["Opportunity","فرصة"],["Threat","تهديد"]],
+example:"A company has skilled employees (strength), outdated equipment (weakness), a growing market (opportunity) and a new competitor (threat).",
+exampleAr:"لدى الشركة موظفون مهرة (قوة)، ومعدات قديمة (ضعف)، وسوق ينمو (فرصة)، ومنافس جديد (تهديد).",
+problem:"Classify these factors: skilled employees, new competitor, new government law, strong brand.",
+solution:"Skilled employees = Strength (internal)\nNew competitor = Threat (external)\nNew government law = External legal factor\nStrong brand = Strength (internal).",
+problemAr:"صنف العوامل التالية: موظفون مهرة، منافس جديد، قانون حكومي جديد، علامة تجارية قوية.",
+questions:[
+["In SWOT, W stands for:",["Work","Weaknesses","Wealth"],1,"W stands for Weaknesses."],
+["Which is an external factor?",["Company culture","Employee skills","Government regulations"],2,"Government regulations are external."],
+["PESTLE includes:",["Political factors","Personal hobbies only","Employee attendance only"],0,"Political factors are one part of PESTLE."],
+["A new competitor is usually a:",["Strength","Threat","Internal resource"],1,"A competitor can create an external threat."]
+]
+},
+{
+title:"Management in Contemporary Era",
+ar:"الإدارة في العصر الحديث",
+intro:"Management is the process of planning, organizing, leading and controlling resources to achieve organizational goals effectively and efficiently.",
+introAr:"الإدارة هي عملية التخطيط والتنظيم والقيادة والرقابة على الموارد لتحقيق أهداف المنظمة بفاعلية وكفاءة.",
+sections:[
+["1. Definitions of Management","Management coordinates people and resources to achieve objectives. Effectiveness means achieving goals. Efficiency means using resources with minimum waste.","تنسق الإدارة بين الأفراد والموارد لتحقيق الأهداف. الفاعلية تعني تحقيق الأهداف، والكفاءة تعني استخدام الموارد بأقل هدر ممكن."],
+["2. Management Process","The four main functions are planning, organizing, leading and controlling. They work together as a continuous management process.","الوظائف الأربع الرئيسية هي التخطيط والتنظيم والقيادة والرقابة. وتعمل معًا كعملية إدارية مستمرة."],
+["3. Levels of Management","Top management sets strategy. Middle management coordinates departments. First-line management supervises daily operations and employees.","تضع الإدارة العليا الاستراتيجية. وتنسق الإدارة الوسطى بين الأقسام. وتشرف الإدارة التنفيذية المباشرة على العمليات اليومية والموظفين."],
+["4. Managerial Skills","Technical skills relate to specialized tasks. Human skills relate to working with people. Conceptual skills involve understanding the organization as a whole.","المهارات الفنية ترتبط بالمهام المتخصصة. والمهارات الإنسانية تتعلق بالتعامل مع الناس. والمهارات الفكرية تتعلق بفهم المنظمة ككل."],
+["5. Fayol's Fourteen Principles","Fayol's principles include division of work, authority and responsibility, discipline, unity of command, unity of direction, subordination of individual interests, remuneration, centralization, scalar chain, order, equity, stability of tenure, initiative and esprit de corps.","تشمل مبادئ فايول تقسيم العمل والسلطة والمسؤولية والانضباط ووحدة الأمر ووحدة التوجيه وتغليب المصلحة العامة والمكافأة والمركزية والتدرج الإداري والنظام والإنصاف والاستقرار الوظيفي والمبادرة وروح الفريق."]
+],
+terms:[["Management","الإدارة"],["Efficiency","الكفاءة"],["Effectiveness","الفاعلية"],["Top Management","الإدارة العليا"],["Middle Management","الإدارة الوسطى"],["Technical Skills","المهارات الفنية"],["Human Skills","المهارات الإنسانية"],["Conceptual Skills","المهارات الفكرية"],["Unity of Command","وحدة الأمر"]],
+example:"A general manager decides the company's long-term strategy. Department managers create plans. Supervisors assign daily tasks to employees.",
+exampleAr:"يحدد المدير العام استراتيجية الشركة طويلة الأجل. ويضع مديرو الأقسام الخطط. ويقوم المشرفون بتوزيع المهام اليومية على الموظفين.",
+problem:"A company planned to sell 1,000 units but sold 800. Calculate the achievement percentage.",
+solution:"Achievement = Actual Sales ÷ Planned Sales × 100\n= 800 ÷ 1,000 × 100 = 80%.",
+problemAr:"خططت شركة لبيع 1000 وحدة لكنها باعت 800 وحدة. احسب نسبة تحقيق الهدف.",
+questions:[
+["Which function sets goals?",["Planning","Controlling","Leading"],0,"Planning establishes objectives."],
+["Top management is responsible for:",["Daily employee attendance only","Overall strategy","Operating one machine"],1,"Top management sets the overall direction."],
+["Human skills involve:",["Repairing machines","Preparing budgets only","Working effectively with people"],2,"Human skills relate to communication and relationships."],
+["Unity of command means:",["An employee should receive orders from one direct manager","Every employee has ten managers","No manager gives instructions"],0,"Unity of command means one direct superior for an employee."]
+]
+},
+{
+title:"Management and Business Functions",
+ar:"الإدارة ووظائف الأعمال",
+intro:"Management functions help businesses turn objectives into results. Planning, organizing, leading and controlling are connected activities.",
+introAr:"تساعد الوظائف الإدارية الشركات على تحويل الأهداف إلى نتائج. التخطيط والتنظيم والقيادة والرقابة أنشطة مترابطة.",
+sections:[
+["1. Planning","Planning establishes objectives and determines the actions, resources and time needed to achieve them.","يحدد التخطيط الأهداف والإجراءات والموارد والوقت اللازم لتحقيقها."],
+["2. Organizing","Organizing divides work, assigns responsibilities and allocates resources. It establishes relationships between departments and employees.","يقسم التنظيم العمل ويوزع المسؤوليات والموارد ويحدد العلاقات بين الأقسام والموظفين."],
+["3. Leading","Leading motivates, guides and communicates with employees. It helps create teamwork and encourages people to achieve goals.","تحفز القيادة الموظفين وتوجههم وتتواصل معهم. وتساعد في بناء فريق العمل وتشجيع الأفراد على تحقيق الأهداف."],
+["4. Controlling","Controlling measures actual performance, compares it with standards, identifies deviations and takes corrective action.","تقيس الرقابة الأداء الفعلي وتقارنه بالمعايير وتحدد الانحرافات وتتخذ الإجراءات التصحيحية."]
+],
+terms:[["Planning","التخطيط"],["Organizing","التنظيم"],["Leading","القيادة"],["Controlling","الرقابة"],["Delegation","تفويض السلطة"],["Performance","الأداء"],["Standards","المعايير"],["Corrective Action","إجراء تصحيحي"]],
+example:"A sales manager sets a monthly target, assigns sales territories, motivates employees and compares actual sales with the target.",
+exampleAr:"يحدد مدير المبيعات هدفًا شهريًا، ويوزع مناطق البيع، ويحفز الموظفين، ثم يقارن المبيعات الفعلية بالهدف.",
+problem:"The target was 500 units and actual sales were 450 units. Calculate the performance gap and achievement rate.",
+solution:"Gap = Target − Actual = 500 − 450 = 50 units.\nAchievement rate = 450 ÷ 500 × 100 = 90%.",
+problemAr:"الهدف 500 وحدة والمبيعات الفعلية 450 وحدة. احسب الفجوة ونسبة تحقيق الهدف.",
+questions:[
+["Assigning duties is part of:",["Organizing","Leading","Promotion"],0,"Organizing assigns tasks and responsibilities."],
+["Motivating employees is part of:",["Controlling","Leading","Accounting"],1,"Leading involves motivation and guidance."],
+["Comparing actual results with standards is:",["Recruitment","Planning only","Controlling"],2,"Controlling measures and compares performance."],
+["Setting a future target is:",["Planning","Controlling","Production"],0,"Planning establishes future objectives."]
+]
+},
+{
+title:"Finance",
+ar:"التمويل",
+intro:"Finance is concerned with obtaining and managing money. Financial management helps businesses decide how to raise funds, where to invest and how to manage short-term resources.",
+introAr:"يهتم التمويل بالحصول على الأموال وإدارتها. وتساعد الإدارة المالية الشركات في تحديد كيفية جمع الأموال وأين تستثمر وكيف تدير الموارد قصيرة الأجل.",
+sections:[
+["1. Finance Concepts","Businesses need finance to start, operate and expand. Sources include owners' capital, retained earnings, bank loans and other financing methods.","تحتاج الشركات إلى التمويل للبدء والتشغيل والتوسع. ومن مصادر التمويل رأس مال الملاك والأرباح المحتجزة والقروض البنكية ووسائل التمويل الأخرى."],
+["2. Management of Finance","Financial management involves investment decisions, financing decisions and decisions about profit distribution. The aim is to use financial resources effectively.","تشمل الإدارة المالية قرارات الاستثمار وقرارات التمويل وقرارات توزيع الأرباح. والهدف هو استخدام الموارد المالية بكفاءة."],
+["3. Working Capital","Working capital is the difference between current assets and current liabilities. It helps measure the resources available for daily operations.","رأس المال العامل هو الفرق بين الأصول المتداولة والالتزامات المتداولة. ويساعد في قياس الموارد المتاحة للعمليات اليومية."],
+["4. Financial Terminology","Assets are resources. Liabilities are obligations. Equity represents owners' interest. Cash flow is money entering and leaving the business.","الأصول هي الموارد. والالتزامات هي الديون والتعهدات. وحقوق الملكية تمثل حق الملاك. والتدفق النقدي هو الأموال الداخلة والخارجة من النشاط."]
+],
+terms:[["Finance","التمويل"],["Assets","الأصول"],["Liabilities","الالتزامات"],["Equity","حقوق الملكية"],["Working Capital","رأس المال العامل"],["Current Assets","الأصول المتداولة"],["Current Liabilities","الالتزامات المتداولة"],["Cash Flow","التدفق النقدي"]],
+example:"A business has cash, inventory and receivables. These are current assets. It also has short-term bills and amounts due to suppliers, which are current liabilities.",
+exampleAr:"لدى الشركة نقدية ومخزون ومدينون، وهذه أصول متداولة. كما لديها فواتير قصيرة الأجل ومستحقات للموردين، وهي التزامات متداولة.",
+problem:"A company has current assets of 120,000 EGP and current liabilities of 75,000 EGP. Calculate working capital.",
+solution:"Working Capital = Current Assets − Current Liabilities\n= 120,000 − 75,000 = 45,000 EGP.",
+problemAr:"لدى شركة أصول متداولة 120,000 جنيه والتزامات متداولة 75,000 جنيه. احسب رأس المال العامل.",
+questions:[
+["Working capital equals:",["Current assets − Current liabilities","Sales − Advertising","Assets + Expenses"],0,"Working capital = Current Assets − Current Liabilities."],
+["A bank loan is usually:",["Revenue","A liability","A marketing expense"],1,"A loan is an obligation that must be repaid."],
+["Current assets are 90,000 and current liabilities are 40,000. Working capital is:",["130,000","40,000","50,000"],2,"90,000 − 40,000 = 50,000."],
+["Which is an asset?",["Cash","Bank loan payable","Supplier debt"],0,"Cash is an asset."]
+]
+},
+{
+title:"Human Resources Management",
+ar:"إدارة الموارد البشرية",
+intro:"Human Resource Management is the process of attracting, selecting, developing, motivating and retaining employees to achieve organizational goals.",
+introAr:"إدارة الموارد البشرية هي عملية جذب العاملين واختيارهم وتطويرهم وتحفيزهم والاحتفاظ بهم لتحقيق أهداف المنظمة.",
+sections:[
+["1. HRM Definitions and Functions","HRM includes workforce planning, recruitment, selection, training, performance appraisal, compensation and employee relations.","تشمل إدارة الموارد البشرية تخطيط القوى العاملة والاستقطاب والاختيار والتدريب وتقييم الأداء والتعويضات وعلاقات العاملين."],
+["2. Harvard HRM Model — 4Cs","The four Cs are Commitment, Competence, Congruence and Cost-effectiveness. They describe important outcomes of human resource management.","العناصر الأربعة في نموذج هارفارد هي الالتزام والكفاءة والتوافق وفعالية التكلفة. وهي توضح نتائج مهمة لإدارة الموارد البشرية."],
+["3. Human Needs Models","Maslow's hierarchy includes physiological needs, safety, belonging, esteem and self-actualization. Managers can consider these needs when motivating employees.","يشمل هرم ماسلو الاحتياجات الفسيولوجية والأمان والانتماء والتقدير وتحقيق الذات. ويمكن للمديرين مراعاة هذه الاحتياجات عند تحفيز الموظفين."],
+["4. People and Work","Employees contribute knowledge, skills and experience. A supportive workplace encourages communication, fairness, safety and development.","يساهم الموظفون بالمعرفة والمهارات والخبرة. وتشجع بيئة العمل الداعمة التواصل والعدالة والسلامة والتطوير."],
+["5. HR Policies and Procedures","Policies are general rules. Procedures explain the steps used to apply these rules. Examples include attendance, recruitment, leave, safety and performance evaluation.","السياسات هي القواعد العامة. أما الإجراءات فتوضح خطوات تطبيق هذه القواعد. ومن أمثلتها الحضور والتوظيف والإجازات والسلامة وتقييم الأداء."]
+],
+terms:[["HRM","إدارة الموارد البشرية"],["Recruitment","الاستقطاب"],["Selection","الاختيار"],["Training","التدريب"],["Performance Appraisal","تقييم الأداء"],["Compensation","التعويضات"],["Commitment","الالتزام"],["Competence","الكفاءة"],["Job Description","الوصف الوظيفي"]],
+example:"A company needs five sales employees. HR prepares job descriptions, advertises vacancies, interviews candidates, selects suitable people and provides training.",
+exampleAr:"تحتاج شركة إلى خمسة موظفين للمبيعات. تعد الموارد البشرية الأوصاف الوظيفية وتنشر الوظائف وتجري المقابلات وتختار الأشخاص المناسبين وتوفر التدريب.",
+problem:"A company has 100 employees. 10 employees leave during the year. Calculate the simple employee turnover rate using the starting workforce.",
+solution:"Turnover Rate = Employees Leaving ÷ Starting Employees × 100\n= 10 ÷ 100 × 100 = 10%.",
+problemAr:"لدى شركة 100 موظف، وغادر 10 موظفين خلال السنة. احسب معدل ترك العمل المبسط باستخدام عدد الموظفين في بداية الفترة.",
+questions:[
+["Recruitment means:",["Attracting candidates","Paying suppliers","Selling products"],0,"Recruitment attracts people to apply for jobs."],
+["The Harvard 4Cs include:",["Competition, Cost, Control, Cash","Commitment, Competence, Congruence, Cost-effectiveness","Customers, Capital, Companies, Cash"],1,"These are the four Cs of the model."],
+["Training aims to:",["Stop employee development","Reduce all skills","Improve employee knowledge and skills"],2,"Training develops job-related skills."],
+["Maslow's highest level is commonly described as:",["Self-actualization","Safety","Physiological needs"],0,"Self-actualization is the highest level in the model."]
+]
+},
+{
+title:"Marketing Essentials 1 — Product",
+ar:"أساسيات التسويق الأول: المنتج",
+intro:"Marketing is the process of understanding customer needs and creating, communicating and delivering value. The marketing mix includes Product, Price, Place and Promotion.",
+introAr:"التسويق هو فهم احتياجات العملاء وإنشاء القيمة والتواصل بشأنها وتقديمها. ويشمل المزيج التسويقي المنتج والسعر والمكان والترويج.",
+sections:[
+["1. Marketing and Marketing Mix","The 4Ps are Product, Price, Place and Promotion. They must work together to satisfy the target market and achieve business objectives.","عناصر المزيج التسويقي الأربعة هي المنتج والسعر والمكان والترويج. ويجب أن تعمل معًا لإشباع السوق المستهدف وتحقيق أهداف الشركة."],
+["2. Product","A product is anything offered to a market to satisfy a need or want. It may be a physical good or an intangible service. Product decisions include quality, design, features and packaging.","المنتج هو أي شيء يقدم للسوق لإشباع حاجة أو رغبة. وقد يكون سلعة ملموسة أو خدمة غير ملموسة. وتشمل قرارات المنتج الجودة والتصميم والخصائص والتغليف."],
+["3. Product Levels","The core benefit is the main value the customer seeks. The actual product includes its design, brand and features. The augmented product includes additional services such as warranties and support.","المنفعة الأساسية هي القيمة الرئيسية التي يبحث عنها العميل. والمنتج الفعلي يشمل التصميم والعلامة التجارية والخصائص. أما المنتج المعزز فيشمل الخدمات الإضافية مثل الضمان والدعم."]
+],
+terms:[["Marketing","التسويق"],["Marketing Mix","المزيج التسويقي"],["Product","المنتج"],["Brand","العلامة التجارية"],["Packaging","التغليف"],["Quality","الجودة"],["Target Market","السوق المستهدف"],["Core Benefit","المنفعة الأساسية"],["Warranty","الضمان"]],
+example:"A smartphone provides communication as its core benefit. Its screen, camera and design are part of the actual product. Its warranty and customer support are augmented benefits.",
+exampleAr:"يوفر الهاتف الذكي الاتصال باعتباره المنفعة الأساسية. وتعد الشاشة والكاميرا والتصميم من مكونات المنتج الفعلي. أما الضمان ودعم العملاء فمن المنافع المعززة.",
+problem:"A company sells 200 products at 150 EGP each. Calculate total sales revenue.",
+solution:"Revenue = Quantity Sold × Selling Price\n= 200 × 150 = 30,000 EGP.",
+problemAr:"تبيع شركة 200 منتج بسعر 150 جنيهًا للمنتج. احسب إجمالي الإيرادات.",
+questions:[
+["Which is one of the 4Ps?",["Payroll","Product","Personality"],1,"Product is one of the four marketing mix elements."],
+["A product can be:",["Only a physical good","Only a service","A good or a service"],2,"Products include goods and services."],
+["A warranty is part of:",["The augmented product","The core benefit only","The production input"],0,"A warranty is an additional service."],
+["Branding helps:",["Remove customer needs","Differentiate a product","Eliminate competition completely"],1,"Branding helps customers recognize and distinguish products."]
+]
+},
+{
+title:"Marketing Essentials 2 — Price, Promotion and Place",
+ar:"أساسيات التسويق الثاني: السعر والترويج والتوزيع",
+intro:"Price, promotion and place are important parts of the marketing mix. They influence customer decisions and help deliver products to the target market.",
+introAr:"السعر والترويج والتوزيع عناصر مهمة في المزيج التسويقي. وهي تؤثر في قرارات العملاء وتساعد في إيصال المنتجات إلى السوق المستهدف.",
+sections:[
+["1. Pricing","Pricing determines how much customers pay. Businesses consider costs, demand, competition, perceived value and objectives when setting prices.","يحدد التسعير المبلغ الذي يدفعه العملاء. وتراعي الشركات التكاليف والطلب والمنافسة والقيمة المدركة والأهداف عند تحديد السعر."],
+["2. Promotion","Promotion communicates product value. Its tools include advertising, sales promotion, public relations, personal selling and direct marketing.","ينقل الترويج قيمة المنتج إلى العملاء. وتشمل أدواته الإعلان وتنشيط المبيعات والعلاقات العامة والبيع الشخصي والتسويق المباشر."],
+["3. Place — Distribution","Place refers to distribution channels that make products available. Channels may include wholesalers, retailers, agents and online platforms.","يشير التوزيع إلى قنوات جعل المنتجات متاحة للعملاء. وقد تشمل تجار الجملة وتجار التجزئة والوكلاء والمنصات الإلكترونية."]
+],
+terms:[["Price","السعر"],["Pricing","التسعير"],["Promotion","الترويج"],["Advertising","الإعلان"],["Sales Promotion","تنشيط المبيعات"],["Distribution","التوزيع"],["Retailer","تاجر التجزئة"],["Wholesaler","تاجر الجملة"]],
+example:"A company sells a product for 300 EGP. It offers a 10% discount and advertises through social media. The product is available in stores and online.",
+exampleAr:"تبيع شركة منتجًا بسعر 300 جنيه. وتقدم خصمًا بنسبة 10% وتعلن عبر وسائل التواصل الاجتماعي. ويتوفر المنتج في المتاجر وعلى الإنترنت.",
+problem:"A product costs 300 EGP. The company gives a 10% discount. Calculate the discount and final price.",
+solution:"Discount = 300 × 10 ÷ 100 = 30 EGP\nFinal Price = 300 − 30 = 270 EGP.",
+problemAr:"سعر المنتج 300 جنيه، وتقدم الشركة خصمًا بنسبة 10%. احسب قيمة الخصم والسعر النهائي.",
+questions:[
+["Price means:",["The amount paid by customers","The number of employees","The factory location"],0,"Price is the amount customers pay."],
+["Advertising is a form of:",["Production","Promotion","Accounting"],1,"Advertising is a promotional tool."],
+["Retailers usually sell to:",["Manufacturers only","Wholesalers only","Final consumers"],2,"Retailers sell products to final consumers."],
+["A 20% discount on 500 EGP equals:",["100 EGP","20 EGP","400 EGP"],0,"500 × 20% = 100 EGP."]
+]
+},
+{
+title:"Production",
+ar:"الإنتاج",
+intro:"Production transforms inputs into outputs. Production management aims to achieve quality, efficiency, productivity and timely delivery while controlling costs.",
+introAr:"يحول الإنتاج المدخلات إلى مخرجات. وتهدف إدارة الإنتاج إلى تحقيق الجودة والكفاءة والإنتاجية والتسليم في الوقت المناسب مع ضبط التكاليف.",
+sections:[
+["1. Production Concepts","Production creates goods and services. Productivity measures output relative to input. Capacity is the maximum output a system can produce under stated conditions.","ينشئ الإنتاج السلع والخدمات. وتقيس الإنتاجية المخرجات بالنسبة للمدخلات. أما الطاقة الإنتاجية فهي أقصى كمية يمكن للنظام إنتاجها في ظروف محددة."],
+["2. Lean Production","Lean production focuses on customer value and reducing waste. Common forms of waste include overproduction, waiting, unnecessary transportation, excess inventory and defects.","يركز الإنتاج الرشيق على قيمة العميل وتقليل الهدر. ومن صور الهدر الإنتاج الزائد والانتظار والنقل غير الضروري والمخزون الزائد والعيوب."],
+["3. Production Scale Control","Production planning determines what, how much and when to produce. Production control monitors actual activities and compares them with plans.","يحدد تخطيط الإنتاج ماذا ننتج وكم ننتج ومتى ننتج. أما الرقابة على الإنتاج فتتابع الأنشطة الفعلية وتقارنها بالخطط."],
+["4. Industrial Location","Location decisions may consider raw materials, labor, customers, transportation, utilities, land cost and government regulations.","قد تراعي قرارات اختيار الموقع المواد الخام والعمال والعملاء والنقل والمرافق وتكلفة الأرض والقوانين الحكومية."]
+],
+terms:[["Production","الإنتاج"],["Productivity","الإنتاجية"],["Capacity","الطاقة الإنتاجية"],["Lean Production","الإنتاج الرشيق"],["Waste","الهدر"],["Inventory","المخزون"],["Defects","العيوب"],["Location","الموقع الصناعي"]],
+example:"A factory reduces unnecessary movement of materials and organizes its production line. This can reduce waste and improve efficiency.",
+exampleAr:"يقلل مصنع حركة المواد غير الضرورية وينظم خط الإنتاج. ويمكن أن يقلل ذلك الهدر ويحسن الكفاءة.",
+problem:"A factory produces 800 units in 8 hours. Calculate hourly output. If capacity is 120 units per hour, calculate capacity utilization.",
+solution:"Hourly Output = 800 ÷ 8 = 100 units/hour\nCapacity Utilization = Actual Output ÷ Capacity × 100\n= 100 ÷ 120 × 100 = 83.33%.",
+problemAr:"ينتج مصنع 800 وحدة في 8 ساعات. احسب الإنتاج في الساعة. إذا كانت الطاقة الإنتاجية 120 وحدة في الساعة، احسب نسبة استغلال الطاقة.",
+questions:[
+["Lean production aims to:",["Increase waste","Reduce waste","Stop quality control"],1,"Lean focuses on reducing waste and improving value."],
+["Productivity compares:",["Output and input","Price and advertising","Profit and tax only"],0,"Productivity is output relative to input."],
+["Which is a location factor?",["Logo color","Employee birthdays","Transportation access"],2,"Transportation access can affect costs and efficiency."],
+["Capacity utilization is based on:",["Actual output compared with capacity","Only selling price","Only employee count"],0,"It measures how much of available capacity is being used."]
+]
+},
+{
+title:"Managerial Accounting",
+ar:"المحاسبة الإدارية",
+intro:"Managerial accounting provides information to managers for planning, decision-making and controlling business activities. It differs from financial accounting in its users and purpose.",
+introAr:"توفر المحاسبة الإدارية معلومات للمديرين من أجل التخطيط واتخاذ القرارات والرقابة على أنشطة الشركة. وتختلف عن المحاسبة المالية في المستخدمين والهدف.",
+sections:[
+["1. Managerial Accounting","It provides internal reports such as budgets, cost analyses, forecasts and performance reports. It helps managers make informed decisions.","توفر تقارير داخلية مثل الموازنات وتحليل التكاليف والتنبؤات وتقارير الأداء. وتساعد المديرين على اتخاذ قرارات مبنية على المعلومات."],
+["2. Accounting Cycle","The cycle generally includes identifying transactions, recording journal entries, posting to the ledger, preparing a trial balance, making adjustments and preparing financial statements.","تشمل الدورة المحاسبية عادة تحديد العمليات وتسجيل قيود اليومية والترحيل إلى دفتر الأستاذ وإعداد ميزان المراجعة وإجراء التسويات وإعداد القوائم المالية."],
+["3. Managerial vs Financial Accounting","Managerial accounting is mainly for internal users and supports decisions. Financial accounting is mainly for external users and follows applicable reporting standards.","المحاسبة الإدارية موجهة أساسًا للمستخدمين الداخليين وتدعم القرارات. أما المحاسبة المالية فموجهة أساسًا للمستخدمين الخارجيين وتتبع معايير التقارير المطبقة."],
+["4. Accounting Terminologies","Revenue is income from business activities. Expenses are costs incurred. Assets are resources. Liabilities are obligations. Net income is revenue minus expenses, after relevant adjustments.","الإيرادات هي الدخل الناتج عن أنشطة الشركة. والمصروفات هي التكاليف المتكبدة. والأصول موارد الشركة. والالتزامات ديونها. وصافي الدخل هو الإيرادات مطروحًا منها المصروفات بعد التسويات اللازمة."]
+],
+terms:[["Managerial Accounting","المحاسبة الإدارية"],["Financial Accounting","المحاسبة المالية"],["Journal","دفتر اليومية"],["Ledger","دفتر الأستاذ"],["Trial Balance","ميزان المراجعة"],["Revenue","الإيرادات"],["Expenses","المصروفات"],["Net Income","صافي الدخل"]],
+example:"A manager wants to know whether a product is profitable. A managerial accounting report can show its production cost, selling price and contribution to profit.",
+exampleAr:"يريد مدير معرفة ما إذا كان المنتج يحقق ربحًا. يمكن لتقرير المحاسبة الإدارية عرض تكلفة إنتاجه وسعر بيعه ومساهمته في الربح.",
+problem:"A business has revenue of 100,000 EGP, expenses of 65,000 EGP and additional operating expenses of 10,000 EGP. Calculate simplified net income.",
+solution:"Net Income = Revenue − Total Expenses\nTotal Expenses = 65,000 + 10,000 = 75,000\nNet Income = 100,000 − 75,000 = 25,000 EGP.",
+problemAr:"لدى شركة إيرادات 100,000 جنيه ومصروفات 65,000 جنيه ومصروفات تشغيل إضافية 10,000 جنيه. احسب صافي الدخل المبسط.",
+questions:[
+["Managerial accounting mainly serves:",["Internal managers","Competitors","The general public only"],0,"It supports internal management decisions."],
+["The journal is used to:",["Advertise products","Record transactions chronologically","Hire employees"],1,"Journal entries record transactions in chronological order."],
+["Revenue is 70,000 and expenses are 45,000. Net income is:",["115,000","45,000","25,000"],2,"70,000 − 45,000 = 25,000."],
+["Financial accounting mainly serves:",["External users","Only production workers","Only the sales manager"],0,"Financial accounting provides information for external users."]
+]
+},
+{
+title:"Industrial Relations",
+ar:"العلاقات الصناعية",
+intro:"Industrial relations concern the relationship between employers, employees and their representatives. They include communication, negotiation, workers' rights and workplace cooperation.",
+introAr:"تهتم العلاقات الصناعية بالعلاقة بين أصحاب الأعمال والعاملين وممثليهم. وتشمل التواصل والتفاوض وحقوق العاملين والتعاون داخل بيئة العمل.",
+sections:[
+["1. Introduction","Good industrial relations support workplace stability, trust, fairness and productivity. Poor relations may lead to disputes and work interruptions.","تدعم العلاقات الجيدة الاستقرار والثقة والعدالة والإنتاجية. وقد تؤدي العلاقات السيئة إلى النزاعات وتعطل العمل."],
+["2. Trade Unions","A trade union is an organization that represents workers and seeks to protect their interests and improve employment conditions.","النقابة العمالية منظمة تمثل العاملين وتسعى إلى حماية مصالحهم وتحسين ظروف العمل."],
+["3. Types of Trade Unions","Unions may be organized by occupation, industry, general membership or professional group, depending on the legal system.","قد تنظم النقابات حسب المهنة أو الصناعة أو العضوية العامة أو المجموعة المهنية، وفقًا للنظام القانوني."],
+["4. Workers' Participation","Workers' participation involves employees in workplace discussions and certain decisions. It can improve communication and cooperation.","تعني مشاركة العاملين إشراك الموظفين في مناقشات العمل وبعض القرارات. ويمكن أن تحسن التواصل والتعاون."],
+["5. Employers' Associations and Collective Bargaining","Employers' associations represent employers. Collective bargaining is negotiation between employers and workers' representatives about wages, working hours and employment conditions.","تمثل جمعيات أصحاب الأعمال أصحاب الشركات. والمفاوضة الجماعية هي التفاوض بين أصحاب الأعمال وممثلي العاملين بشأن الأجور وساعات العمل وظروف التوظيف."],
+["6. Employers' Actions","Employers may take lawful management actions to address workplace issues. Industrial relations systems also provide procedures for handling disputes.","قد يتخذ أصحاب الأعمال إجراءات إدارية قانونية لمعالجة مشكلات العمل. كما توفر أنظمة العلاقات الصناعية إجراءات للتعامل مع النزاعات."]
+],
+terms:[["Industrial Relations","العلاقات الصناعية"],["Trade Union","النقابة العمالية"],["Workers' Participation","مشاركة العاملين"],["Collective Bargaining","المفاوضة الجماعية"],["Employers' Association","جمعية أصحاب الأعمال"],["Working Conditions","ظروف العمل"],["Dispute","نزاع"],["Negotiation","التفاوض"]],
+example:"Workers are concerned about working hours. Their representatives meet the employer to discuss the issue and negotiate a suitable agreement.",
+exampleAr:"يشعر العاملون بالقلق بشأن ساعات العمل. ويجتمع ممثلوهم مع صاحب العمل لمناقشة المشكلة والتفاوض للوصول إلى اتفاق مناسب.",
+problem:"A company employs 200 workers. 150 workers participate in a workplace survey. Calculate the participation rate.",
+solution:"Participation Rate = Participants ÷ Total Workers × 100\n= 150 ÷ 200 × 100 = 75%.",
+problemAr:"توظف شركة 200 عامل، وشارك 150 عاملًا في استبيان خاص بالعمل. احسب نسبة المشاركة.",
+questions:[
+["A trade union represents:",["Workers","Competitors","Customers"],0,"Trade unions represent workers."],
+["Collective bargaining means:",["Advertising products","Negotiation between employers and worker representatives","Preparing a sales budget"],1,"It is negotiation about employment conditions."],
+["Workers' participation means:",["Employees have no role","Customers run the factory","Employees participate in workplace discussions"],2,"It involves employees in discussions and decisions."],
+["An employers' association represents:",["Employers","Only consumers","Only suppliers"],0,"It represents employers' interests."]
+]
+}
+];
+
+let current=0;
+let completed=JSON.parse(localStorage.getItem("mhone_business_completed_v3")||"[]");
+let examAnswers={};
+
+function renderList(){
+ const list=document.getElementById("chapterList");
+ list.innerHTML="";
+ chapters.forEach((ch,i)=>{
+  const b=document.createElement("button");
+  b.className="chapter-btn "+(i===current?"active":"");
+  b.textContent=(completed.includes(i)?"✓ ":"")+(i+1)+". "+ch.title;
+  b.onclick=()=>showChapter(i);
+  list.appendChild(b);
+ });
+ document.getElementById("progressText").textContent=completed.length+" / 14 completed";
+ document.getElementById("progressFill").style.width=(completed.length/14*100)+"%";
+}
+function showChapter(i){
+ current=i;
+ const c=chapters[i];
+ renderList();
+ let html=`
+ <div class="hero">
+ <small>CHAPTER ${i+1} / 14</small>
+ <h1>${c.title}</h1>
+ <p class="arabic">${c.ar}</p>
+ <div class="english">${c.intro}</div>
+ <p class="arabic">${c.introAr}</p>
+ </div>
+ <div class="card"><h2>Chapter Explanation | شرح الفصل</h2>`;
+ c.sections.forEach(s=>{
+  html+=`<div class="dual">
+  <div class="lang english"><h3>${s[0]}</h3>${s[1]}</div>
+  <div class="lang arabic"><h3>${s[0]}</h3>${s[2]}</div>
+  </div>`;
+ });
+ html+=`</div><div class="card"><h2>Key Terms | أهم المصطلحات</h2><div class="terms">`;
+ c.terms.forEach(t=>html+=`<div class="term"><b>${t[0]}</b><span class="arabic">${t[1]}</span></div>`);
+ html+=`</div></div>
+ <div class="card"><h2>Practical Application | تطبيق عملي</h2>
+ <div class="example"><b>English:</b><br>${c.example}</div>
+ <div class="example arabic"><b>الشرح بالعربي:</b><br>${c.exampleAr}</div>
+ </div>
+ <div class="card"><h2>Numerical Problem | مسألة محلولة</h2>
+ <div class="lang english"><b>Question:</b><br>${c.problem}</div>
+ <div class="lang arabic"><b>المطلوب:</b><br>${c.problemAr}</div>
+ <button class="btn" onclick="toggleSolution('sol${i}')">Show / Hide Solution</button>
+ <div class="solution" id="sol${i}" style="display:none;white-space:pre-line">${c.solution}</div>
+ </div>
+ <div class="card"><h2>Chapter Test | اختبار الفصل</h2>
+ <p class="arabic">جاوب على الأسئلة وشوف التصحيح والتفسير بعد كل إجابة.</p>`;
+ c.questions.forEach((q,j)=>{
+  html+=`<div class="question" id="cq${i}_${j}">
+  <p><b>Question ${j+1}:</b> ${q[0]}</p>`;
+  q[1].forEach((a,k)=>html+=`<button class="option" onclick="answerChapter(${i},${j},${k},this)">${String.fromCharCode(65+k)}. ${a}</button>`);
+  html+=`<div class="feedback" id="cf${i}_${j}"></div>
+  <div class="solution" id="cs${i}_${j}">${q[3]}</div></div>`;
+ });
+ html+=`<div class="actions">
+ <button class="btn" onclick="markDone(${i})">Mark as Completed ✓</button>
+ <button class="btn secondary" onclick="showChapter(${Math.max(0,i-1)})">Previous</button>
+ <button class="btn secondary" onclick="showChapter(${Math.min(13,i+1)})">Next Chapter</button>
+ </div></div>`;
+ document.getElementById("content").innerHTML=html;
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function toggleSolution(id){
+ const el=document.getElementById(id);
+ el.style.display=el.style.display==="none"?"block":"none";
+}
+function answerChapter(ch,qi,k,btn){
+ const q=chapters[ch].questions[qi];
+ const box=document.getElementById("cq"+ch+"_"+qi);
+ const buttons=box.querySelectorAll(".option");
+ buttons.forEach(b=>b.disabled=true);
+ const f=document.getElementById("cf"+ch+"_"+qi);
+ if(k===q[2]){
+  f.textContent="✓ Correct Answer!";
+  f.className="feedback correct";
+  btn.style.borderColor="var(--green)";
+ }else{
+  f.textContent="✗ Incorrect. Correct answer: "+q[1][q[2]];
+  f.className="feedback wrong";
+  buttons[q[2]].style.borderColor="var(--green)";
+ }
+ document.getElementById("cs"+ch+"_"+qi).style.display="block";
+}
+function markDone(i){
+ if(!completed.includes(i))completed.push(i);
+ localStorage.setItem("mhone_business_completed_v3",JSON.stringify(completed));
+ renderList();
+ alert("Chapter completed!");
+}
+function resetProgress(){
+ if(confirm("Reset all course progress?")){
+ completed=[];
+ localStorage.removeItem("mhone_business_completed_v3");
+ renderList();
+ }
+}
+
+const exam=[
+["Economics mainly studies:",["Scarce resource allocation","Only advertising","Only accounting"],0],
+["Opportunity cost is:",["Total revenue","The next best alternative given up","Total expenses"],1],
+["A mixed economy combines:",["Only private ownership","Only government planning","Markets and government involvement"],2],
+["The four factors of production include:",["Land, labor, capital and entrepreneurship","Price, product, place and promotion","Revenue, expenses, assets and debts"],0],
+["Division of labor means:",["Stopping production","Dividing tasks among workers","Increasing prices"],1],
+["In SWOT, opportunities are:",["Internal weaknesses","Employee skills","External positive factors"],2],
+["PESTLE includes:",["Legal factors","Only product quality","Only employee salaries"],0],
+["Top management mainly sets:",["Daily machine schedules","Overall strategy","Customer shopping lists"],1],
+["The four management functions include:",["Buying, selling, storing and shipping","Hiring, firing, paying and advertising","Planning, organizing, leading and controlling"],2],
+["Working capital equals:",["Current assets minus current liabilities","Revenue minus expenses","Assets plus liabilities"],0],
+["Current assets are 80,000 and current liabilities are 30,000. Working capital is:",["110,000","50,000","30,000"],1],
+["Recruitment means:",["Evaluating products","Recording transactions","Attracting candidates"],2],
+["The 4Ps include:",["Product, Price, Place and Promotion","People, Profit, Planning and Production","Price, Payroll, Profit and Policy"],0],
+["A 10% discount on 400 EGP equals:",["400 EGP","40 EGP","10 EGP"],1],
+["Lean production aims to:",["Increase waiting","Increase defects","Reduce waste"],2],
+["Productivity compares:",["Output with input","Price with profit","Employees with customers"],0],
+["Managerial accounting mainly helps:",["Competitors","Internal managers","Only suppliers"],1],
+["A business has revenue of 90,000 and expenses of 60,000. Net income is:",["150,000","60,000","30,000"],2],
+["Collective bargaining is:",["Negotiation between employers and worker representatives","A marketing technique","A production method"],0],
+["A trade union represents:",["Suppliers","Workers","Competitors"],1]
+];
+function showExam(){
+ current=-1;
+ renderList();
+ examAnswers={};
+ let html=`<div class="hero"><small>FINAL ASSESSMENT</small><h1>Business English — Final Exam</h1>
+ <p>20 Multiple Choice Questions • Choose one answer for each question.</p>
+ <p class="arabic">امتحان شامل من 20 سؤال اختيار من متعدد. اختار إجابة واحدة لكل سؤال، وبعد الانتهاء اضغط تصحيح الامتحان.</p></div>
+ <div class="card"><h2>Final Examination</h2>`;
+ exam.forEach((q,i)=>{
+  html+=`<div class="question" id="exam${i}"><p><b>Question ${i+1}:</b> ${q[0]}</p>`;
+  q[1].forEach((a,k)=>html+=`<button class="option" onclick="chooseExam(${i},${k},this)">${String.fromCharCode(65+k)}. ${a}</button>`);
+  html+=`</div>`;
+ });
+ html+=`<button class="btn" onclick="gradeExam()">Submit Final Exam</button>
+ <div id="examResult" class="score" style="margin-top:20px"></div></div>`;
+ document.getElementById("content").innerHTML=html;
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function chooseExam(i,k,btn){
+ examAnswers[i]=k;
+ const box=document.getElementById("exam"+i);
+ box.querySelectorAll(".option").forEach(b=>{
+  b.style.borderColor="#444";
+  b.style.color="white";
+ });
+ btn.style.borderColor="var(--gold)";
+ btn.style.color="var(--light)";
+}
+function gradeExam(){
+ let score=0;
+ exam.forEach((q,i)=>{
+  const box=document.getElementById("exam"+i);
+  const buttons=box.querySelectorAll(".option");
+  buttons.forEach((b,k)=>{
+   b.disabled=true;
+   if(k===q[2])b.style.borderColor="var(--green)";
+   if(examAnswers[i]===k&&k!==q[2])b.style.borderColor="var(--red)";
+  });
+  if(examAnswers[i]===q[2])score++;
+ });
+ const percent=score/exam.length*100;
+ let result=percent>=85?"Excellent work!":percent>=70?"Very good!":percent>=50?"Good effort. Review your mistakes.":"Keep studying and try again.";
+ document.getElementById("examResult").innerHTML=
+ `Your Score: ${score} / ${exam.length} (${percent}%)<br>${result}<br>
+ <span class="arabic">درجتك: ${score} من ${exam.length} — راجع الأسئلة التي أخطأت فيها وكرر المذاكرة.</span>`;
+}
+showChapter(0);
+</script>
+</body>
+</html>

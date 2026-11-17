@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | MH ONE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="login-box">
+
+            <h1>MH ONE</h1>
+
+            <p class="login-subtitle">Create Your Account</p>
+
+            <p class="login-description">
+                Join MH ONE and organize your university life.
+            </p>
+
+            <form id="registerForm">
+
+                <label>Full Name</label>
+                <input type="text" id="fullName"
+                    placeholder="Enter your full name" required>
+
+                <label>University Email</label>
+                <input type="email" id="email"
+                    placeholder="Enter your email" required>
+
+                <label>College</label>
+                <select id="college" required>
+                    <option value="">Select your college</option>
+                    <option>Information Systems</option>
+                    <option>Engineering</option>
+                    <option>Business Administration</option>
+                </select>
+
+                <label>Academic Year</label>
+                <select id="academicYear" required>
+                    <option value="">Select your year</option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                    <option>Third Year</option>
+                    <option>Fourth Year</option>
+                </select>
+
+                <label>Password</label>
+                <input type="password" id="password"
+                    placeholder="Create a password" required>
+
+                <button type="submit">Create Account</button>
+
+            </form>
+
+            <p class="register-text">
+                Already have an account?
+                <a href="login.html">Login</a>
+            </p>
+
+            <a href="index.html" class="back-home">Back to Home</a>
+
+        </div>
+
+    </div>
+
+    <script src="register.js"></script>
+
+</body>
+</html>

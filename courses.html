@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Courses | MH ONE</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.courses-page {
+    width: 88%;
+    max-width: 1100px;
+    margin: 40px auto;
+}
+.courses-hero {
+    text-align: center;
+    padding: 35px 15px;
+}
+.courses-hero h1 {
+    color: #d6ad45;
+    text-shadow: 0 0 14px #d6ad4560;
+}
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+    gap: 20px;
+}
+.course-card {
+    background: #151515;
+    border: 1px solid #49391d;
+    border-radius: 14px;
+    padding: 23px;
+    transition: .25s;
+}
+.course-card:hover {
+    transform: translateY(-5px);
+    border-color: #d6ad45;
+    box-shadow: 0 0 17px #d6ad4530;
+}
+.course-card h3 { color: #f5d77e; }
+.course-card p { color: #ccc; }
+.course-card a {
+    display: inline-block;
+    padding: 9px 17px;
+    background: #d6ad45;
+    color: #111;
+    text-decoration: none;
+    border-radius: 7px;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><h1>MH ONE</h1></div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+    </nav>
+</header>
+
+<main class="courses-page">
+    <section class="courses-hero">
+        <h1>My Courses</h1>
+        <p>Second Year - First Term</p>
+        <p>اختر المادة التي تريد مذاكرتها</p>
+    </section>
+
+    <section class="course-grid">
+
+        <div class="course-card">
+            <h3>إدارة الإنتاج والعمليات</h3>
+            <p>شرح الفصول العشرة والأمثلة والأسئلة.</p>
+            <a href="production.html">افتح المادة</a>
+        </div>
+
+        <div class="course-card">
+            <h3>محاسبة التكاليف</h3>
+            <p>شرح الوحدات الثمانية والقوانين والتدريبات.</p>
+            <a href="cost-accounting.html">افتح المادة</a>
+        </div>
+
+        <div class="course-card">
+            <h3>إدارة التسويق</h3>
+            <p>شرح الفصول والملخصات والأسئلة التفاعلية.</p>
+            <a href="marketing.html">افتح المادة</a>
+        </div>
+
+        <div class="course-card">
+            <h3>اللغة الأجنبية الثانية</h3>
+            <p>شرح ومراجعة وتدريبات اللغة.</p>
+            <a href="language2.html">افتح المادة</a>
+        </div>
+
+    </section>
+</main>
+
+</body>
+</html>

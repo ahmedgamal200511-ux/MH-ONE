@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MH ONE | AI Study Assistant</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+*{box-sizing:border-box}
+body{background:#080808;color:#f5f5f5}
+.assistant-main{max-width:1100px;margin:auto;padding:30px 20px}
+.assistant-hero{
+    text-align:center;padding:35px 20px;border:1px solid #D4AF37;
+    border-radius:20px;background:linear-gradient(130deg,#090909,#30230b,#090909);
+    box-shadow:0 0 25px rgba(212,175,55,.12)
+}
+.assistant-hero .robot{font-size:48px}
+.assistant-hero h2{color:#F5D98B;font-size:30px;margin:10px}
+.assistant-hero p{color:#ccc;line-height:1.8}
+.assistant-card{
+    background:linear-gradient(145deg,#1c180e,#101010);
+    border:1px solid #76591e;border-radius:17px;padding:22px;margin-top:22px
+}
+.assistant-card h3{color:#F5D98B;margin-top:0}
+.form-group{margin:15px 0}
+.form-group label{display:block;color:#e8d39b;margin-bottom:8px}
+.form-group select,.chat-input textarea{
+    width:100%;padding:13px;border-radius:9px;
+    background:#090909;color:#fff;border:1px solid #A98735;font-size:15px
+}
+.chat-box{
+    min-height:300px;max-height:480px;overflow-y:auto;
+    background:#090909;border:1px solid #49391d;
+    border-radius:13px;padding:17px;margin:15px 0
+}
+.message{
+    max-width:88%;padding:13px 16px;margin:12px 0;
+    border-radius:13px;line-height:1.8;overflow-wrap:anywhere;
+    white-space:pre-wrap
+}
+.bot-message{
+    background:#211b0e;color:#f5e7c0;
+    border:1px solid #76591e;margin-left:auto
+}
+.user-message{
+    background:#493716;color:#fff;margin-right:auto
+}
+.chat-input{display:flex;gap:10px;align-items:stretch}
+.chat-input textarea{resize:vertical;min-height:55px;flex:1}
+.gold-btn{
+    border:0;padding:13px 22px;border-radius:9px;
+    background:linear-gradient(135deg,#F5D98B,#B58A28);
+    color:#090909;font-weight:bold;cursor:pointer;font-size:15px
+}
+.gold-btn:hover{box-shadow:0 0 18px rgba(212,175,55,.4)}
+.quick-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.quick-btn{
+    background:#16130d;border:1px solid #76591e;color:#F5D98B;
+    border-radius:20px;padding:10px 15px;cursor:pointer
+}
+.quick-btn:hover{background:#30240e}
+.notice{color:#aaa;font-size:13px;line-height:1.8;margin-top:15px}
+@media(max-width:600px){
+.assistant-hero h2{font-size:24px}
+.chat-input{flex-direction:column}
+.chat-input .gold-btn{width:100%}
+.message{max-width:100%}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <h1>MH ONE</h1>
+        <span>BY MOHAMED HATEM</span>
+    </div>
+    <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="dashboard.html">لوحة التحكم</a>
+        <a href="courses.html">المواد الدراسية</a>
+        <a href="library.html">المكتبة</a>
+    </nav>
+    <div class="header-actions">
+        <a href="dashboard.html" class="login-btn">رجوع</a>
+    </div>
+</header>
+
+<main class="assistant-main">
+
+    <section class="assistant-hero">
+        <div class="robot">🤖</div>
+        <h2>MH ONE AI Study Assistant</h2>
+        <p>مساعدك الدراسي لفهم المواد وتنظيم المذاكرة والتدريب على الأسئلة.</p>
+    </section>
+
+    <section class="assistant-card">
+        <h3>🎓 ابدأ المذاكرة</h3>
+
+        <div class="form-group">
+            <label for="subject">اختر المادة</label>
+            <select id="subject">
+                <option value="general">مساعدة عامة</option>
+                <option value="production">إدارة الإنتاج والعمليات</option>
+                <option value="cost">محاسبة التكاليف</option>
+                <option value="marketing">إدارة التسويق</option>
+                <option value="english">لغة أجنبية 2</option>
+                <option value="economics">مبادئ الاقتصاد</option>
+            </select>
+        </div>
+
+        <div class="chat-box" id="chatBox" aria-live="polite">
+            <div class="message bot-message">
+                أهلًا بيك في MH ONE! 👋
+                أنا مساعدك الدراسي. اختار المادة واكتب سؤالك، وهساعدك بالمعلومات المتاحة عندي.
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <textarea id="userInput" placeholder="اكتب سؤالك هنا..."></textarea>
+            <button class="gold-btn" onclick="sendMessage()">إرسال ➤</button>
+        </div>
+
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="quickQuestion('اشرح لي أهم مفاهيم المادة')">📘 اشرح المادة</button>
+            <button class="quick-btn" onclick="quickQuestion('اعمل لي سؤال تدريب')">📝 سؤال تدريب</button>
+            <button class="quick-btn" onclick="quickQuestion('اعمل لي ملخص للمادة')">📚 ملخص</button>
+        </div>
+
+        <p class="notice">
+            ملاحظة: هذه نسخة أولية تعمل بإجابات تعليمية محددة، وقد لا تعرف الإجابة عن كل الأسئلة. راجع المقرر وملاحظات الدكتور للتأكد من المعلومات.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 MH ONE - By Mohamed Hatem</p>
+</footer>
+
+<script>
+const knowledge = {
+    production: {
+        name:"إدارة الإنتاج والعمليات",
+        topics:{
+            "الإنتاج":"الإنتاج هو عملية تحويل المدخلات مثل المواد الخام والعمل ورأس المال إلى مخرجات في صورة سلع أو خدمات.",
+            "المدخلات":"المدخلات هي الموارد المستخدمة في العملية الإنتاجية، مثل المواد الخام والعمالة والآلات ورأس المال.",
+            "الجودة":"الجودة تعني مدى مطابقة المنتج أو الخدمة للمواصفات واحتياجات العملاء.",
+            "الطاقة الإنتاجية":"الطاقة الإنتاجية هي أقصى كمية يمكن للنظام إنتاجها خلال فترة زمنية معينة في ظل ظروف محددة.",
+            "الموقع":"اختيار موقع المشروع يعتمد على عوامل مثل تكلفة الأرض والنقل والقرب من الأسواق والعمالة والمواد الخام."
+        }
+    },
+    cost: {
+        name:"محاسبة التكاليف",
+        topics:{
+            "التكلفة":"التكلفة هي الموارد التي يتم التضحية بها أو استهلاكها للحصول على سلعة أو خدمة.",
+            "التكاليف الثابتة":"هي التكاليف التي يظل إجماليها ثابتًا في حدود الطاقة الملائمة، مثل إيجار المصنع.",
+            "التكاليف المتغيرة":"هي التكاليف التي يتغير إجماليها مع تغير حجم النشاط، مثل المواد المباشرة.",
+            "التكلفة المباشرة":"هي تكلفة يمكن تتبعها وربطها بوحدة إنتاج معينة بسهولة، مثل الخشب المستخدم في صناعة قطعة أثاث.",
+            "الأوامر الإنتاجية":"نظام تكاليف الأوامر يستخدم عندما يكون الإنتاج بناءً على طلبات أو أوامر إنتاجية منفصلة."
+        }
+    },
+    marketing: {
+        name:"إدارة التسويق",
+        topics:{
+            "التسويق":"التسويق هو مجموعة الأنشطة التي تهدف إلى فهم احتياجات العملاء وتقديم قيمة تحقق أهداف المنشأة والعملاء.",
+            "المزيج التسويقي":"يتكون المزيج التسويقي التقليدي من أربعة عناصر: المنتج والسعر والمكان والترويج.",
+            "بحوث التسويق":"هي عملية جمع وتحليل المعلومات المتعلقة بالسوق والعملاء والمنافسين لدعم القرارات التسويقية.",
+            "سلوك المستهلك":"يدرس سلوك المستهلك كيفية اختيار الأفراد للسلع والخدمات وشرائها واستخدامها.",
+            "البيئة التسويقية":"تشمل العوامل الداخلية والخارجية التي تؤثر على قدرة المنشأة على خدمة عملائها."
+        }
+    },
+    english: {
+        name:"لغة أجنبية 2",
+        topics:{
+            "present simple":"نستخدم Present Simple للتعبير عن العادات والحقائق. مثال: She studies every day.",
+            "past simple":"نستخدم Past Simple للتعبير عن حدث انتهى في الماضي. مثال: I visited my friend yesterday.",
+            "present perfect":"نستخدم Present Perfect للتعبير عن تجربة أو حدث له علاقة بالحاضر. مثال: I have finished my homework.",
+            "since":"نستخدم Since مع نقطة بداية زمنية، مثل: since 2020.",
+            "for":"نستخدم For مع مدة زمنية، مثل: for three years.",
+            "marketing":"Marketing تعني التسويق.",
+            "management":"Management تعني الإدارة.",
+            "customer":"Customer تعني العميل."
+        }
+    },
+    economics: {
+        name:"مبادئ الاقتصاد",
+        topics:{
+            "الاقتصاد":"علم الاقتصاد يدرس كيفية استخدام الموارد النادرة لإشباع الحاجات الإنسانية المتعددة.",
+            "الندرة":"الندرة تعني أن الموارد المتاحة محدودة مقارنة بالحاجات والرغبات الإنسانية.",
+            "المنفعة":"المنفعة هي مقدار الإشباع الذي يحصل عليه المستهلك من استهلاك سلعة أو خدمة.",
+            "المنفعة الحدية":"المنفعة الحدية هي التغير في المنفعة الكلية نتيجة استهلاك وحدة إضافية من السلعة.",
+            "الطلب":"الطلب هو الكميات التي يرغب المستهلكون ويقدرون على شرائها عند أسعار مختلفة خلال فترة معينة.",
+            "العرض":"العرض هو الكميات التي يرغب المنتجون ويقدرون على بيعها عند أسعار مختلفة."
+        }
+    }
+};
+
+function addMessage(text,type){
+    const box=document.getElementById("chatBox");
+    const message=document.createElement("div");
+    message.className="message "+(type==="user"?"user-message":"bot-message");
+    message.textContent=text;
+    box.appendChild(message);
+    box.scrollTop=box.scrollHeight;
+}
+
+function findAnswer(question,subject){
+    const q=question.toLowerCase().trim();
+
+    if(subject==="general"){
+        if(q.includes("مرحبا")||q.includes("اهلا")||q.includes("السلام عليكم")){
+            return "أهلًا بيك! اختار مادة من القائمة واسألني عن موضوع دراسي.";
+        }
+        if(q.includes("مساعد")||q.includes("بتعمل")){
+            return "أنا مساعد دراسي أولي داخل MH ONE. أقدر أساعدك في بعض المفاهيم والمصطلحات والموضوعات المتاحة.";
+        }
+        return "اختار المادة الدراسية الأول علشان أقدر أقدم لك إجابة مرتبطة بالمادة.";
+    }
+
+    const data=knowledge[subject];
+    if(!data)return "المعلومات الخاصة بهذه المادة غير متاحة حاليًا.";
+
+    if(q.includes("ملخص")||q.includes("لخص")){
+        return "ملخص مادة "+data.name+":\n"+
+        Object.entries(data.topics).map(([key,value])=>key+": "+value).join("\n\n");
+    }
+
+    if(q.includes("سؤال")||q.includes("اختبر")||q.includes("تدريب")){
+        const keys=Object.keys(data.topics);
+        const random=keys[Math.floor(Math.random()*keys.length)];
+        return "سؤال تدريبي:\nما المقصود بـ "+random+"؟\n\nحاول تجاوب بنفسك، ثم ابحث عن المفهوم في ملخص المادة لمراجعة إجابتك.";
+    }
+
+    for(const [key,value] of Object.entries(data.topics)){
+        if(q.includes(key.toLowerCase())){
+            return value;
+        }
+    }
+
+    if(q.includes("اشرح")||q.includes("مفهوم")||q.includes("يعني اي")||q.includes("ما هو")){
+        return "أقدر أشرح لك الموضوعات الأساسية المتاحة في "+data.name+".\nالموضوعات المتاحة: "+Object.keys(data.topics).join("، ")+".\nاكتب اسم موضوع محدد علشان أشرحه.";
+    }
+
+    return "مش لاقي إجابة محددة للسؤال ده في المعلومات المتاحة عندي حاليًا. جرّب كتابة اسم موضوع من موضوعات المادة: "+Object.keys(data.topics).join("، ");
+}
+
+function sendMessage(){
+    const input=document.getElementById("userInput");
+    const question=input.value.trim();
+    const subject=document.getElementById("subject").value;
+
+    if(!question){
+        alert("اكتب سؤالك الأول.");
+        return;
+    }
+
+    addMessage(question,"user");
+    input.value="";
+
+    const answer=findAnswer(question,subject);
+    addMessage(answer,"bot");
+}
+
+function quickQuestion(question){
+    document.getElementById("userInput").value=question;
+    sendMessage();
+}
+
+document.getElementById("userInput").addEventListener("keydown",function(event){
+    if(event.key==="Enter"&&!event.shiftKey){
+        event.preventDefault();
+        sendMessage();
+    }
+});
+</script>
+
+<script src="script.js"></script>
+<script src="language.js"></script>
+
+</body>
+</html>

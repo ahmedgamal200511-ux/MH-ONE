@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Progress | MH ONE</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090909;color:#fff;font-family:Arial,sans-serif}
+header{padding:22px 7%;display:flex;justify-content:space-between;align-items:center;gap:15px;background:#101010;border-bottom:1px solid #49391d;flex-wrap:wrap}
+.logo{font-size:27px;font-weight:bold;color:#e4bd68;text-shadow:0 0 12px #d6ad5577}
+a{color:#f5d98b;text-decoration:none;border:1px solid #49391d;padding:10px 15px;border-radius:8px}
+.container{width:90%;max-width:1200px;margin:35px auto}
+.hero{background:linear-gradient(120deg,#241d10,#111);border:1px solid #49391d;border-radius:16px;padding:28px;margin-bottom:25px}
+h1{color:#f5d98b;margin:0 0 12px}
+.hero p{color:#bbb;line-height:1.8;margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:30px}
+.stat,.subject{background:#151515;border:1px solid #49391d;border-radius:14px;padding:20px}
+.stat{text-align:center}
+.stat strong{display:block;color:#f5d98b;font-size:30px;margin-bottom:8px}
+.stat span{color:#aaa}
+h2{color:#f5d98b;margin:30px 0 18px}
+.subjects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.subject h3{color:#f5d98b;margin:0}
+.subject-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.percent{font-size:22px;color:#e4bd68;font-weight:bold}
+.track{height:9px;background:#333;border-radius:20px;overflow:hidden;margin-bottom:12px}
+.fill{height:100%;width:0;background:linear-gradient(90deg,#9b722a,#f5d98b);transition:width .3s}
+.info{color:#aaa;font-size:13px;margin-bottom:18px}
+.chapter{display:flex;align-items:center;gap:10px;background:#202020;padding:11px;border-radius:8px;margin-bottom:9px}
+.chapter input{accent-color:#d6ad55;width:18px;height:18px;cursor:pointer}
+.chapter-name{flex:1;overflow-wrap:anywhere;font-size:14px}
+.chapter.done .chapter-name{text-decoration:line-through;color:#888}
+button{cursor:pointer}
+.edit,.delete{background:#211b10;color:#f5d98b;border:1px solid #514124;border-radius:6px;padding:6px 9px}
+.delete{color:#ff9999;border-color:#512929}
+.add-area{display:flex;gap:8px;margin-top:15px}
+.add-area input{flex:1;min-width:0;background:#090909;border:1px solid #49391d;border-radius:8px;padding:11px;color:#fff}
+.add-btn{background:#d6ad55;color:#17120a;border:0;border-radius:8px;padding:10px 14px;font-weight:bold}
+footer{text-align:center;color:#777;padding:30px}
+@media(max-width:750px){.subjects{grid-template-columns:1fr}.stats{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">MH ONE</div>
+    <a href="dashboard.html">العودة للرئيسية ←</a>
+</header>
+
+<main class="container">
+
+    <section class="hero">
+        <h1>My Progress</h1>
+        <p>تابع إنجازك الدراسي وسجل الفصول التي أنهيتها في كل مادة.</p>
+    </section>
+
+    <section class="stats">
+        <div class="stat">
+            <strong id="totalSubjects">4</strong>
+            <span>إجمالي المواد</span>
+        </div>
+        <div class="stat">
+            <strong id="completedChapters">0</strong>
+            <span>الفصول المكتملة</span>
+        </div>
+        <div class="stat">
+            <strong id="overallProgress">0%</strong>
+            <span>نسبة الإنجاز الكلية</span>
+        </div>
+    </section>
+
+    <h2>تقدم المواد الدراسية</h2>
+    <section class="subjects" id="subjects"></section>
+
+</main>
+
+<footer>MH ONE | Your Study Journey Starts Here</footer>
+
+<script>
+const KEY = "MHONE_Progress_Tracker";
+
+const defaults = [
+    {id:"production",name:"إدارة الإنتاج والعمليات",chapters:10,prefix:"الفصل"},
+    {id:"cost",name:"محاسبة التكاليف",chapters:8,prefix:"الوحدة"},
+    {id:"marketing",name:"إدارة التسويق",chapters:4,prefix:"الفصل"},
+    {id:"language",name:"لغة أجنبية 2",chapters:14,prefix:"Chapter"}
+];
+
+function createDefaultData(){
+    return defaults.map(s=>({
+        id:s.id,
+        name:s.name,
+        chapters:Array.from({length:s.chapters},(_,i)=>({
+            name:s.prefix+" "+(i+1),
+            done:false
+        }))
+    }));
+}
+
+function loadData(){
+    try{
+        const saved=localStorage.getItem(KEY);
+        if(saved){
+            const data=JSON.parse(saved);
+            if(Array.isArray(data)) return data;
+        }
+    }catch(e){
+        console.error(e);
+    }
+    return createDefaultData();
+}
+
+let data=loadData();
+
+function save(){
+    try{
+        localStorage.setItem(KEY,JSON.stringify(data));
+    }catch(e){
+        alert("تعذر حفظ التقدم في المتصفح.");
+    }
+}
+
+function safe(text){
+    return String(text).replace(/[&<>"']/g,c=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    })[c]);
+}
+
+function updateStats(){
+    let total=0,completed=0;
+
+    data.forEach(subject=>{
+        total+=subject.chapters.length;
+        completed+=subject.chapters.filter(c=>c.done).length;
+    });
+
+    document.getElementById("totalSubjects").textContent=data.length;
+    document.getElementById("completedChapters").textContent=completed;
+    document.getElementById("overallProgress").textContent=
+        (total?Math.round(completed/total*100):0)+"%";
+}
+
+function render(){
+    const container=document.getElementById("subjects");
+    container.innerHTML="";
+
+    data.forEach(subject=>{
+        const total=subject.chapters.length;
+        const completed=subject.chapters.filter(c=>c.done).length;
+        const percent=total?Math.round(completed/total*100):0;
+
+        const card=document.createElement("div");
+        card.className="subject";
+
+        card.innerHTML=`
+            <div class="subject-head">
+                <h3>${safe(subject.name)}</h3>
+                <span class="percent">${percent}%</span>
+            </div>
+
+            <div class="track">
+                <div class="fill" style="width:${percent}%"></div>
+            </div>
+
+            <div class="info">${completed} من ${total} مكتمل</div>
+
+            <div class="chapter-list">
+                ${subject.chapters.map((chapter,index)=>`
+                    <div class="chapter ${chapter.done?"done":""}">
+                        <input type="checkbox"
+                            data-subject="${safe(subject.id)}"
+                            data-index="${index}"
+                            ${chapter.done?"checked":""}>
+                        <span class="chapter-name">${safe(chapter.name)}</span>
+                        <button class="edit" data-action="edit"
+                            data-subject="${safe(subject.id)}"
+                            data-index="${index}">تعديل</button>
+                        <button class="delete" data-action="delete"
+                            data-subject="${safe(subject.id)}"
+                            data-index="${index}">حذف</button>
+                    </div>
+                `).join("")}
+            </div>
+
+            <div class="add-area">
+                <input type="text" placeholder="اسم فصل جديد..."
+                    id="new-${safe(subject.id)}">
+                <button class="add-btn"
+                    data-action="add"
+                    data-subject="${safe(subject.id)}">إضافة</button>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+
+    updateStats();
+}
+
+document.getElementById("subjects").addEventListener("change",function(e){
+    if(e.target.type!=="checkbox")return;
+
+    const subject=data.find(s=>s.id===e.target.dataset.subject);
+    const index=Number(e.target.dataset.index);
+
+    if(!subject||!subject.chapters[index])return;
+
+    subject.chapters[index].done=e.target.checked;
+    save();
+    render();
+});
+
+document.getElementById("subjects").addEventListener("click",function(e){
+    const button=e.target.closest("button[data-action]");
+    if(!button)return;
+
+    const action=button.dataset.action;
+    const id=button.dataset.subject;
+    const subject=data.find(s=>s.id===id);
+    if(!subject)return;
+
+    const index=Number(button.dataset.index);
+
+    if(action==="add"){
+        const input=document.getElementById("new-"+id);
+        const name=input.value.trim();
+
+        if(!name){
+            alert("اكتب اسم الفصل الأول.");
+            return;
+        }
+
+        subject.chapters.push({name:name,done:false});
+    }
+
+    if(action==="edit"){
+        const chapter=subject.chapters[index];
+        if(!chapter)return;
+
+        const name=prompt("اكتب الاسم الجديد:",chapter.name);
+        if(name===null||!name.trim())return;
+
+        chapter.name=name.trim();
+    }
+
+    if(action==="delete"){
+        if(!subject.chapters[index])return;
+        if(!confirm("هل تريد حذف هذا الفصل؟"))return;
+        subject.chapters.splice(index,1);
+    }
+
+    save();
+    render();
+});
+
+render();
+</script>
+
+</body>
+</html>

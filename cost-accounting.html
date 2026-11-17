@@ -1,0 +1,796 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>محاسبة التكاليف | MH ONE</title>
+<link rel="stylesheet" href="style.css">
+<style>
+:root {
+    --gold: #d6ad45;
+    --gold-light: #f5d77e;
+    --black: #090909;
+    --panel: #151515;
+    --muted: #b8b8b8;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    background: var(--black);
+    color: #f5f5f5;
+    font-family: Tahoma, Arial, sans-serif;
+    line-height: 1.9;
+}
+header {
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #39301b;
+    background: #101010;
+}
+.logo {
+    color: var(--gold);
+    font-size: 25px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 9px;
+}
+nav a:hover { color: var(--gold); }
+.hero {
+    padding: 55px 7%;
+    background: radial-gradient(ellipse at top, #352912 0%, #111 55%, #090909 100%);
+    text-align: center;
+}
+.hero h1 {
+    color: var(--gold-light);
+    font-size: clamp(28px, 5vw, 43px);
+    margin: 0 0 10px;
+    text-shadow: 0 0 15px #d6ad4570;
+}
+.hero p { color: #ddd; }
+.container { width: 86%; max-width: 1150px; margin: 35px auto; }
+.panel, .unit {
+    background: var(--panel);
+    border: 1px solid #39301b;
+    border-radius: 15px;
+    padding: 23px;
+    margin-bottom: 22px;
+}
+h2, h3 { color: var(--gold-light); }
+.unit h2 { margin-top: 0; }
+.unit-number {
+    color: var(--gold);
+    font-size: 14px;
+    font-weight: bold;
+}
+.unit-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
+}
+.unit-nav a {
+    color: #f4d77e;
+    text-decoration: none;
+    background: #171717;
+    border: 1px solid #59451d;
+    padding: 12px;
+    border-radius: 10px;
+    transition: .2s;
+}
+.unit-nav a:hover {
+    background: #302613;
+    transform: translateY(-2px);
+}
+.example, .note, .law {
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+}
+.example { background: #202018; border-right: 4px solid var(--gold); }
+.note { background: #1c1c1c; border-right: 4px solid #777; }
+.law { background: #29220f; border: 1px solid #6c5420; }
+.law strong { color: var(--gold-light); }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    overflow: hidden;
+}
+th, td {
+    border: 1px solid #49402d;
+    padding: 10px;
+    text-align: center;
+}
+th { background: #332817; color: var(--gold-light); }
+tr:nth-child(even) { background: #1d1d1d; }
+.question {
+    border-top: 1px solid #40351f;
+    padding: 17px 0;
+}
+.question p { font-weight: bold; }
+.option {
+    display: block;
+    width: 100%;
+    text-align: right;
+    background: #202020;
+    border: 1px solid #454545;
+    color: white;
+    border-radius: 8px;
+    padding: 11px 14px;
+    margin: 8px 0;
+    cursor: pointer;
+    font-size: 15px;
+}
+.option:hover { border-color: var(--gold); }
+.option.correct { background: #18351f; border-color: #4caf50; }
+.option.wrong { background: #3a1c1c; border-color: #d65b5b; }
+.feedback { color: var(--gold-light); min-height: 28px; }
+.progress-wrap {
+    height: 10px;
+    background: #333;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 12px 0;
+}
+#progressBar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #8f6b20, #f5d77e);
+    transition: .3s;
+}
+button.main-btn {
+    background: var(--gold);
+    color: #111;
+    padding: 11px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #aaa;
+    border-top: 1px solid #39301b;
+}
+@media(max-width:650px) {
+    .container { width: 93%; }
+    header { justify-content: center; }
+    nav { text-align: center; }
+    nav a { display: inline-block; margin: 5px; }
+    .panel, .unit { padding: 16px; }
+    table { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">MH ONE</div>
+    <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="dashboard.html">لوحة التحكم</a>
+        <a href="courses.html">المواد</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>محاسبة التكاليف</h1>
+    <p>الفرقة الثانية – الترم الأول</p>
+    <p>شرح الوحدات التعليمية | القوانين | أمثلة | اختبارات</p>
+</section>
+
+<main class="container">
+
+<section class="panel">
+    <h2>محتويات المادة</h2>
+    <p>المقرر يتكون من 8 وحدات تعليمية. اختار الوحدة التي تريد مذاكرتها:</p>
+    <div class="unit-nav">
+        <a href="#u1">الوحدة الأولى: مفهوم التكاليف وتبويباتها</a>
+        <a href="#u2">الوحدة الثانية: سلوك التكاليف وطرق قياسها</a>
+        <a href="#u3">الوحدة الثالثة: نظم تكاليف الأوامر الإنتاجية</a>
+        <a href="#u4">الوحدة الرابعة: تكاليف المراحل الإنتاجية</a>
+        <a href="#u5">الوحدة الخامسة: تحليل التكلفة والحجم والربح</a>
+        <a href="#u6">الوحدة السادسة: ضبط ورقابة التكاليف الصناعية</a>
+        <a href="#u7">الوحدة السابعة: التكاليف على أساس الأنشطة</a>
+        <a href="#u8">الوحدة الثامنة: تكاليف المقاولات والعقود</a>
+    </div>
+    <h3>تقدمك في المذاكرة</h3>
+    <div class="progress-wrap"><div id="progressBar"></div></div>
+    <p id="progressText">أنجزت 0 من 8 وحدات</p>
+</section>
+
+<!-- UNIT 1 -->
+<section class="unit" id="u1">
+<div class="unit-number">الوحدة التعليمية الأولى | الصفحات 1–32</div>
+<h2>مفهوم التكاليف وتبويباتها</h2>
+
+<h3>1. مفهوم التكلفة</h3>
+<p>التكلفة هي مقدار ما تتحمله المنشأة من موارد أو تضحيات اقتصادية للحصول على سلعة أو خدمة أو تحقيق هدف معين.</p>
+
+<h3>2. عناصر التكاليف الصناعية</h3>
+<table>
+<tr><th>العنصر</th><th>المقصود به</th><th>مثال</th></tr>
+<tr><td>مواد مباشرة</td><td>مواد تدخل في المنتج ويمكن تحديدها بسهولة</td><td>الخشب في صناعة الأثاث</td></tr>
+<tr><td>أجور مباشرة</td><td>أجور العاملين الذين يصنعون المنتج مباشرة</td><td>أجر عامل الإنتاج</td></tr>
+<tr><td>تكاليف صناعية غير مباشرة</td><td>تكاليف المصنع التي لا يمكن ربطها بوحدة معينة بسهولة</td><td>كهرباء المصنع وإيجاره</td></tr>
+</table>
+
+<div class="law">
+<strong>التكلفة الأولية = المواد المباشرة + الأجور المباشرة</strong><br>
+<strong>تكلفة التحويل = الأجور المباشرة + التكاليف الصناعية غير المباشرة</strong><br>
+<strong>إجمالي التكاليف الصناعية = مواد مباشرة + أجور مباشرة + تكاليف صناعية غير مباشرة</strong>
+</div>
+
+<h3>3. تبويب التكاليف حسب السلوك</h3>
+<ul>
+<li><b>تكاليف ثابتة:</b> إجماليها لا يتغير في حدود الطاقة الملائمة مع تغير حجم النشاط، مثل إيجار المصنع.</li>
+<li><b>تكاليف متغيرة:</b> إجماليها يتغير مع حجم الإنتاج، مثل المواد المباشرة.</li>
+<li><b>تكاليف مختلطة:</b> تحتوي على جزء ثابت وجزء متغير، مثل بعض فواتير الكهرباء.</li>
+</ul>
+
+<h3>4. تبويب التكاليف حسب إمكانية التتبع</h3>
+<ul>
+<li>تكاليف مباشرة: يمكن تتبعها وربطها بوحدة التكلفة.</li>
+<li>تكاليف غير مباشرة: يصعب ربطها بوحدة معينة، ويتم تحميلها باستخدام أساس مناسب.</li>
+</ul>
+
+<div class="example">
+<b>مثال:</b> مصنع أثاث يستخدم خشبًا لصناعة طاولة، ويدفع أجرًا للعامل الذي يصنعها، ويتحمل إيجار المصنع.
+<br>الخشب: مواد مباشرة. أجر العامل: أجور مباشرة. إيجار المصنع: تكاليف صناعية غير مباشرة.
+</div>
+
+<div class="note"><b>خلاصة الوحدة:</b> لازم تفرق بين عناصر التكلفة الثلاثة، وبين التكلفة المباشرة وغير المباشرة، والثابتة والمتغيرة.</div>
+
+<div class="question" data-answer="b">
+<p>1. أي مما يلي يُعد من المواد المباشرة في مصنع الأثاث؟</p>
+<button class="option" data-value="a">أ) إيجار المصنع</button>
+<button class="option" data-value="b">ب) الخشب المستخدم في صناعة الطاولة</button>
+<button class="option" data-value="c">ج) راتب مدير المصنع</button>
+<div class="feedback"></div>
+</div>
+<div class="question" data-answer="a">
+<p>2. التكلفة الأولية تساوي:</p>
+<button class="option" data-value="a">أ) مواد مباشرة + أجور مباشرة</button>
+<button class="option" data-value="b">ب) أجور مباشرة + تكاليف غير مباشرة</button>
+<button class="option" data-value="c">ج) مواد غير مباشرة + إيجار</button>
+<div class="feedback"></div>
+</div>
+<button class="main-btn complete">تحديد الوحدة كمكتملة</button>
+</section>
+
+<!-- UNIT 2 -->
+<section class="unit" id="u2">
+<div class="unit-number">الوحدة التعليمية الثانية | الصفحات 33–64</div>
+<h2>سلوك التكاليف وطرق قياس التكاليف</h2>
+
+<h3>1. سلوك التكاليف</h3>
+<p>سلوك التكلفة هو كيفية تغير إجمالي التكلفة عند تغير مستوى النشاط أو حجم الإنتاج.</p>
+<table>
+<tr><th>نوع التكلفة</th><th>إجمالي التكلفة</th><th>نصيب الوحدة</th></tr>
+<tr><td>ثابتة</td><td>ثابت تقريبًا</td><td>يتغير عكسيًا مع الإنتاج</td></tr>
+<tr><td>متغيرة</td><td>يتغير مع الإنتاج</td><td>ثابت تقريبًا</td></tr>
+<tr><td>مختلطة</td><td>جزء ثابت وجزء متغير</td><td>يتغير حسب حجم النشاط</td></tr>
+</table>
+
+<h3>2. الطريقة العليا والدنيا (High-Low)</h3>
+<p>نستخدم أعلى وأقل مستوى نشاط، وليس أعلى وأقل تكلفة، لحساب معدل التكلفة المتغيرة.</p>
+<div class="law">
+<strong>معدل التكلفة المتغيرة للوحدة =</strong><br>
+(تكلفة أعلى نشاط − تكلفة أقل نشاط) ÷ (وحدات أعلى نشاط − وحدات أقل نشاط)
+<br><br>
+<strong>التكلفة الثابتة = إجمالي التكلفة − (معدل المتغير × حجم النشاط)</strong>
+</div>
+
+<div class="example">
+<b>مثال محلول:</b><br>
+عند 1,000 وحدة كانت التكلفة 8,000 جنيه، وعند 2,000 وحدة كانت التكلفة 11,000 جنيه.<br>
+معدل المتغير = (11,000 − 8,000) ÷ (2,000 − 1,000) = 3 جنيهات للوحدة.<br>
+التكلفة الثابتة = 8,000 − (3 × 1,000) = 5,000 جنيه.<br>
+إذن معادلة التكلفة: ص = 5,000 + 3س.
+</div>
+
+<h3>3. طريقة الرسم الانتشاري (Scattergraph)</h3>
+<p>يتم تمثيل مستويات النشاط والتكاليف على رسم بياني، ثم رسم خط تقريبي يوضح العلاقة بينهما، وتقدير الجزء الثابت والمتغير.</p>
+
+<h3>4. طريقة المربعات الصغرى (Least Squares)</h3>
+<p>طريقة إحصائية تستخدم البيانات المتاحة لتقدير العلاقة بين التكلفة وحجم النشاط بأفضل صورة ممكنة.</p>
+<div class="law">
+<strong>معادلة التكلفة:</strong> ص = أ + ب س<br>
+أ = التكلفة الثابتة المقدرة<br>
+ب = معدل التكلفة المتغيرة للوحدة<br>
+س = حجم النشاط
+</div>
+
+<div class="note"><b>خلاصة الوحدة:</b> احفظ طريقة High-Low جيدًا، وافهم الفرق بين الرسم الانتشاري والمربعات الصغرى. في التطبيق العملي اختار أعلى وأقل نشاط.</div>
+
+<div class="question" data-answer="c">
+<p>1. في طريقة High-Low نستخدم:</p>
+<button class="option" data-value="a">أ) أعلى وأقل تكلفة فقط</button>
+<button class="option" data-value="b">ب) متوسط التكاليف</button>
+<button class="option" data-value="c">ج) أعلى وأقل مستوى نشاط</button>
+<div class="feedback"></div>
+</div>
+<div class="question" data-answer="a">
+<p>2. إذا كان معدل المتغير 4 جنيهات للوحدة، والتكلفة الثابتة 2,000 جنيه، فما تكلفة 500 وحدة؟</p>
+<button class="option" data-value="a">أ) 4,000 جنيه</button>
+<button class="option" data-value="b">ب) 2,500 جنيه</button>
+<button class="option" data-value="c">ج) 6,000 جنيه</button>
+<div class="feedback"></div>
+</div>
+<button class="main-btn complete">تحديد الوحدة كمكتملة</button>
+</section>
+
+<!-- UNIT 3 -->
+<section class="unit" id="u3">
+<div class="unit-number">الوحدة التعليمية الثالثة | الصفحات 65–94</div>
+<h2>نظم التكاليف بالأوامر الإنتاجية</h2>
+
+<h3>1. مفهوم نظام الأوامر الإنتاجية</h3>
+<p>هو نظام لتجميع وتحديد تكلفة كل أمر إنتاجي بشكل مستقل، ويستخدم عندما تكون المنتجات أو الطلبات مختلفة عن بعضها.</p>
+<p><b>أمثلة:</b> صناعة الأثاث حسب الطلب، المطابع، شركات تنفيذ الطلبات الخاصة.</p>
+
+<h3>2. عناصر تكلفة الأمر</h3>
+<ul>
+<li>المواد المباشرة المنصرفة للأمر.</li>
+<li>الأجور المباشرة للعاملين على الأمر.</li>
+<li>التكاليف الصناعية غير المباشرة المحملة على الأمر.</li>
+</ul>
+<div class="law">
+<strong>تكلفة الأمر = المواد المباشرة + الأجور المباشرة + التكاليف الصناعية غير المباشرة المحملة</strong>
+</div>
+
+<h3>3. معدل تحميل التكاليف الصناعية غير المباشرة</h3>
+<div class="law">
+<strong>معدل التحميل المقدر = التكاليف الصناعية غير المباشرة المقدرة ÷ أساس التحميل المقدر</strong><br>
+<strong>التكاليف المحملة = معدل التحميل × أساس التحميل الفعلي للأمر</strong>
+</div>
+<p>قد يكون أساس التحميل ساعات العمل المباشر أو ساعات تشغيل الآلات أو الأجور المباشرة، حسب طبيعة المصنع.</p>
+
+<h3>4. بطاقة تكلفة الأمر</h3>
+<table>
+<tr><th>البيان</th><th>المبلغ</th></tr>
+<tr><td>مواد مباشرة</td><td>5,000</td></tr>
+<tr><td>أجور مباشرة</td><td>3,000</td></tr>
+<tr><td>تكاليف صناعية غير مباشرة محملة</td><td>2,000</td></tr>
+<tr><th>إجمالي تكلفة الأمر</th><th>10,000</th></tr>
+</table>
+
+<h3>5. التكاليف الفعلية والمحمّلة</h3>
+<p>التكاليف الفعلية هي ما حدث بالفعل خلال الفترة، أما المحملة فهي ما تم تحميله على الأوامر باستخدام معدل التحميل المقدر.</p>
+<ul>
+<li>إذا كانت التكاليف الفعلية أكبر من المحملة: يوجد نقص تحميل.</li>
+<li>إذا كانت التكاليف المحملة أكبر من الفعلية: يوجد زيادة تحميل.</li>
+</ul>
+<div class="note"><b>ملحوظة:</b> المعالجة النهائية لفروق التحميل تتبع سياسة المقرر وطريقة إقفال الفروق التي يشرحها الدكتور.</div>
+
+<div class="example">
+<b>مثال:</b> أمر إنتاجي تكلفته مواد مباشرة 8,000 جنيه، وأجور مباشرة 4,000 جنيه، وتكاليف غير مباشرة محملة 3,000 جنيه.<br>
+إجمالي تكلفة الأمر = 8,000 + 4,000 + 3,000 = 15,000 جنيه.
+</div>
+
+<h3>6. عند إتمام الأمر وبيعه</h3>
+<p>عند إتمام الإنتاج تنتقل تكلفة الأمر من الإنتاج تحت التشغيل إلى الإنتاج التام، وعند البيع تنتقل تكلفة الوحدات المباعة إلى تكلفة البضاعة المباعة.</p>
+
+<div class="note"><b>خلاصة الوحدة:</b> ركز على بطاقة تكلفة الأمر، ومعدل التحميل، والفرق بين الفعلي والمحمّل، وتوقيت انتقال التكلفة.</div>
+
+<div class="question" data-answer="b">
+<p>1. يستخدم نظام الأوامر الإنتاجية عندما:</p>
+<button class="option" data-value="a">أ) تكون المنتجات متجانسة وتنتج باستمرار فقط</button>
+<button class="option" data-value="b">ب) تكون الطلبات أو المنتجات مختلفة ويمكن تتبع تكلفة كل أمر</button>
+<button class="option" data-value="c">ج) لا توجد أوامر إنتاج</button>
+<div class="feedback"></div>
+</div>
+<div class="question" data-answer="c">
+<p>2. إذا كانت المواد 8,000 والأجور 4,000 والتكاليف المحملة 3,000، فتكلفة الأمر:</p>
+<button class="option" data-value="a">أ) 12,000</button>
+<button class="option" data-value="b">ب) 14,000</button>
+<button class="option" data-value="c">ج) 15,000</button>
+<div class="feedback"></div>
+</div>
+<button class="main-btn complete">تحديد الوحدة كمكتملة</button>
+</section>
+
+<!-- UNIT 4 -->
+<section class="unit" id="u4">
+<div class="unit-number">الوحدة التعليمية الرابعة | الصفحات 95–125</div>
+<h2>المحاسبة عن تكاليف المراحل الإنتاجية</h2>
+
+<h3>1. مفهوم نظام المراحل الإنتاجية</h3>
+<p>نظام يستخدم في المنشآت التي تنتج كميات كبيرة من منتجات متجانسة تمر بمراحل إنتاجية متتابعة.</p>
+<p><b>أمثلة:</b> مصانع الأسمنت، السكر، الزيوت، والمواد الكيميائية.</p>
+
+<h3>2. الفرق بين الأوامر والمراحل</h3>
+<table>
+<tr><th>الأوامر الإنتاجية</th><th>المراحل الإنتاجية</th></tr>
+<tr><td>كل أمر له تكلفة مستقلة</td><td>كل مرحلة تجمع تكاليفها</td></tr>
+<tr><td>منتجات أو طلبات مختلفة</td><td>منتجات متجانسة ومتكررة</td></tr>
+<tr><td>بطاقة تكلفة لكل أمر</td><td>تقرير تكلفة لكل مرحلة</td></tr>
+</table>
+
+<h3>3. الوحدات المكافئة</h3>
+<p>تستخدم لتحويل الإنتاج غير التام إلى عدد وحدات كاملة مكافئة، مع مراعاة نسبة الإتمام.</p>
+<div class="law">
+<strong>الوحدات المكافئة = الوحدات غير التامة × نسبة الإتمام</strong>
+</div>
+
+<div class="example">
+<b>مثال:</b><br>
+يوجد 100 وحدة تحت التشغيل، ونسبة إتمامها 50%.<br>
+الوحدات المكافئة = 100 × 50% = 50 وحدة مكافئة.
+</div>
+
+<h3>4. تكلفة الوحدة المكافئة</h3>
+<div class="law">
+<strong>تكلفة الوحدة المكافئة = إجمالي تكلفة العنصر ÷ إجمالي الوحدات المكافئة لذلك العنصر</strong>
+</div>
+<p>يتم حساب تكلفة المواد وتكلفة التحويل كلٌّ على حدة إذا اختلفت نسب الإتمام.</p>
+
+<h3>5. تقرير تكاليف الإنتاج</h3>
+<p>يهدف إلى تحديد الوحدات الداخلة والخارجة، والوحدات تحت التشغيل، وتكلفة الإنتاج التام، وتكلفة مخزون آخر المدة تحت التشغيل.</p>
+
+<div class="note"><b>خلاصة الوحدة:</b> افهم متى نستخدم نظام المراحل، والفرق بينه وبين الأوامر، وطريقة حساب الوحدات المكافئة وتكلفة الوحدة المكافئة.</div>
+
+<div class="question" data-answer="a">
+<p>1. يناسب نظام المراحل الإنتاجية:</p>
+<button class="option" data-value="a">أ) الإنتاج المستمر للمنتجات المتجانسة</button>
+<button class="option" data-value="b">ب) الطلبات الفردية المختلفة فقط</button>
+<button class="option" data-value="c">ج) الأعمال التي لا تمر بمراحل</button>
+<div class="feedback"></div>
+</div>
+<div class="question" data-answer="b">
+<p>2. 200 وحدة تحت التشغيل ونسبة إتمامها 25%، الوحدات المكافئة:</p>
+<button class="option" data-value="a">أ) 200 وحدة</button>
+<button class="option" data-value="b">ب) 50 وحدة</button>
+<button class="option" data-value="c">ج) 25 وحدة</button>
+<div class="feedback"></div>
+</div>
+<button class="main-btn complete">تحديد الوحدة كمكتملة</button>
+</section>
+
+<!-- UNIT 5 -->
+<section class="unit" id="u5">
+<div class="unit-number">الوحدة التعليمية الخامسة | الصفحات 126–154</div>
+<h2>تحليل العلاقة بين التكلفة والحجم والربح</h2>
+
+<h3>1. مفهوم تحليل التكلفة والحجم والربح (CVP)</h3>
+<p>أداة تساعد الإدارة على معرفة تأثير تغير حجم المبيعات والتكاليف وسعر البيع على الربح.</p>
+
+<h3>2. هامش المساهمة</h3>
+<div class="law">
+<strong>هامش المساهمة للوحدة = سعر بيع الوحدة − التكلفة المتغيرة للوحدة</strong><br>
+<strong>إجمالي هامش المساهمة = المبيعات − إجمالي التكاليف المتغيرة</strong>
+</div>
+
+<h3>3. نقطة التعادل</h3>
+<p>هي مستوى المبيعات الذي عنده يتساوى إجمالي الإيرادات مع إجمالي التكاليف، ويكون الربح صفرًا.</p>
+<div class="law">
+<strong>نقطة التعادل بالوحدات = التكاليف الثابتة ÷ هامش المساهمة للوحدة</strong><br>
+<strong>نقطة التعادل بالمبيعات = التكاليف الثابتة ÷ نسبة هامش المساهمة</strong>
+</div>
+
+<h3>4. نسبة هامش المساهمة</h3>
+<div class="law">
+<strong>نسبة هامش المساهمة = هامش المساهمة ÷ سعر البيع × 100%</strong>
+</div>
+
+<div class="example">
+<b>مثال محلول:</b><br>
+سعر البيع = 100 جنيه، التكلفة المتغيرة = 60 جنيهًا، والتكاليف الثابتة = 20,000 جنيه.<br>
+هامش المساهمة = 100 − 60 = 40 جنيهًا.<br>
+نقطة التعادل = 20,000 ÷ 40 = 500 وحدة.<br>
+نسبة هامش المساهمة = 40 ÷ 100 = 40%.
+</div>
+
+<h3>5. الربح المستهدف</h3>
+<div class="law">
+<strong>عدد الوحدات لتحقيق ربح مستهدف = (التكاليف الثابتة + الربح المستهدف) ÷ هامش المساهمة للوحدة</strong>
+</div>
+
+<h3>6. هامش الأمان</h3>
+<p>يوضح مقدار انخفاض المبيعات الممكن قبل الوصول إلى نقطة التعادل.</p>
+<div class="law">
+<strong>هامش الأمان = المبيعات الفعلية − مبيعات نقطة التعادل</strong>
+</div>
+
+<div class="note"><b>خلاصة الوحدة:</b> احفظ قوانين هامش المساهمة، ونقطة التعادل، والربح المستهدف، وهامش الأمان، وانتبه هل المطلوب وحدات أم قيمة مبيعات.</div>
+
+<div class="question" data-answer="b">
+<p>1. إذا كان سعر البيع 80 جنيهًا والتكلفة المتغيرة 50 جنيهًا، هامش المساهمة:</p>
+<button class="option" data-value="a">أ) 130 جنيهًا</button>
+<button class="option" data-value="b">ب) 30 جنيهًا</button>
+<button class="option" data-value="c">ج) 50 جنيهًا</button>
+<div class="feedback"></div>
+</div>
+<div class="question" data-answer="c">
+<p>2. التكاليف الثابتة 12,000 جنيه وهامش المساهمة 30 جنيهًا، نقطة التعادل بالوحدات:</p>
+<button class="option" data-value="a">أ) 300 وحدة</button>
+<button class="option" data-value="b">ب) 200 وحدة</button>
+<button class="option" data-value="c">ج) 400 وحدة</button>
+<div class="feedback"></div>
+</div>
+<button class="main-btn complete">تحديد الوحدة كمكتملة</button>
+</section>
+
+<!-- UNIT 6 -->
+<section class="unit" id="u6">
+<div class="unit-number">الوحدة التعليمية السادسة | الصفحات 155–188</div>
+<h2>ضبط ورقابة التكاليف الصناعية غير المباشرة</h2>
+
+<h3>1. مفهوم التكاليف الصناعية غير المباشرة</h3>
+<p>هي تكاليف الإنتاج التي لا يمكن تتبعها اقتصاديًا وبسهولة إلى وحدة إنتاج معينة، مثل صيانة الآلات وإهلاك المعدات وإضاءة المصنع.</p>
+
+<h3>2. تقدير التكاليف الصناعية غير المباشرة</h3>
+<p>تحتاج المنشأة إلى تقدير التكاليف الصناعية غير المباشرة قبل بداية الفترة حتى تستطيع تحميل الأوامر أو الإنتاج بنصيب مناسب منها.</p>
+
+<h3>3. معدل التحميل</h3>
+<div class="law">
+<strong>معدل التحميل المقدر = التكاليف الصناعية غير المباشرة المقدرة ÷ أساس التحميل المقدر</strong><br>
+<strong>التكاليف المحملة = معدل التحميل × أساس التحميل الفعلي</strong>
+</div>
+
+<h3>4. أسس التحميل</h3>
+<ul>
+<li>ساعات العمل المباشر.</li>
+<li>تكلفة الأجور المباشرة.</li>
+<li>ساعات تشغيل الآلات.</li>
+<li>الوحدات المنتجة، عندما يكون ذلك مناسبًا.</li>
+</ul>
+
+<h3>5. الرقابة على التكاليف</h3>
+<p>تهدف الرقابة إلى مقارنة التكاليف الفعلية بالمقدرة، واكتشاف الانحرافات، ومعرفة أسبابها، واتخاذ الإجراءات التصحيحية.</p>
+
+<div class="example">
+<b>مثال:</b><br>
+التكاليف الصناعية غير المباشرة المقدرة = 50,000 جنيه.<br>
+ساعات تشغيل الآلات المقدرة = 10,000 ساعة.<br>
+معدل التحميل = 50,000 ÷ 10,000 = 5 جنيهات لكل ساعة.<br>
+إذا استخدم أمر إنتاجي 200 ساعة، فالتكاليف المحملة = 200 × 5 = 1,000 جنيه.
+</div>
+
+<div class="note"><b>خلاصة الوحدة:</b> ركز على تقدير التكاليف، واختيار أساس التحميل، وحساب المعدل، ثم المقارنة بين الفعلي والمحمّل.</div>
+
+<div class="question" data-answer="a">
+<p>1. من أمثلة التكاليف الصناعية غير المباشرة:</p>
+<button class="option" data-value="a">أ) إهلاك آلات المصنع</button>
+<button class="option" data-value="b">ب) الخشب المستخدم في طاولة محددة</button>
+<button class="option" data-value="c">ج) أجر عامل يصنع منتجًا محددًا مباشرة</button>
+<div class="feedback"></div>
+</div>
+<div class="question" data-answer="b">
+<p>2. معدل التحميل = التكاليف المقدرة ÷ :</p>
+<button class="option" data-value="a">أ) المبيعات الفعلية</button>
+<button class="option" data-value="b">ب) أساس التحميل المقدر</button>
+<button class="option" data-value="c">ج) الربح المستهدف</button>
+<div class="feedback"></div>
+</div>
+<button class="main-btn complete">تحديد الوحدة كمكتملة</button>
+</section>
+
+<!-- UNIT 7 -->
+<section class="unit" id="u7">
+<div class="unit-number">الوحدة التعليمية السابعة | الصفحات 189–218</div>
+<h2>المحاسبة عن التكاليف الصناعية غير المباشرة على أساس الأنشطة (ABC)</h2>
+
+<h3>1. مفهوم نظام التكاليف على أساس الأنشطة</h3>
+<p>نظام يهدف إلى تحميل التكاليف الصناعية غير المباشرة على المنتجات بناءً على الأنشطة التي تستهلكها هذه المنتجات، بدلًا من الاعتماد على أساس تحميل واحد فقط.</p>
+
+<h3>2. مفهوم النشاط ومسبب التكلفة</h3>
+<ul>
+<li><b>النشاط:</b> عمل أو إجراء يستهلك موارد المنشأة، مثل إعداد الآلات أو فحص المنتجات.</li>
+<li><b>مسبب التكلفة:</b> عامل يوضح سبب حدوث تكلفة النشاط، مثل عدد مرات إعداد الآلات.</li>
+</ul>
+
+<h3>3. خطوات تطبيق نظام ABC</h3>
+<ol>
+<li>تحديد الأنشطة الرئيسية داخل المنشأة.</li>
+<li>تجميع التكاليف المرتبطة بكل نشاط في مجموعة تكلفة.</li>
+<li>اختيار مسبب تكلفة مناسب لكل نشاط.</li>
+<li>حساب معدل تكلفة النشاط.</li>
+<li>تحميل المنتجات بتكلفة الأنشطة التي استهلكتها.</li>
+</ol>
+
+<div class="law">
+<strong>معدل تكلفة النشاط = إجمالي تكلفة النشاط ÷ إجمالي كمية مسبب التكلفة</strong><br>
+<strong>نصيب المنتج من تكلفة النشاط = معدل النشاط × كمية المسبب التي استهلكها المنتج</strong>
+</div>
+
+<div class="example">
+<b>مثال:</b><br>
+تكلفة نشاط إعداد الآلات = 12,000 جنيه.<br>
+عدد مرات الإعداد = 60 مرة.<br>
+معدل النشاط = 12,000 ÷ 60 = 200 جنيه لكل مرة.<br>
+إذا احتاج منتج إلى 10 مرات إعداد، نصيبه = 10 × 200 = 2,000 جنيه.
+</div>
+
+<h3>4. مميزات النظام</h3>
+<ul>
+<li>يساعد على قياس تكلفة المنتجات بصورة أكثر دقة عندما تختلف الأنشطة المستهلكة.</li>
+<li>يوضح الأنشطة التي تستهلك موارد كثيرة.</li>
+<li>يساعد الإدارة في اتخاذ القرارات وتحسين العمليات.</li>
+</ul>
+
+<h3>5. التحديات</h3>
+<ul>
+<li>قد يحتاج إلى بيانات كثيرة.</li>
+<li>تكلفة تطبيقه وصيانته قد تكون مرتفعة.</li>
+<li>يتطلب تحديد الأنشطة ومسببات التكلفة بصورة مناسبة.</li>
+</ul>
+
+<div class="note"><b>خلاصة الوحدة:</b> افهم فكرة ABC وخطواته، والفرق بين النشاط ومسبب التكلفة، وطريقة حساب معدل النشاط.</div>
+
+<div class="question" data-answer="c">
+<p>1. مسبب التكلفة هو:</p>
+<button class="option" data-value="a">أ) سعر بيع المنتج</button>
+<button class="option" data-value="b">ب) إجمالي أرباح المنشأة</button>
+<button class="option" data-value="c">ج) عامل يفسر استهلاك النشاط للتكلفة</button>
+<div class="feedback"></div>
+</div>
+<div class="question" data-answer="a">
+<p>2. إذا كانت تكلفة النشاط 10,000 جنيه وعدد مرات النشاط 100 مرة، فمعدل النشاط:</p>
+<button class="option" data-value="a">أ) 100 جنيه</button>
+<button class="option" data-value="b">ب) 1,000 جنيه</button>
+<button class="option" data-value="c">ج) 10 جنيهات</button>
+<div class="feedback"></div>
+</div>
+<button class="main-btn complete">تحديد الوحدة كمكتملة</button>
+</section>
+
+<!-- UNIT 8 -->
+<section class="unit" id="u8">
+<div class="unit-number">الوحدة التعليمية الثامنة | الصفحات 219–252</div>
+<h2>المحاسبة عن تكاليف المقاولات (العقود)</h2>
+
+<h3>1. مفهوم عقود المقاولات</h3>
+<p>هي اتفاقات لتنفيذ أعمال أو مشروعات كبيرة خلال فترة زمنية، مثل إنشاء المباني والطرق والجسور.</p>
+
+<h3>2. خصائص عقود المقاولات</h3>
+<ul>
+<li>تنفيذ العمل يحتاج إلى فترة زمنية قد تمتد لأكثر من فترة مالية.</li>
+<li>كل عقد غالبًا له مواصفات وتكلفة مستقلة.</li>
+<li>توجد تكاليف مباشرة وغير مباشرة مرتبطة بتنفيذ العقد.</li>
+<li>قد يتم تحصيل قيمة العقد على دفعات وفقًا لمراحل الإنجاز.</li>
+</ul>
+
+<h3>3. عناصر تكلفة العقد</h3>
+<table>
+<tr><th>العنصر</th><th>أمثلة</th></tr>
+<tr><td>مواد مباشرة</td><td>أسمنت، حديد، طوب</td></tr>
+<tr><td>أجور مباشرة</td><td>أجور العمال بالموقع</td></tr>
+<tr><td>معدات وآلات</td><td>تكلفة استخدام المعدات بالمشروع</td></tr>
+<tr><td>تكاليف غير مباشرة</td><td>إشراف ومصروفات موقع مشتركة</td></tr>
+</table>
+
+<h3>4. تكلفة العقد</h3>
+<div class="law">
+<strong>إجمالي تكلفة العقد = المواد المباشرة + الأجور المباشرة + المعدات + التكاليف الأخرى المحملة</strong>
+</div>
+
+<h3>5. المستخلصات والمدفوعات</h3>
+<p>المستخلص هو بيان يوضح الأعمال التي تم تنفيذها خلال فترة معينة وقيمتها، ويستخدم للمطالبة بالمبالغ المستحقة وفق شروط العقد.</p>
+
+<h3>6. ربح أو خسارة العقد</h3>
+<div class="law">
+<strong>ربح العقد = إيراد العقد المعترف به − التكاليف المتعلقة به</strong>
+</div>
+<p>يجب مراعاة توقيت الاعتراف بالإيراد والتكلفة طبقًا للمعايير والسياسات المحاسبية المطبقة وشروط العقد.</p>
+
+<div class="example">
+<b>مثال مبسط:</b><br>
+قيمة الأعمال المعترف بها = 500,000 جنيه.<br>
+التكاليف المتعلقة بها = 420,000 جنيه.<br>
+الربح = 500,000 − 420,000 = 80,000 جنيه.
+</div>
+
+<div class="note"><b>خلاصة الوحدة:</b> افهم طبيعة عقود المقاولات، وعناصر تكلفة العقد، والمستخلصات، وكيفية تحديد نتيجة العقد وفقًا لما يدرسه الدكتور.</div>
+
+<div class="question" data-answer="b">
+<p>1. من أمثلة عقود المقاولات:</p>
+<button class="option" data-value="a">أ) بيع قلم في مكتبة</button>
+<button class="option" data-value="b">ب) إنشاء مبنى أو طريق</button>
+<button class="option" data-value="c">ج) شراء منتج جاهز للاستخدام</button>
+<div class="feedback"></div>
+</div>
+<div class="question" data-answer="c">
+<p>2. إذا كان إيراد العقد المعترف به 300,000 جنيه والتكاليف 250,000 جنيه، فالربح:</p>
+<button class="option" data-value="a">أ) 550,000 جنيه</button>
+<button class="option" data-value="b">ب) 250,000 جنيه</button>
+<button class="option" data-value="c">ج) 50,000 جنيه</button>
+<div class="feedback"></div>
+</div>
+<button class="main-btn complete">تحديد الوحدة كمكتملة</button>
+</section>
+
+<section class="panel">
+    <h2>مراجعة عامة للمادة</h2>
+    <p>قبل الامتحان، راجع النقاط الأساسية التالية:</p>
+    <ul>
+        <li>عناصر التكاليف الصناعية وتبويباتها.</li>
+        <li>سلوك التكاليف وطرق فصل الثابت عن المتغير.</li>
+        <li>بطاقة تكلفة الأمر ومعدل التحميل.</li>
+        <li>الوحدات المكافئة وتكلفة الوحدة المكافئة.</li>
+        <li>هامش المساهمة ونقطة التعادل والربح المستهدف.</li>
+        <li>الرقابة على التكاليف الصناعية غير المباشرة.</li>
+        <li>خطوات نظام ABC ومسببات التكلفة.</li>
+        <li>عناصر تكلفة العقود والمستخلصات.</li>
+    </ul>
+    <p class="note">هذه الصفحة شرح تأسيسي منظم وفق عناوين الفهرس، وليست بديلًا عن أمثلة الدكتور أو تفاصيل الكتاب. أي قوانين أو طرق معالجة تفصيلية خاصة بالمقرر نطابقها مع مذكرتك.</p>
+</section>
+
+</main>
+
+<footer>
+    <p>MH ONE | Cost Accounting</p>
+    <p>Designed for Mohamed Hatem</p>
+</footer>
+
+<script>
+let completed = JSON.parse(localStorage.getItem("costUnitsCompleted") || "[]");
+
+function updateProgress() {
+    const percent = (completed.length / 8) * 100;
+    document.getElementById("progressBar").style.width = percent + "%";
+    document.getElementById("progressText").textContent =
+        "أنجزت " + completed.length + " من 8 وحدات";
+}
+
+document.querySelectorAll(".unit").forEach((unit, index) => {
+    const button = unit.querySelector(".complete");
+    const unitNumber = index + 1;
+
+    if (completed.includes(unitNumber)) {
+        button.textContent = "تم إنجاز الوحدة ✓";
+    }
+
+    button.addEventListener("click", () => {
+        if (!completed.includes(unitNumber)) {
+            completed.push(unitNumber);
+        } else {
+            completed = completed.filter(n => n !== unitNumber);
+        }
+        localStorage.setItem("costUnitsCompleted", JSON.stringify(completed));
+        button.textContent = completed.includes(unitNumber)
+            ? "تم إنجاز الوحدة ✓"
+            : "تحديد الوحدة كمكتملة";
+        updateProgress();
+    });
+});
+
+document.querySelectorAll(".question").forEach(question => {
+    const correctAnswer = question.dataset.answer;
+    const feedback = question.querySelector(".feedback");
+
+    question.querySelectorAll(".option").forEach(option => {
+        option.addEventListener("click", () => {
+            if (question.dataset.answered === "true") return;
+
+            question.dataset.answered = "true";
+
+            if (option.dataset.value === correctAnswer) {
+                option.classList.add("correct");
+                feedback.textContent = "إجابة صحيحة ✓";
+            } else {
+                option.classList.add("wrong");
+                question.querySelectorAll(".option").forEach(btn => {
+                    if (btn.dataset.value === correctAnswer) {
+                        btn.classList.add("correct");
+                    }
+                });
+                feedback.textContent = "إجابة غير صحيحة. راجع الاختيار الصحيح باللون الأخضر.";
+            }
+        });
+    });
+});
+
+updateProgress();
+</script>
+</body>
+</html>

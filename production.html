@@ -1,0 +1,1554 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة الإنتاج والعمليات | MH ONE</title>
+
+<style>
+:root {
+    --gold: #d6ad55;
+    --gold-light: #f4d58b;
+    --black: #090909;
+    --panel: #151515;
+    --panel2: #1d1d1d;
+    --text: #eeeeee;
+    --muted: #aaaaaa;
+    --border: #393020;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    background: var(--black);
+    color: var(--text);
+    font-family: Tahoma, Arial, sans-serif;
+    line-height: 1.9;
+}
+header {
+    padding: 28px 6%;
+    background: linear-gradient(120deg,#080808,#211a0c);
+    border-bottom: 1px solid var(--gold);
+}
+.logo {
+    color: var(--gold);
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+header p { color: var(--muted); margin: 5px 0; }
+.hero {
+    padding: 45px 6%;
+    background: radial-gradient(circle at top left,#35280f,#090909 60%);
+}
+.hero h1 {
+    color: var(--gold-light);
+    font-size: clamp(26px,4vw,42px);
+    margin: 0;
+}
+.hero p { color: #ccc; max-width: 750px; }
+.container {
+    width: min(1200px,92%);
+    margin: 30px auto;
+}
+.progress-box {
+    background: var(--panel);
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 25px;
+}
+.progress-track {
+    height: 10px;
+    background: #333;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg,#9b7229,var(--gold-light));
+    transition: .3s;
+}
+.layout {
+    display: grid;
+    grid-template-columns: 270px minmax(0,1fr);
+    gap: 24px;
+    align-items: start;
+}
+.sidebar {
+    position: sticky;
+    top: 15px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 18px;
+    border-radius: 14px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+.sidebar h3 { color: var(--gold); margin-top: 0; }
+.sidebar a {
+    display: block;
+    text-decoration: none;
+    color: #ddd;
+    padding: 9px 10px;
+    border-radius: 8px;
+    margin: 5px 0;
+    font-size: 14px;
+    transition: .2s;
+}
+.sidebar a:hover {
+    background: #302510;
+    color: var(--gold-light);
+}
+.content { min-width: 0; }
+.chapter {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    scroll-margin-top: 15px;
+}
+.chapter h2 {
+    color: var(--gold-light);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+    margin-top: 0;
+}
+.chapter h3 { color: var(--gold); margin-top: 25px; }
+.chapter h4 { color: #e8d4a8; }
+.chapter p, .chapter li { color: #ddd; }
+.chapter li { margin: 6px 0; }
+.tag {
+    display: inline-block;
+    background: #302510;
+    color: var(--gold-light);
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+.note, .example, .summary, .law {
+    padding: 15px 18px;
+    border-radius: 10px;
+    margin: 17px 0;
+}
+.note { background: #202020; border-right: 4px solid var(--gold); }
+.example { background: #19221b; border-right: 4px solid #70ad7d; }
+.summary { background: #282113; border-right: 4px solid var(--gold-light); }
+.law { background: #211c2b; border-right: 4px solid #a68bd0; }
+.note strong, .example strong, .summary strong, .law strong {
+    color: var(--gold-light);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    min-width: 450px;
+}
+.table-wrap { overflow-x: auto; }
+th,td {
+    border: 1px solid #49402d;
+    padding: 10px;
+    text-align: right;
+}
+th { background: #302510; color: var(--gold-light); }
+td { color: #ddd; }
+.quiz {
+    background: #101010;
+    border: 1px solid #514124;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 25px;
+}
+.quiz h3 { margin-top: 0; }
+.question {
+    padding: 15px 0;
+    border-bottom: 1px solid #333;
+}
+.question:last-child { border: 0; }
+.question label {
+    display: block;
+    padding: 5px;
+    cursor: pointer;
+    color: #ddd;
+}
+.question input { accent-color: var(--gold); margin-left: 8px; }
+.quiz button, .top-button {
+    background: linear-gradient(120deg,#9b7229,var(--gold-light));
+    color: #111;
+    border: 0;
+    padding: 11px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 12px;
+}
+.result { margin-top: 12px; font-weight: bold; }
+footer {
+    text-align: center;
+    color: #999;
+    padding: 30px;
+    border-top: 1px solid var(--border);
+}
+@media(max-width:850px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; max-height: none; }
+    .sidebar nav {
+        display: grid;
+        grid-template-columns: repeat(2,minmax(0,1fr));
+        gap: 3px;
+    }
+    .chapter { padding: 18px; }
+}
+@media(max-width:480px) {
+    .sidebar nav { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">MH ONE</div>
+    <p>BY MOHAMMED HATEM</p>
+</header>
+
+<section class="hero">
+    <span class="tag">الفرقة الثانية – الترم الأول</span>
+    <h1>إدارة الإنتاج والعمليات</h1>
+    <p>
+        مذكرة تعليمية منظمة تساعدك على فهم المادة ومراجعتها،
+        بداية من أساسيات إدارة الإنتاج وحتى التخطيط والصيانة.
+    </p>
+</section>
+
+<div class="container">
+
+    <div class="progress-box">
+        <strong>تقدمك في المذاكرة</strong>
+        <p id="progressText">أنجزت 0 من 10 فصول</p>
+        <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+            <h3>فهرس المادة</h3>
+            <nav>
+                <a href="#ch1">الفصل الأول: مدخل المادة</a>
+                <a href="#ch2">الفصل الثاني: النظم الرشيقة</a>
+                <a href="#ch3">الفصل الثالث: اختيار الموقع</a>
+                <a href="#ch4">الفصل الرابع: تصميم المنتجات</a>
+                <a href="#ch5">الفصل الخامس: تصميم النظم والعمل</a>
+                <a href="#ch6">الفصل السادس: التنبؤ بالطلب</a>
+                <a href="#ch7">الفصل السابع: نقطة التعادل</a>
+                <a href="#ch8">الفصل الثامن: جدولة الإنتاج</a>
+                <a href="#ch9">الفصل التاسع: التخطيط الكلي</a>
+                <a href="#ch10">الفصل العاشر: الصيانة</a>
+            </nav>
+        </aside>
+
+        <main class="content">
+
+<!-- الفصل الأول -->
+<section class="chapter" id="ch1">
+<span class="tag">الفصل الأول</span>
+<h2>مدخل إلى إدارة الإنتاج والعمليات</h2>
+
+<h3>1- مفهوم إدارة الإنتاج والعمليات</h3>
+<p>
+إدارة الإنتاج والعمليات هي الوظيفة المسؤولة عن تحويل الموارد والمدخلات
+إلى منتجات أو خدمات تحقق احتياجات العملاء.
+</p>
+<p>
+بمعنى أبسط: المؤسسة لديها موارد مثل العمال والآلات والخامات والمال،
+وتستخدم هذه الموارد لإنتاج سلعة أو تقديم خدمة.
+</p>
+
+<div class="note">
+<strong>احفظ:</strong>
+إدارة الإنتاج والعمليات = تخطيط وتنظيم وتوجيه ورقابة الأنشطة
+التي تحول المدخلات إلى مخرجات.
+</div>
+
+<h3>2- طبيعة وظيفة الإنتاج والعمليات</h3>
+<p>تعتمد وظيفة الإنتاج على ثلاثة عناصر أساسية:</p>
+<ul>
+<li><strong>المدخلات (Inputs):</strong> الموارد التي تدخل عملية الإنتاج.</li>
+<li><strong>العمليات التحويلية (Transformation):</strong> الأنشطة التي تحول المدخلات.</li>
+<li><strong>المخرجات (Outputs):</strong> المنتجات أو الخدمات الناتجة.</li>
+</ul>
+
+<div class="example">
+<strong>مثال:</strong>
+مصنع أثاث:
+<ul>
+<li>المدخلات: خشب، عمال، آلات، كهرباء.</li>
+<li>العملية التحويلية: تقطيع الخشب وتجميعه وطلاؤه.</li>
+<li>المخرجات: كراسي وطاولات.</li>
+</ul>
+</div>
+
+<h3>3- تنافسية الشركة وإدارة العمليات</h3>
+<p>
+تساعد إدارة العمليات المؤسسة على المنافسة من خلال تحسين الجودة،
+وتقليل التكلفة، وسرعة التسليم، والمرونة في الاستجابة لطلبات العملاء.
+</p>
+<ul>
+<li><strong>التكلفة:</strong> تقديم المنتج بتكلفة مناسبة.</li>
+<li><strong>الجودة:</strong> مطابقة المنتج للمواصفات المطلوبة.</li>
+<li><strong>السرعة:</strong> تقليل وقت الإنتاج والتسليم.</li>
+<li><strong>الاعتمادية:</strong> الالتزام بمواعيد التسليم.</li>
+<li><strong>المرونة:</strong> القدرة على تغيير الكميات أو المنتجات.</li>
+</ul>
+
+<h3>4- الفرق بين القطاع الإنتاجي والخدمي</h3>
+<div class="table-wrap">
+<table>
+<tr><th>القطاع الإنتاجي</th><th>القطاع الخدمي</th></tr>
+<tr><td>ينتج سلعًا مادية غالبًا.</td><td>يقدم خدمات غير مادية غالبًا.</td></tr>
+<tr><td>يمكن تخزين المنتجات.</td><td>الخدمة غالبًا لا يمكن تخزينها.</td></tr>
+<tr><td>قد يتم الإنتاج بعيدًا عن العميل.</td><td>غالبًا يتفاعل العميل مع مقدم الخدمة.</td></tr>
+<tr><td>مثل مصانع السيارات.</td><td>مثل المستشفيات والبنوك.</td></tr>
+</table>
+</div>
+
+<h3>5- الخصائص الرئيسية لنظم الإنتاج الخدمي</h3>
+<ul>
+<li>صعوبة تخزين الخدمة.</li>
+<li>وجود تفاعل مباشر مع العميل في كثير من الخدمات.</li>
+<li>اختلاف مستوى الخدمة حسب مقدمها وظروف تقديمها.</li>
+<li>تزامن إنتاج الخدمة واستهلاكها في حالات كثيرة.</li>
+</ul>
+
+<h3>6- أهداف إدارة الإنتاج والعمليات</h3>
+<ul>
+<li>تحقيق الجودة المطلوبة.</li>
+<li>خفض التكاليف والهدر.</li>
+<li>استغلال الموارد بكفاءة.</li>
+<li>زيادة الإنتاجية.</li>
+<li>الالتزام بمواعيد التسليم.</li>
+<li>تحقيق رضا العملاء.</li>
+</ul>
+
+<h3>7- أنشطة إدارة الإنتاج والعمليات</h3>
+<p>
+تشمل تصميم المنتجات، واختيار الموقع، وتخطيط الطاقة الإنتاجية،
+وتحديد أساليب العمل، وإدارة المخزون، والجدولة، ومراقبة الجودة والصيانة.
+</p>
+
+<h3>8- تنظيم إدارة الإنتاج والعمليات</h3>
+<p>
+تختلف طريقة تنظيم إدارة العمليات حسب حجم المؤسسة وطبيعة نشاطها.
+لكنها تتعاون عادة مع التسويق والتمويل والموارد البشرية والمشتريات.
+</p>
+
+<div class="summary">
+<strong>ملخص الفصل الأول:</strong>
+<ul>
+<li>المدخلات تتحول من خلال العمليات إلى مخرجات.</li>
+<li>القطاع الإنتاجي ينتج سلعًا، والخدمي يقدم خدمات.</li>
+<li>أهم أهداف العمليات: الجودة والتكلفة والسرعة والمرونة.</li>
+<li>إدارة العمليات تتعاون مع باقي إدارات المؤسسة.</li>
+</ul>
+</div>
+
+<div class="quiz" data-quiz>
+<h3>اختبر نفسك – الفصل الأول</h3>
+<div class="question" data-answer="b">
+<p>1. ما المقصود بالمدخلات في نظام الإنتاج؟</p>
+<label><input type="radio" name="q1" value="a"> المنتجات النهائية</label>
+<label><input type="radio" name="q1" value="b"> الموارد المستخدمة في الإنتاج</label>
+<label><input type="radio" name="q1" value="c"> العملاء فقط</label>
+</div>
+<div class="question" data-answer="a">
+<p>2. أي مما يلي مثال على قطاع خدمي؟</p>
+<label><input type="radio" name="q2" value="a"> المستشفى</label>
+<label><input type="radio" name="q2" value="b"> مصنع الأثاث</label>
+<label><input type="radio" name="q2" value="c"> مصنع السيارات</label>
+</div>
+<div class="question" data-answer="c">
+<p>3. من أهداف إدارة العمليات:</p>
+<label><input type="radio" name="q3" value="a"> زيادة الهدر</label>
+<label><input type="radio" name="q3" value="b"> تجاهل الجودة</label>
+<label><input type="radio" name="q3" value="c"> تحسين استغلال الموارد</label>
+</div>
+<button type="button" onclick="gradeQuiz(this)">تصحيح الإجابات</button>
+<div class="result"></div>
+</div>
+<button class="top-button" onclick="markDone(1,this)">تمت مذاكرة الفصل ✓</button>
+</section>
+
+<!-- الفصل الثاني -->
+<section class="chapter" id="ch2">
+<span class="tag">الفصل الثاني</span>
+<h2>النظم الرشيقة Lean Systems</h2>
+
+<h3>1- مفهوم النظم الرشيقة</h3>
+<p>
+النظم الرشيقة هي فلسفة إدارية تهدف إلى تقديم قيمة أكبر للعميل
+باستخدام موارد أقل، من خلال التخلص من الأنشطة التي لا تضيف قيمة
+للمنتج أو الخدمة.
+</p>
+
+<h3>2- نظام الإنتاج في الوقت المحدد JIT</h3>
+<p>
+Just In Time يعني توفير المواد أو إنتاج الوحدات في الوقت والكمية
+المطلوبين، بدلًا من الاحتفاظ بمخزون كبير دون حاجة.
+</p>
+<div class="note">
+<strong>الفكرة الأساسية:</strong>
+لا تنتج ولا تطلب إلا ما تحتاج إليه، بالكمية المطلوبة، وفي الوقت المناسب.
+</div>
+
+<h3>3- نشأة ومفهوم JIT</h3>
+<p>
+ارتبط تطور نظام الإنتاج في الوقت المحدد بتجربة شركة تويوتا اليابانية،
+حيث سعت إلى تقليل المخزون والهدر وتحسين تدفق العمل.
+</p>
+
+<h3>4- أهداف JIT</h3>
+<ul>
+<li>تقليل المخزون.</li>
+<li>خفض تكاليف التخزين.</li>
+<li>تقليل وقت الانتظار.</li>
+<li>تحسين الجودة.</li>
+<li>اكتشاف المشكلات بسرعة.</li>
+<li>تحسين العلاقة مع الموردين.</li>
+</ul>
+
+<h3>5- فلسفة JIT</h3>
+<p>
+تعتمد الفلسفة على التحسين المستمر، ومنع الهدر، وإنتاج ما يحتاجه العميل،
+وتقوية التعاون بين العاملين والموردين.
+</p>
+
+<h3>6- المخزون في نظام JIT</h3>
+<p>
+في هذا النظام لا يُنظر إلى المخزون الكبير باعتباره حلًا دائمًا؛
+فقد يخفي عيوب الجودة أو مشكلات الموردين أو ضعف تنظيم الإنتاج.
+لكن تقليل المخزون يحتاج إلى موردين موثوقين وتخطيط دقيق.
+</p>
+
+<h3>7- منافع تطبيق JIT</h3>
+<ul>
+<li>تقليل الأموال المجمدة في المخزون.</li>
+<li>تقليل المساحات المستخدمة للتخزين.</li>
+<li>تحسين سرعة تدفق الإنتاج.</li>
+<li>تقليل التلف والتقادم.</li>
+</ul>
+
+<h3>8- محددات نظام JIT</h3>
+<ul>
+<li>تأخر المورد قد يوقف الإنتاج.</li>
+<li>التغير المفاجئ في الطلب قد يسبب صعوبة في التلبية.</li>
+<li>يحتاج إلى تنسيق قوي مع الموردين.</li>
+<li>يتطلب جودة مستقرة وعمليات منظمة.</li>
+</ul>
+
+<h3>9- الإنتاج الرشيق Lean Production</h3>
+<p>
+الإنتاج الرشيق هو تطبيق مبادئ التخلص من الهدر وتحسين تدفق العمل
+وتقديم قيمة للعميل بصورة مستمرة.
+</p>
+
+<h3>10- صفات ومزايا الإنتاج الرشيق</h3>
+<ul>
+<li>التركيز على احتياجات العميل.</li>
+<li>التحسين المستمر Kaizen.</li>
+<li>تقليل الأنشطة غير الضرورية.</li>
+<li>رفع جودة المنتج.</li>
+<li>إشراك العاملين في حل المشكلات.</li>
+</ul>
+
+<h3>11- أنواع الفاقد والهدر Types of Waste</h3>
+<ol>
+<li>الإنتاج الزائد عن الحاجة.</li>
+<li>الانتظار دون عمل.</li>
+<li>النقل غير الضروري.</li>
+<li>العمليات الزائدة عن المطلوب.</li>
+<li>المخزون الزائد.</li>
+<li>الحركة غير الضرورية.</li>
+<li>العيوب وإعادة التشغيل.</li>
+</ol>
+<p>وتضيف بعض المراجع عدم الاستفادة من قدرات العاملين باعتباره نوعًا إضافيًا من الهدر.</p>
+
+<h3>12- تقنيات تطبيق الإنتاج الرشيق</h3>
+<ul>
+<li><strong>5S:</strong> تنظيم مكان العمل وترتيبه والمحافظة على نظافته.</li>
+<li><strong>Kaizen:</strong> التحسين المستمر بخطوات صغيرة.</li>
+<li><strong>Kanban:</strong> أسلوب إشارات لتنظيم تدفق المواد والإنتاج.</li>
+<li><strong>Value Stream Mapping:</strong> رسم تدفق القيمة لتحديد الهدر.</li>
+<li><strong>Standardized Work:</strong> توحيد خطوات أداء العمل.</li>
+</ul>
+
+<div class="example">
+<strong>مثال:</strong>
+مصنع ينتج 1000 وحدة بينما الطلب 600 فقط.
+الـ400 وحدة الزائدة قد تسبب تكلفة تخزين وتجميد أموال؛
+الإنتاج الرشيق يساعد على ربط الإنتاج بالطلب الفعلي.
+</div>
+
+<div class="summary">
+<strong>ملخص الفصل الثاني:</strong>
+JIT = الكمية المناسبة، في الوقت المناسب.
+Lean = قيمة أكبر وهدر أقل.
+من أهم صور الهدر: الإنتاج الزائد، الانتظار، النقل، المخزون، العيوب.
+</div>
+
+<div class="quiz" data-quiz>
+<h3>اختبر نفسك – الفصل الثاني</h3>
+<div class="question" data-answer="a">
+<p>1. ماذا يعني JIT؟</p>
+<label><input type="radio" name="q4" value="a"> الإنتاج في الوقت المحدد</label>
+<label><input type="radio" name="q4" value="b"> زيادة المخزون دائمًا</label>
+<label><input type="radio" name="q4" value="c"> إيقاف الإنتاج</label>
+</div>
+<div class="question" data-answer="c">
+<p>2. أي مما يلي يعتبر من الهدر؟</p>
+<label><input type="radio" name="q5" value="a"> تحسين الجودة</label>
+<label><input type="radio" name="q5" value="b"> تنظيم العمل</label>
+<label><input type="radio" name="q5" value="c"> الإنتاج الزائد</label>
+</div>
+<div class="question" data-answer="b">
+<p>3. ما المقصود بـ Kaizen؟</p>
+<label><input type="radio" name="q6" value="a"> زيادة المخزون</label>
+<label><input type="radio" name="q6" value="b"> التحسين المستمر</label>
+<label><input type="radio" name="q6" value="c"> إلغاء الرقابة</label>
+</div>
+<button type="button" onclick="gradeQuiz(this)">تصحيح الإجابات</button>
+<div class="result"></div>
+</div>
+<button class="top-button" onclick="markDone(2,this)">تمت مذاكرة الفصل ✓</button>
+</section>
+
+<!-- الفصل الثالث -->
+<section class="chapter" id="ch3">
+<span class="tag">الفصل الثالث</span>
+<h2>اختيار موقع النظام الإنتاجي وهيكل تكنولوجيا العمليات</h2>
+
+<h3>1- مفهوم موقع النظام الإنتاجي</h3>
+<p>
+هو المكان الجغرافي الذي تختاره المؤسسة لممارسة نشاطها الإنتاجي
+أو الخدمي، مثل موقع المصنع أو المستشفى أو مركز التوزيع.
+</p>
+
+<h3>2- أهمية اختيار الموقع</h3>
+<ul>
+<li>التأثير في تكلفة النقل والتشغيل.</li>
+<li>القرب من العملاء والأسواق.</li>
+<li>سهولة الحصول على المواد الخام.</li>
+<li>توفير العمالة المناسبة.</li>
+<li>تحسين القدرة التنافسية.</li>
+</ul>
+
+<h3>3- حالات اختيار موقع النظام الإنتاجي</h3>
+<ul>
+<li>إنشاء مشروع جديد.</li>
+<li>التوسع وفتح فرع جديد.</li>
+<li>نقل المنشأة إلى مكان آخر.</li>
+<li>إعادة توزيع الأنشطة بين المواقع.</li>
+</ul>
+
+<h3>4- مراحل اتخاذ قرار اختيار الموقع</h3>
+<ol>
+<li>تحديد أهداف المؤسسة ومتطلباتها.</li>
+<li>تحديد المناطق البديلة المناسبة.</li>
+<li>جمع البيانات عن كل موقع.</li>
+<li>تحديد عوامل المفاضلة وأوزانها.</li>
+<li>تقييم البدائل.</li>
+<li>اختيار الموقع الأنسب ومتابعة نتائجه.</li>
+</ol>
+
+<h3>5- العوامل المؤثرة في اختيار الموقع</h3>
+<ul>
+<li>القرب من المواد الخام.</li>
+<li>القرب من الأسواق والعملاء.</li>
+<li>تكلفة الأرض والإيجار.</li>
+<li>توافر العمالة ومستوى مهارتها.</li>
+<li>النقل والمواصلات.</li>
+<li>توافر الكهرباء والمياه والخدمات.</li>
+<li>القوانين والضرائب والاشتراطات البيئية.</li>
+<li>الأمن والاستقرار وإمكانية التوسع.</li>
+</ul>
+
+<h3>6- أساليب المفاضلة بين المواقع</h3>
+<h4>أولًا: طريقة التكاليف</h4>
+<p>
+نحسب إجمالي تكلفة كل موقع، ثم نقارن بين البدائل.
+إذا كانت المواقع تقدم نفس مستوى الخدمة أو الإنتاج، يكون الموقع الأقل
+في إجمالي التكلفة هو الأفضل من الناحية الاقتصادية.
+</p>
+
+<div class="law">
+<strong>القانون:</strong><br>
+إجمالي التكلفة = التكاليف الثابتة + (تكلفة الوحدة المتغيرة × كمية الإنتاج)
+</div>
+
+<div class="example">
+<strong>مثال محلول:</strong>
+<table>
+<tr><th>البيان</th><th>الموقع أ</th><th>الموقع ب</th></tr>
+<tr><td>التكاليف الثابتة</td><td>20,000</td><td>30,000</td></tr>
+<tr><td>التكلفة المتغيرة للوحدة</td><td>10</td><td>8</td></tr>
+<tr><td>الإنتاج المتوقع</td><td>5,000</td><td>5,000</td></tr>
+<tr><td>التكلفة الإجمالية</td><td>70,000</td><td>70,000</td></tr>
+</table>
+الموقع أ = 20,000 + (10 × 5,000) = 70,000<br>
+الموقع ب = 30,000 + (8 × 5,000) = 70,000<br>
+إذن التكلفة متساوية عند هذه الكمية، ونحتاج إلى عوامل أخرى للمفاضلة.
+</div>
+
+<h4>ثانيًا: طريقة النقاط المرجحة</h4>
+<p>
+نحدد عوامل الاختيار، ونعطي كل عامل وزنًا يعبر عن أهميته،
+ثم نقيّم كل موقع بدرجة، ونحسب مجموع الدرجات المرجحة.
+</p>
+
+<div class="law">
+<strong>القانون:</strong><br>
+الدرجة المرجحة = وزن العامل × درجة الموقع<br>
+إجمالي الموقع = مجموع الدرجات المرجحة لجميع العوامل.
+</div>
+
+<div class="example">
+<strong>مثال:</strong>
+إذا كان وزن القرب من السوق 40%، وحصل موقع على 8 من 10:
+الدرجة المرجحة = 0.40 × 8 = 3.2
+</div>
+
+<h3>7- هيكل نظام الخدمة</h3>
+<p>
+يعبر عن الطريقة التي يتم بها تنظيم تقديم الخدمة، ويشمل موقع تقديمها،
+ومدى اتصال العميل بمقدم الخدمة، والموارد والتكنولوجيا المستخدمة.
+</p>
+<p>
+يجب أن يتناسب تصميم نظام الخدمة مع طبيعة العميل وسرعة الخدمة
+ومستوى التفاعل المطلوب.
+</p>
+
+<div class="summary">
+<strong>ملخص الفصل الثالث:</strong>
+<ul>
+<li>اختيار الموقع قرار طويل الأجل يؤثر على التكاليف.</li>
+<li>من العوامل المهمة: السوق، الخامات، العمالة، النقل.</li>
+<li>طريقة التكاليف تقارن إجمالي التكاليف.</li>
+<li>طريقة النقاط المرجحة تقارن العوامل بأوزانها.</li>
+</ul>
+</div>
+
+<div class="quiz" data-quiz>
+<h3>اختبر نفسك – الفصل الثالث</h3>
+<div class="question" data-answer="b">
+<p>1. من العوامل المؤثرة في اختيار الموقع:</p>
+<label><input type="radio" name="q7" value="a"> لون شعار الشركة</label>
+<label><input type="radio" name="q7" value="b"> القرب من الأسواق</label>
+<label><input type="radio" name="q7" value="c"> اسم المدير</label>
+</div>
+<div class="question" data-answer="a">
+<p>2. إجمالي التكلفة يساوي:</p>
+<label><input type="radio" name="q8" value="a"> الثابتة + المتغيرة الإجمالية</label>
+<label><input type="radio" name="q8" value="b"> الثابتة فقط</label>
+<label><input type="radio" name="q8" value="c"> المتغيرة فقط</label>
+</div>
+<div class="question" data-answer="c">
+<p>3. طريقة النقاط المرجحة تعتمد على:</p>
+<label><input type="radio" name="q9" value="a"> اختيار الموقع عشوائيًا</label>
+<label><input type="radio" name="q9" value="b"> تجاهل العوامل</label>
+<label><input type="radio" name="q9" value="c"> الأوزان والدرجات</label>
+</div>
+<button type="button" onclick="gradeQuiz(this)">تصحيح الإجابات</button>
+<div class="result"></div>
+</div>
+<button class="top-button" onclick="markDone(3,this)">تمت مذاكرة الفصل ✓</button>
+</section>
+
+<!-- الفصل الرابع -->
+<section class="chapter" id="ch4">
+<span class="tag">الفصل الرابع</span>
+<h2>تصميم وتخطيط المنتجات</h2>
+
+<h3>1- مفهوم تصميم المنتج</h3>
+<p>
+تصميم المنتج هو تحديد خصائص وشكل ومكونات المنتج وطريقة استخدامه،
+بما يلبي احتياجات العملاء ويتناسب مع إمكانيات المؤسسة.
+</p>
+
+<h3>2- أهمية قرار تصميم وتطوير المنتج</h3>
+<ul>
+<li>تلبية رغبات العملاء.</li>
+<li>تحقيق التميز عن المنافسين.</li>
+<li>تحسين الجودة والأداء.</li>
+<li>تقليل تكلفة التصنيع.</li>
+<li>زيادة فرص نجاح المنتج في السوق.</li>
+</ul>
+
+<h3>3- أنشطة ومراحل تصميم وتطوير المنتج</h3>
+<ol>
+<li>تحديد احتياجات العملاء وفرص السوق.</li>
+<li>توليد أفكار للمنتجات الجديدة.</li>
+<li>تقييم الأفكار واختيار المناسب منها.</li>
+<li>إعداد التصميم المبدئي.</li>
+<li>اختبار النموذج الأولي.</li>
+<li>تطوير التصميم النهائي.</li>
+<li>بدء الإنتاج ومتابعة الأداء.</li>
+</ol>
+
+<h3>4- خطوات تصميم المنتج</h3>
+<p>
+تبدأ العملية بفهم المشكلة التي سيحلها المنتج، ثم تحديد المواصفات
+والوظائف المطلوبة، واختيار المواد والمكونات، وتحديد الشكل والتكلفة،
+ثم اختبار التصميم قبل اعتماده.
+</p>
+
+<h3>5- أدوات تصميم المنتج Product Design Tools</h3>
+<ul>
+<li><strong>QFD:</strong> نشر وظيفة الجودة، لتحويل صوت العميل إلى مواصفات فنية.</li>
+<li><strong>CAD:</strong> التصميم بمساعدة الحاسب.</li>
+<li><strong>Prototype:</strong> النموذج الأولي لاختبار الفكرة قبل الإنتاج الكامل.</li>
+<li><strong>Value Engineering:</strong> هندسة القيمة لتحقيق الوظيفة المطلوبة بأفضل تكلفة مناسبة.</li>
+<li><strong>FMEA:</strong> تحليل أنماط الفشل وآثاره لتوقع المشكلات وتقليل مخاطرها.</li>
+</ul>
+
+<h3>6- تصميم المنتج في مجال الخدمات</h3>
+<p>
+لا يقتصر التصميم على السلع المادية؛ فالمؤسسة الخدمية تصمم أيضًا
+طريقة تقديم الخدمة، ووقت الانتظار، وخطوات التعامل مع العميل،
+ومكان تقديم الخدمة، والتكنولوجيا المستخدمة.
+</p>
+
+<div class="example">
+<strong>مثال:</strong>
+عند تصميم خدمة مصرفية إلكترونية، يجب تحديد خطوات فتح الحساب،
+وطريقة التحقق من البيانات، وسهولة الاستخدام، وسرعة تنفيذ المعاملات.
+</div>
+
+<div class="summary">
+<strong>ملخص الفصل الرابع:</strong>
+تصميم المنتج يربط احتياجات العميل بالإمكانات الفنية والاقتصادية للمؤسسة.
+ومن الأدوات المهمة: QFD وCAD والنموذج الأولي وهندسة القيمة وFMEA.
+</div>
+
+<div class="quiz" data-quiz>
+<h3>اختبر نفسك – الفصل الرابع</h3>
+<div class="question" data-answer="c">
+<p>1. الهدف الأساسي من تصميم المنتج هو:</p>
+<label><input type="radio" name="q10" value="a"> زيادة التعقيد</label>
+<label><input type="radio" name="q10" value="b"> تجاهل العميل</label>
+<label><input type="radio" name="q10" value="c"> تلبية احتياجات العملاء</label>
+</div>
+<div class="question" data-answer="a">
+<p>2. ماذا يعني CAD؟</p>
+<label><input type="radio" name="q11" value="a"> التصميم بمساعدة الحاسب</label>
+<label><input type="radio" name="q11" value="b"> تخزين المنتجات</label>
+<label><input type="radio" name="q11" value="c"> مراقبة المخزون</label>
+</div>
+<div class="question" data-answer="b">
+<p>3. النموذج الأولي يستخدم من أجل:</p>
+<label><input type="radio" name="q12" value="a"> إلغاء التصميم</label>
+<label><input type="radio" name="q12" value="b"> اختبار التصميم قبل الإنتاج الكامل</label>
+<label><input type="radio" name="q12" value="c"> زيادة المخزون</label>
+</div>
+<button type="button" onclick="gradeQuiz(this)">تصحيح الإجابات</button>
+<div class="result"></div>
+</div>
+<button class="top-button" onclick="markDone(4,this)">تمت مذاكرة الفصل ✓</button>
+</section>
+
+<!-- الفصل الخامس -->
+<section class="chapter" id="ch5">
+<span class="tag">الفصل الخامس</span>
+<h2>تصميم النظم الإنتاجية وتنظيم أساليب العمل</h2>
+
+<h3>1- مفهوم تصميم النظم الإنتاجية</h3>
+<p>
+هو تحديد الطريقة التي ستُرتب بها الموارد والآلات والأفراد والأنشطة
+داخل المؤسسة من أجل إنتاج السلع أو تقديم الخدمات بكفاءة.
+</p>
+
+<h3>2- مناهج تصميم النظم الإنتاجية</h3>
+<ul>
+<li><strong>التصميم حسب المنتج:</strong> ترتيب المعدات وفق تسلسل خطوات إنتاج منتج معين.</li>
+<li><strong>التصميم حسب العملية:</strong> تجميع المعدات المتشابهة في أقسام واحدة.</li>
+<li><strong>التصميم الخلوي:</strong> تجميع الموارد اللازمة لإنتاج عائلة من المنتجات المتشابهة.</li>
+<li><strong>التصميم في الموقع الثابت:</strong> يظل المنتج في مكانه وتنتقل إليه الموارد، مثل بناء السفن.</li>
+</ul>
+
+<h3>3- مفهوم تصميم العمل Job Design</h3>
+<p>
+هو تحديد المهام والمسؤوليات والطرق التي يؤدي بها العامل وظيفته،
+بما يحقق التوازن بين الإنتاجية وسلامة العامل ورضاه.
+</p>
+
+<h3>4- طرق تحليل وتحسين بيئة العمل</h3>
+<ul>
+<li>دراسة خطوات العمل لتحديد الخطوات غير الضرورية.</li>
+<li>تحسين ترتيب الأدوات والمعدات.</li>
+<li>تقليل الحركات والانتقالات غير اللازمة.</li>
+<li>تحسين الإضاءة والتهوية ودرجة الحرارة.</li>
+<li>توفير وسائل السلامة المهنية.</li>
+</ul>
+
+<h3>5- معايير العمل Work Standards</h3>
+<p>
+معيار العمل هو المستوى المحدد للوقت أو الأداء اللازم لإنجاز مهمة
+بظروف عمل معروفة وبطريقة محددة.
+</p>
+<p>تساعد المعايير على تخطيط الطاقة الإنتاجية وتقدير احتياجات العمالة والتكاليف.</p>
+
+<h3>6- قياسات وملاحظات العمل</h3>
+<p>
+من الأساليب المستخدمة دراسة الوقت والحركة، وملاحظة أداء العاملين،
+وتحليل خطوات العمل بهدف تحديد الطريقة المناسبة لتنفيذ المهمة.
+</p>
+
+<h3>7- تنظيم بيئة العمل</h3>
+<p>
+يشمل ترتيب أماكن العمل والأدوات والمواد ومسارات الحركة،
+وتوزيع المسؤوليات بما يقلل التعارض والوقت الضائع.
+</p>
+
+<h3>8- تخصيص العمل</h3>
+<p>
+يقصد به توزيع المهام والأنشطة على الأفراد أو الآلات أو محطات العمل
+وفق قدراتهم وطاقاتهم ومتطلبات العملية الإنتاجية.
+ويجب مراعاة العدالة والمهارة وحجم العمل والوقت المتاح.
+</p>
+
+<div class="example">
+<strong>مثال:</strong>
+في خط تجميع، إذا كانت هناك ثلاث مهام تستغرق 2 و3 و4 دقائق،
+فإن توزيعها على محطات العمل يجب أن يراعي تسلسل العمليات
+وتقليل وقت الانتظار بين المحطات.
+</div>
+
+<div class="summary">
+<strong>ملخص الفصل الخامس:</strong>
+تصميم النظام يحدد ترتيب الموارد، وتصميم العمل يحدد مهام العامل.
+أهم أشكال الترتيب: حسب المنتج، حسب العملية، الخلايا، والموقع الثابت.
+</div>
+
+<div class="quiz" data-quiz>
+<h3>اختبر نفسك – الفصل الخامس</h3>
+<div class="question" data-answer="b">
+<p>1. التصميم حسب المنتج يعني:</p>
+<label><input type="radio" name="q13" value="a"> تجميع كل الآلات المتشابهة فقط</label>
+<label><input type="radio" name="q13" value="b"> ترتيب الموارد حسب تسلسل إنتاج المنتج</label>
+<label><input type="radio" name="q13" value="c"> عدم ترتيب المعدات</label>
+</div>
+<div class="question" data-answer="a">
+<p>2. Job Design يعني:</p>
+<label><input type="radio" name="q14" value="a"> تصميم العمل والوظيفة</label>
+<label><input type="radio" name="q14" value="b"> تصميم الإعلان</label>
+<label><input type="radio" name="q14" value="c"> تخزين الخامات</label>
+</div>
+<div class="question" data-answer="c">
+<p>3. من أهداف معايير العمل:</p>
+<label><input type="radio" name="q15" value="a"> إلغاء التخطيط</label>
+<label><input type="radio" name="q15" value="b"> زيادة وقت الانتظار</label>
+<label><input type="radio" name="q15" value="c"> تقدير الوقت والأداء المطلوب</label>
+</div>
+<button type="button" onclick="gradeQuiz(this)">تصحيح الإجابات</button>
+<div class="result"></div>
+</div>
+<button class="top-button" onclick="markDone(5,this)">تمت مذاكرة الفصل ✓</button>
+</section>
+
+<!-- الفصل السادس -->
+<section class="chapter" id="ch6">
+<span class="tag">الفصل السادس</span>
+<h2>التنبؤ بالطلب على المنتج</h2>
+
+<h3>1- مفهوم التنبؤ</h3>
+<p>
+التنبؤ هو تقدير ما قد يحدث في المستقبل اعتمادًا على البيانات السابقة
+والمعلومات الحالية والأساليب العلمية.
+وفي الإنتاج، نستخدمه لتقدير الطلب المتوقع على المنتجات.
+</p>
+
+<h3>2- أهمية التنبؤ</h3>
+<ul>
+<li>تحديد كمية الإنتاج المطلوبة.</li>
+<li>تخطيط احتياجات المواد الخام.</li>
+<li>تحديد العمالة والطاقة الإنتاجية.</li>
+<li>تقليل نقص المخزون أو زيادته.</li>
+<li>المساعدة في إعداد الموازنات.</li>
+</ul>
+
+<h3>3- الأبعاد الزمنية للتنبؤ</h3>
+<ul>
+<li><strong>قصير الأجل:</strong> لفترات قصيرة، مثل أسابيع أو شهور، ويساعد في الجدولة والمخزون.</li>
+<li><strong>متوسط الأجل:</strong> لفترات متوسطة، ويساعد في تخطيط الإنتاج والعمالة.</li>
+<li><strong>طويل الأجل:</strong> لسنوات، ويساعد في قرارات التوسع والاستثمار والطاقة الإنتاجية.</li>
+</ul>
+
+<h3>4- خطوات عملية التنبؤ</h3>
+<ol>
+<li>تحديد الغرض من التنبؤ.</li>
+<li>تحديد المنتج والفترة الزمنية.</li>
+<li>جمع البيانات المناسبة.</li>
+<li>اختيار طريقة التنبؤ.</li>
+<li>إجراء الحسابات والتقديرات.</li>
+<li>مقارنة التوقعات بالنتائج الفعلية.</li>
+<li>تحديث التنبؤ عند ظهور معلومات جديدة.</li>
+</ol>
+
+<h3>5- طرق وأساليب التنبؤ</h3>
+<h4>أولًا: الطرق النوعية</h4>
+<p>
+تعتمد على الخبرة والرأي والتقدير، وتفيد عند عدم توافر بيانات تاريخية كافية.
+مثل رأي الخبراء وأبحاث السوق.
+</p>
+
+<h4>ثانيًا: الطرق الكمية</h4>
+<p>تعتمد على البيانات والأرقام، ومنها:</p>
+
+<h4>أ- المتوسط الحسابي البسيط</h4>
+<div class="law">
+<strong>القانون:</strong><br>
+المتوسط الحسابي = مجموع القيم ÷ عدد القيم
+</div>
+<div class="example">
+<strong>مثال:</strong>
+الطلب خلال ثلاثة أشهر كان 100 و120 و140 وحدة.
+المتوسط = (100 + 120 + 140) ÷ 3 = 120 وحدة.
+</div>
+
+<h4>ب- المتوسط المتحرك</h4>
+<p>
+نحسب متوسط عدد محدد من أحدث الفترات، ثم نحرّك الفترة مع ظهور بيانات جديدة.
+</p>
+<div class="example">
+<strong>مثال:</strong>
+إذا كان الطلب في آخر ثلاثة أشهر 100 و120 و140:
+تنبؤ الشهر التالي = (100 + 120 + 140) ÷ 3 = 120 وحدة.
+</div>
+
+<h4>ج- المتوسط المتحرك المرجح</h4>
+<div class="law">
+<strong>القانون:</strong><br>
+التنبؤ = مجموع (قيمة الطلب × وزنها النسبي)
+</div>
+<p>ويجب أن يكون مجموع الأوزان مساويًا لـ 1 أو 100%.</p>
+<div class="example">
+<strong>مثال:</strong>
+الطلبات: 100 و120 و140، والأوزان: 0.2 و0.3 و0.5 على الترتيب.
+التنبؤ = (100×0.2) + (120×0.3) + (140×0.5) = 126 وحدة.
+</div>
+
+<h4>د- التمهيد الأسي البسيط</h4>
+<div class="law">
+<strong>القانون:</strong><br>
+التنبؤ الجديد = α × الطلب الفعلي + (1-α) × التنبؤ السابق
+</div>
+<p>
+حيث α معامل التمهيد، وتتراوح قيمته بين صفر وواحد.
+</p>
+
+<div class="example">
+<strong>مثال:</strong>
+التنبؤ السابق 100، والطلب الفعلي 120، ومعامل التمهيد 0.2.
+التنبؤ الجديد = (0.2×120) + (0.8×100) = 104 وحدات.
+</div>
+
+<h4>هـ- قياس خطأ التنبؤ</h4>
+<p>يمكن قياس الخطأ من خلال الفرق بين القيمة الفعلية والمتوقعة.</p>
+<div class="law">
+<strong>الخطأ = الطلب الفعلي - الطلب المتوقع</strong><br>
+<strong>متوسط الخطأ المطلق MAD:</strong>
+مجموع القيم المطلقة للأخطاء ÷ عدد الفترات.
+</div>
+
+<div class="summary">
+<strong>ملخص الفصل السادس:</strong>
+التنبؤ يساعد في اتخاذ قرارات الإنتاج المستقبلية.
+الطرق النوعية تعتمد على الرأي والخبرة، والكمية تعتمد على البيانات.
+من الطرق الكمية: المتوسط الحسابي والمتحرك والمرجح والتمهيد الأسي.
+</div>
+
+<div class="quiz" data-quiz>
+<h3>اختبر نفسك – الفصل السادس</h3>
+<div class="question" data-answer="a">
+<p>1. التنبؤ هو:</p>
+<label><input type="radio" name="q16" value="a"> تقدير المستقبل بناءً على المعلومات</label>
+<label><input type="radio" name="q16" value="b"> تسجيل الماضي فقط</label>
+<label><input type="radio" name="q16" value="c"> إلغاء التخطيط</label>
+</div>
+<div class="question" data-answer="c">
+<p>2. المتوسط الحسابي للقيم 10 و20 و30 يساوي:</p>
+<label><input type="radio" name="q17" value="a"> 20</label>
+<label><input type="radio" name="q17" value="b"> 30</label>
+<label><input type="radio" name="q17" value="c"> 20</label>
+</div>
+<div class="question" data-answer="b">
+<p>3. الطرق النوعية تعتمد بصورة أساسية على:</p>
+<label><input type="radio" name="q18" value="a"> الآلات فقط</label>
+<label><input type="radio" name="q18" value="b"> الخبرة والآراء</label>
+<label><input type="radio" name="q18" value="c"> المعادلات فقط</label>
+</div>
+<button type="button" onclick="gradeQuiz(this)">تصحيح الإجابات</button>
+<div class="result"></div>
+</div>
+<button class="top-button" onclick="markDone(6,this)">تمت مذاكرة الفصل ✓</button>
+</section>
+
+<!-- الفصل السابع -->
+<section class="chapter" id="ch7">
+<span class="tag">الفصل السابع</span>
+<h2>التحليل الاقتصادي باستخدام تحليل التكلفة والحجم والربح</h2>
+
+<h3>1- مفهوم تحليل التكلفة والحجم والربح CVP</h3>
+<p>
+هو تحليل يدرس العلاقة بين التكاليف وحجم النشاط والربح،
+ويساعد الإدارة على معرفة تأثير تغير كمية المبيعات أو التكلفة
+على نتيجة النشاط.
+</p>
+
+<h3>2- مفهوم نقطة التعادل Break-Even Point</h3>
+<p>
+نقطة التعادل هي المستوى الذي تتساوى عنده الإيرادات الكلية مع التكاليف الكلية،
+وبالتالي يكون الربح صفرًا.
+</p>
+
+<div class="law">
+<strong>هامش المساهمة للوحدة:</strong><br>
+سعر بيع الوحدة - التكلفة المتغيرة للوحدة<br><br>
+<strong>نقطة التعادل بالوحدات:</strong><br>
+التكاليف الثابتة ÷ هامش المساهمة للوحدة
+</div>
+
+<h3>3- حساب نقطة التعادل</h3>
+<div class="example">
+<strong>مثال محلول:</strong>
+<ul>
+<li>التكاليف الثابتة = 20,000 جنيه.</li>
+<li>سعر بيع الوحدة = 50 جنيهًا.</li>
+<li>التكلفة المتغيرة للوحدة = 30 جنيهًا.</li>
+</ul>
+هامش المساهمة = 50 - 30 = 20 جنيهًا.<br>
+نقطة التعادل = 20,000 ÷ 20 = 1,000 وحدة.
+<p>إذن يجب بيع 1,000 وحدة للوصول إلى التعادل.</p>
+</div>
+
+<h3>4- نقطة التعادل بالمبيعات</h3>
+<div class="law">
+نسبة هامش المساهمة = هامش المساهمة للوحدة ÷ سعر البيع للوحدة<br>
+نقطة التعادل بالمبيعات = التكاليف الثابتة ÷ نسبة هامش المساهمة
+</div>
+
+<div class="example">
+<strong>مثال:</strong>
+نسبة هامش المساهمة = 20 ÷ 50 = 0.4<br>
+نقطة التعادل بالمبيعات = 20,000 ÷ 0.4 = 50,000 جنيه.
+</div>
+
+<h3>5- التعبير البياني لنقطة التعادل</h3>
+<p>
+يتم رسم كمية الإنتاج أو المبيعات على المحور الأفقي،
+والتكاليف والإيرادات على المحور الرأسي.
+نقطة تقاطع خط الإيرادات الكلية مع خط التكاليف الكلية
+تمثل نقطة التعادل.
+</p>
+
+<h3>6- العوامل المؤثرة على موضع نقطة التعادل</h3>
+<ul>
+<li>ارتفاع أو انخفاض التكاليف الثابتة.</li>
+<li>تغير التكلفة المتغيرة للوحدة.</li>
+<li>تغير سعر بيع الوحدة.</li>
+<li>تغير مزيج المنتجات عند بيع أكثر من منتج.</li>
+</ul>
+
+<h3>7- استخدامات نقطة التعادل</h3>
+<ul>
+<li>تحديد الحد الأدنى من المبيعات لتغطية التكاليف.</li>
+<li>المساعدة في تحديد أسعار البيع.</li>
+<li>دراسة أثر تغير التكاليف.</li>
+<li>المقارنة بين بدائل الإنتاج.</li>
+<li>تقدير حجم النشاط المطلوب لتحقيق ربح معين.</li>
+</ul>
+
+<h3>8- الربح المستهدف</h3>
+<div class="law">
+<strong>عدد الوحدات لتحقيق ربح مستهدف:</strong><br>
+(التكاليف الثابتة + الربح المستهدف) ÷ هامش المساهمة للوحدة
+</div>
+
+<div class="example">
+<strong>مثال:</strong>
+التكاليف الثابتة 20,000، وهامش المساهمة 20 جنيهًا،
+والربح المستهدف 10,000 جنيه.
+عدد الوحدات = (20,000 + 10,000) ÷ 20 = 1,500 وحدة.
+</div>
+
+<div class="note">
+<strong>افتراضات مهمة:</strong>
+في النموذج البسيط نفترض ثبات سعر البيع والتكلفة المتغيرة للوحدة
+والتكاليف الثابتة خلال نطاق النشاط محل التحليل،
+وأن حجم الإنتاج والمبيعات متساويان أو أن المخزون لا يتغير.
+</div>
+
+<div class="summary">
+<strong>ملخص الفصل السابع:</strong>
+نقطة التعادل = التكاليف الثابتة ÷ هامش المساهمة للوحدة.
+هامش المساهمة = سعر البيع - التكلفة المتغيرة.
+عند التعادل لا يوجد ربح ولا خسارة.
+</div>
+
+<div class="quiz" data-quiz>
+<h3>اختبر نفسك – الفصل السابع</h3>
+<div class="question" data-answer="b">
+<p>1. عند نقطة التعادل يكون:</p>
+<label><input type="radio" name="q19" value="a"> الربح أكبر من صفر دائمًا</label>
+<label><input type="radio" name="q19" value="b"> الإيراد الكلي مساويًا للتكلفة الكلية</label>
+<label><input type="radio" name="q19" value="c"> لا توجد تكاليف</label>
+</div>
+<div class="question" data-answer="a">
+<p>2. إذا كان سعر البيع 50 والتكلفة المتغيرة 30، فهامش المساهمة:</p>
+<label><input type="radio" name="q20" value="a"> 20</label>
+<label><input type="radio" name="q20" value="b"> 30</label>
+<label><input type="radio" name="q20" value="c"> 80</label>
+</div>
+<div class="question" data-answer="c">
+<p>3. إذا كانت التكاليف الثابتة 10,000 وهامش المساهمة 10، فنقطة التعادل:</p>
+<label><input type="radio" name="q21" value="a"> 100 وحدة</label>
+<label><input type="radio" name="q21" value="b"> 10,000 وحدة</label>
+<label><input type="radio" name="q21" value="c"> 1,000 وحدة</label>
+</div>
+<button type="button" onclick="gradeQuiz(this)">تصحيح الإجابات</button>
+<div class="result"></div>
+</div>
+<button class="top-button" onclick="markDone(7,this)">تمت مذاكرة الفصل ✓</button>
+</section>
+
+<!-- الفصل الثامن -->
+<section class="chapter" id="ch8">
+<span class="tag">الفصل الثامن</span>
+<h2>الجدولة التفصيلية للإنتاج</h2>
+
+<h3>1- مفهوم جدولة الإنتاج</h3>
+<p>
+الجدولة هي تحديد توقيت تنفيذ الأنشطة والعمليات الإنتاجية،
+وتحديد ترتيب المهام والموارد اللازمة لإنجازها.
+</p>
+
+<h3>2- أهمية جدولة الإنتاج</h3>
+<ul>
+<li>الالتزام بمواعيد التسليم.</li>
+<li>تحسين استغلال الآلات والعمال.</li>
+<li>تقليل أوقات الانتظار والتعطل.</li>
+<li>تنسيق العمليات المختلفة.</li>
+<li>معرفة الأعمال المتأخرة.</li>
+</ul>
+
+<h3>3- البيانات اللازمة لاتخاذ قرارات الجدولة</h3>
+<ul>
+<li>الطلبات المطلوب تنفيذها.</li>
+<li>مواعيد التسليم.</li>
+<li>زمن تشغيل كل مهمة.</li>
+<li>الموارد والآلات المتاحة.</li>
+<li>ترتيب العمليات المطلوبة.</li>
+<li>أوقات التوقف والصيانة.</li>
+</ul>
+
+<h3>4- مكونات الجدولة التفصيلية</h3>
+<ul>
+<li>تحديد المهام المطلوب تنفيذها.</li>
+<li>تحديد الموارد المطلوبة لكل مهمة.</li>
+<li>تحديد ترتيب تنفيذ الأعمال.</li>
+<li>تحديد وقت بداية ونهاية كل مهمة.</li>
+<li>متابعة التنفيذ ومعالجة التأخير.</li>
+</ul>
+
+<h3>5- قواعد ترتيب الأعمال</h3>
+<ul>
+<li><strong>FCFS:</strong> تنفيذ الأعمال حسب أسبقية الوصول.</li>
+<li><strong>SPT:</strong> تنفيذ العمل ذي زمن التشغيل الأقصر أولًا.</li>
+<li><strong>EDD:</strong> تنفيذ العمل ذي موعد التسليم الأقرب أولًا.</li>
+<li><strong>LPT:</strong> تنفيذ العمل ذي زمن التشغيل الأطول أولًا.</li>
+</ul>
+
+<div class="example">
+<strong>مثال مبسط:</strong>
+لدينا ثلاثة أعمال وصلت في الوقت نفسه:
+<ul>
+<li>العمل A يحتاج 6 ساعات.</li>
+<li>العمل B يحتاج ساعتين.</li>
+<li>العمل C يحتاج 4 ساعات.</li>
+</ul>
+وفق قاعدة SPT يكون الترتيب: B ثم C ثم A.
+</div>
+
+<h3>6- متابعة الجدول</h3>
+<p>
+بعد وضع الجدول يجب متابعة التنفيذ ومقارنة الأداء الفعلي بالمخطط،
+وتحديد أسباب التأخير وإعادة توزيع الموارد عند الحاجة.
+</p>
+
+<div class="summary">
+<strong>ملخص الفصل الثامن:</strong>
+الجدولة تحدد ماذا سينفذ ومتى وبأي ترتيب.
+من قواعد الجدولة: FCFS وSPT وEDD وLPT.
+اختيار القاعدة يعتمد على هدف المؤسسة وطبيعة الأعمال.
+</div>
+
+<div class="quiz" data-quiz>
+<h3>اختبر نفسك – الفصل الثامن</h3>
+<div class="question" data-answer="a">
+<p>1. الجدولة تهتم أساسًا بـ:</p>
+<label><input type="radio" name="q22" value="a"> توقيت وترتيب تنفيذ الأعمال</label>
+<label><input type="radio" name="q22" value="b"> تصميم شعار الشركة</label>
+<label><input type="radio" name="q22" value="c"> تحديد الضرائب</label>
+</div>
+<div class="question" data-answer="c">
+<p>2. قاعدة SPT تعني:</p>
+<label><input type="radio" name="q23" value="a"> الأسبق وصولًا أولًا</label>
+<label><input type="radio" name="q23" value="b"> الأطول زمنًا أولًا</label>
+<label><input type="radio" name="q23" value="c"> الأقصر زمنًا أولًا</label>
+</div>
+<div class="question" data-answer="b">
+<p>3. قاعدة EDD تعتمد على:</p>
+<label><input type="radio" name="q24" value="a"> أكبر تكلفة</label>
+<label><input type="radio" name="q24" value="b"> أقرب موعد تسليم</label>
+<label><input type="radio" name="q24" value="c"> أطول وقت تشغيل</label>
+</div>
+<button type="button" onclick="gradeQuiz(this)">تصحيح الإجابات</button>
+<div class="result"></div>
+</div>
+<button class="top-button" onclick="markDone(8,this)">تمت مذاكرة الفصل ✓</button>
+</section>
+
+<!-- الفصل التاسع -->
+<section class="chapter" id="ch9">
+<span class="tag">الفصل التاسع</span>
+<h2>التخطيط الكلي للإنتاج</h2>
+
+<h3>1- مفهوم التخطيط الكلي للإنتاج</h3>
+<p>
+هو وضع خطة متوسطة الأجل تحدد مستوى الإنتاج والعمالة والمخزون
+والموارد اللازمة لتلبية الطلب المتوقع خلال فترة مستقبلية.
+</p>
+
+<h3>2- أهداف التخطيط الكلي</h3>
+<ul>
+<li>تحقيق التوازن بين الطلب والطاقة الإنتاجية.</li>
+<li>تحديد حجم الإنتاج المناسب.</li>
+<li>التحكم في تكاليف الإنتاج.</li>
+<li>تحديد احتياجات العمالة.</li>
+<li>تحديد مستويات المخزون.</li>
+</ul>
+
+<h3>3- أنواع التخطيط الكلي</h3>
+<p>
+تختلف الخطط حسب طبيعة المؤسسة؛ فقد تعتمد على مستوى إنتاج ثابت،
+أو على تغيير الإنتاج لمواكبة الطلب، أو الجمع بين أكثر من أسلوب.
+</p>
+
+<h3>4- وحدات قياس الإنتاج لأغراض التخطيط</h3>
+<ul>
+<li>عدد الوحدات المنتجة.</li>
+<li>ساعات العمل.</li>
+<li>الأطنان أو اللترات أو غيرها من وحدات القياس.</li>
+<li>وحدات إنتاج مكافئة عند وجود منتجات مختلفة.</li>
+</ul>
+
+<h3>5- مراحل التخطيط الكلي</h3>
+<ol>
+<li>تقدير الطلب المتوقع.</li>
+<li>تحديد الطاقة الإنتاجية المتاحة.</li>
+<li>تحديد مستويات العمالة والمخزون.</li>
+<li>إعداد بدائل الخطط.</li>
+<li>حساب تكاليف كل بديل.</li>
+<li>اختيار الخطة الأنسب.</li>
+<li>متابعة التنفيذ وتحديث الخطة.</li>
+</ol>
+
+<h3>6- استراتيجيات مواجهة تقلبات الطلب</h3>
+<h4>أ- استراتيجية ملاحقة الطلب Chase Strategy</h4>
+<p>
+تعديل مستوى الإنتاج أو العمالة بما يتناسب مع تغير الطلب.
+قد يساعد ذلك في تقليل المخزون، لكنه قد يسبب تكاليف مرتبطة
+بتغيير حجم العمالة أو الطاقة.
+</p>
+
+<h4>ب- استراتيجية مستوى الإنتاج Level Strategy</h4>
+<p>
+الحفاظ على مستوى إنتاج ثابت نسبيًا، واستخدام المخزون
+لمواجهة اختلاف الطلب بين الفترات.
+</p>
+
+<h4>ج- الاستراتيجية المختلطة Mixed Strategy</h4>
+<p>
+الجمع بين تغيير الإنتاج واستخدام المخزون والعمل الإضافي
+أو غيرها من البدائل للوصول إلى خطة مناسبة.
+</p>
+
+<div class="example">
+<strong>مثال:</strong>
+إذا كان الطلب في الصيف مرتفعًا وفي الشتاء منخفضًا:
+<ul>
+<li>استراتيجية ملاحقة الطلب: زيادة الإنتاج في الصيف وخفضه في الشتاء.</li>
+<li>استراتيجية المستوى: إنتاج كمية ثابتة وتخزين الفائض في الشتاء.</li>
+<li>الاستراتيجية المختلطة: إنتاج أساسي ثابت مع عمل إضافي أو مخزون عند الحاجة.</li>
+</ul>
+</div>
+
+<div class="summary">
+<strong>ملخص الفصل التاسع:</strong>
+التخطيط الكلي يوازن بين الطلب والإنتاج والعمالة والمخزون.
+أهم الاستراتيجيات: ملاحقة الطلب، مستوى الإنتاج، والاستراتيجية المختلطة.
+</div>
+
+<div class="quiz" data-quiz>
+<h3>اختبر نفسك – الفصل التاسع</h3>
+<div class="question" data-answer="b">
+<p>1. التخطيط الكلي يهتم بـ:</p>
+<label><input type="radio" name="q25" value="a"> قرار يومي منفرد فقط</label>
+<label><input type="radio" name="q25" value="b"> الإنتاج والعمالة والمخزون خلال فترة متوسطة</label>
+<label><input type="radio" name="q25" value="c"> تصميم الإعلان</label>
+</div>
+<div class="question" data-answer="a">
+<p>2. استراتيجية Level تعني:</p>
+<label><input type="radio" name="q26" value="a"> الحفاظ على مستوى إنتاج ثابت نسبيًا</label>
+<label><input type="radio" name="q26" value="b"> إيقاف الإنتاج</label>
+<label><input type="radio" name="q26" value="c"> تغيير العمالة كل يوم بالضرورة</label>
+</div>
+<div class="question" data-answer="c">
+<p>3. الاستراتيجية المختلطة تعني:</p>
+<label><input type="radio" name="q27" value="a"> الاعتماد على المخزون فقط دائمًا</label>
+<label><input type="radio" name="q27" value="b"> الاعتماد على الإنتاج الثابت فقط</label>
+<label><input type="radio" name="q27" value="c"> الجمع بين أكثر من أسلوب</label>
+</div>
+<button type="button" onclick="gradeQuiz(this)">تصحيح الإجابات</button>
+<div class="result"></div>
+</div>
+<button class="top-button" onclick="markDone(9,this)">تمت مذاكرة الفصل ✓</button>
+</section>
+
+<!-- الفصل العاشر -->
+<section class="chapter" id="ch10">
+<span class="tag">الفصل العاشر</span>
+<h2>الصيانة</h2>
+
+<h3>1- مفهوم وظيفة الصيانة</h3>
+<p>
+الصيانة هي مجموعة الأنشطة التي تهدف إلى المحافظة على المعدات
+والآلات والأصول في حالة تشغيل مناسبة، أو إعادتها إلى الحالة
+المطلوبة عند حدوث عطل.
+</p>
+
+<h3>2- أهداف وظيفة الصيانة</h3>
+<ul>
+<li>تقليل الأعطال والتوقف المفاجئ.</li>
+<li>زيادة العمر التشغيلي للمعدات.</li>
+<li>رفع كفاءة التشغيل.</li>
+<li>تحسين السلامة.</li>
+<li>تقليل تكاليف الإصلاح والتوقف.</li>
+<li>ضمان استمرارية الإنتاج.</li>
+</ul>
+
+<h3>3- نسبة الصلاحية Availability</h3>
+<p>
+تعبر عن نسبة الوقت الذي تكون فيه المعدة متاحة للعمل
+إلى إجمالي الوقت المحدد للتشغيل.
+</p>
+
+<div class="law">
+<strong>نسبة الصلاحية:</strong><br>
+وقت التشغيل الفعلي ÷ الوقت الكلي × 100
+</div>
+
+<div class="example">
+<strong>مثال:</strong>
+إذا كانت المعدة متاحة للتشغيل 10 ساعات، وتوقفت ساعة واحدة:
+وقت التشغيل الفعلي = 10 - 1 = 9 ساعات.<br>
+نسبة الصلاحية = (9 ÷ 10) × 100 = 90%.
+</div>
+
+<h3>4- أنواع نظم الصيانة</h3>
+<ul>
+<li>الصيانة الوقائية.</li>
+<li>الصيانة العلاجية أو التصحيحية.</li>
+<li>الصيانة التنبؤية، في الأنظمة التي تعتمد على متابعة حالة المعدة.</li>
+</ul>
+
+<h3>5- الصيانة الوقائية Preventive Maintenance</h3>
+<p>
+هي تنفيذ أعمال صيانة مخططة على فترات أو وفق معايير محددة،
+بهدف تقليل احتمالات حدوث الأعطال قبل وقوعها.
+</p>
+<p>أمثلة: الفحص الدوري، التنظيف، التشحيم، واستبدال أجزاء وفق خطة صيانة.</p>
+
+<h3>6- الصيانة العلاجية Corrective Maintenance</h3>
+<p>
+هي أعمال الصيانة التي تتم لمعالجة عطل أو خلل بعد اكتشافه،
+وإعادة المعدة إلى حالة التشغيل المطلوبة.
+</p>
+
+<h3>7- العلاقة بين الصيانة الوقائية والعلاجية</h3>
+<div class="table-wrap">
+<table>
+<tr><th>الصيانة الوقائية</th><th>الصيانة العلاجية</th></tr>
+<tr><td>تتم قبل حدوث العطل بهدف الوقاية.</td><td>تتم بعد اكتشاف العطل لإصلاحه.</td></tr>
+<tr><td>غالبًا تكون مخططة.</td><td>قد تكون طارئة أو مخططة بعد اكتشاف الخلل.</td></tr>
+<tr><td>تساعد على تقليل الأعطال المفاجئة.</td><td>تعيد المعدة إلى حالة التشغيل.</td></tr>
+<tr><td>قد تتطلب تكلفة دورية.</td><td>قد تتسبب الأعطال في تكلفة توقف وإصلاح.</td></tr>
+</table>
+</div>
+
+<h3>8- الصيانة التنبؤية Predictive Maintenance</h3>
+<p>
+تعتمد على مراقبة حالة المعدات وبيانات التشغيل، مثل الاهتزاز
+ودرجة الحرارة، لتقدير الوقت المناسب للتدخل قبل حدوث العطل.
+</p>
+
+<div class="example">
+<strong>مثال:</strong>
+مصنع يقوم بفحص درجة حرارة محرك بصورة مستمرة.
+إذا ظهرت مؤشرات غير طبيعية، يتم فحصه قبل أن يؤدي الخلل
+إلى توقف مفاجئ.
+</div>
+
+<div class="summary">
+<strong>ملخص الفصل العاشر:</strong>
+الصيانة تحافظ على كفاءة المعدات واستمرار الإنتاج.
+الوقائية قبل العطل، والعلاجية بعد اكتشاف العطل،
+والتنبؤية تعتمد على متابعة حالة المعدة والتنبؤ بالمشكلات.
+نسبة الصلاحية = وقت التشغيل الفعلي ÷ الوقت الكلي × 100.
+</div>
+
+<div class="quiz" data-quiz>
+<h3>اختبر نفسك – الفصل العاشر</h3>
+<div class="question" data-answer="a">
+<p>1. الصيانة الوقائية تتم:</p>
+<label><input type="radio" name="q28" value="a"> قبل حدوث العطل بهدف الوقاية</label>
+<label><input type="radio" name="q28" value="b"> بعد توقف المعدة فقط</label>
+<label><input type="radio" name="q28" value="c"> دون خطة</label>
+</div>
+<div class="question" data-answer="b">
+<p>2. الصيانة العلاجية تهدف إلى:</p>
+<label><input type="radio" name="q29" value="a"> زيادة الأعطال</label>
+<label><input type="radio" name="q29" value="b"> إصلاح العطل وإعادة التشغيل</label>
+<label><input type="radio" name="q29" value="c"> إلغاء الفحص</label>
+</div>
+<div class="question" data-answer="c">
+<p>3. إذا كان وقت التشغيل 9 ساعات من أصل 10، فنسبة الصلاحية:</p>
+<label><input type="radio" name="q30" value="a"> 50%</label>
+<label><input type="radio" name="q30" value="b"> 80%</label>
+<label><input type="radio" name="q30" value="c"> 90%</label>
+</div>
+<button type="button" onclick="gradeQuiz(this)">تصحيح الإجابات</button>
+<div class="result"></div>
+</div>
+<button class="top-button" onclick="markDone(10,this)">تمت مذاكرة الفصل ✓</button>
+</section>
+
+<div class="chapter">
+<h2>المراجعة النهائية للمادة</h2>
+<p>قبل الامتحان راجع النقاط الأساسية التالية:</p>
+<ul>
+<li>الفصل الأول: المدخلات والعمليات والمخرجات وأهداف إدارة العمليات.</li>
+<li>الفصل الثاني: JIT والإنتاج الرشيق وأنواع الهدر.</li>
+<li>الفصل الثالث: عوامل اختيار الموقع وطرق المفاضلة.</li>
+<li>الفصل الرابع: مراحل وأدوات تصميم المنتج.</li>
+<li>الفصل الخامس: أنواع تصميم النظم ومعايير العمل.</li>
+<li>الفصل السادس: طرق التنبؤ والقوانين الحسابية.</li>
+<li>الفصل السابع: نقطة التعادل وهامش المساهمة والربح المستهدف.</li>
+<li>الفصل الثامن: قواعد جدولة الأعمال.</li>
+<li>الفصل التاسع: استراتيجيات التخطيط الكلي.</li>
+<li>الفصل العاشر: أنواع الصيانة ونسبة الصلاحية.</li>
+</ul>
+
+<div class="note">
+<strong>تنبيه دراسي مهم:</strong>
+هذه مذكرة تأسيسية وملخص تعليمي منظم مبني على عناوين الفهرس،
+وليست نقلًا حرفيًا من كتاب الدكتور. راجع تعريفات الدكتور
+والأمثلة والجداول والتفاصيل المطلوبة في المحاضرات قبل الامتحان.
+</div>
+</div>
+
+        </main>
+    </div>
+</div>
+
+<footer>
+    MH ONE © 2026 | Your University Life, All in One Place.
+</footer>
+
+<script>
+let completed = new Set();
+
+function markDone(number, button) {
+    if (completed.has(number)) {
+        completed.delete(number);
+        button.textContent = "تمت مذاكرة الفصل ✓";
+        button.style.opacity = "1";
+    } else {
+        completed.add(number);
+        button.textContent = "إلغاء علامة الإنجاز";
+        button.style.opacity = ".7";
+    }
+
+    const count = completed.size;
+    document.getElementById("progressText").textContent =
+        "أنجزت " + count + " من 10 فصول";
+
+    document.getElementById("progressFill").style.width =
+        (count * 10) + "%";
+}
+
+function gradeQuiz(button) {
+    const quiz = button.closest(".quiz");
+    const questions = quiz.querySelectorAll(".question");
+    let score = 0;
+    let answered = 0;
+
+    questions.forEach(question => {
+        const selected = question.querySelector("input:checked");
+        const correct = question.dataset.answer;
+
+        question.querySelectorAll("label").forEach(label => {
+            label.style.color = "#ddd";
+        });
+
+        if (selected) {
+            answered++;
+            if (selected.value === correct) {
+                score++;
+                selected.closest("label").style.color = "#80d69a";
+            } else {
+                selected.closest("label").style.color = "#ff8585";
+                const correctInput = question.querySelector(
+                    'input[value="' + correct + '"]'
+                );
+                if (correctInput) {
+                    correctInput.closest("label").style.color = "#80d69a";
+                }
+            }
+        }
+    });
+
+    const result = quiz.querySelector(".result");
+
+    if (answered < questions.length) {
+        result.style.color = "#f2cb78";
+        result.textContent =
+            "جاوب على كل الأسئلة أولًا. أجبت عن " +
+            answered + " من " + questions.length + ".";
+        return;
+    }
+
+    result.style.color = score === questions.length ? "#80d69a" : "#f2cb78";
+    result.textContent =
+        "درجتك: " + score + " من " + questions.length +
+        (score === questions.length ? " — ممتاز! كل إجاباتك صحيحة." :
+        " — راجع الإجابات الصحيحة باللون الأخضر.");
+}
+</script>
+
+</body>
+</html>

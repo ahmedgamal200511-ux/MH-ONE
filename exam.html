@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MH ONE | Exam Center</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+*{box-sizing:border-box}
+body{background:#080808;color:#f5f5f5}
+.exam-main{max-width:1100px;margin:auto;padding:30px 20px}
+.exam-hero{
+    padding:35px 25px;text-align:center;border:1px solid #D4AF37;
+    border-radius:20px;background:linear-gradient(130deg,#090909,#30230b,#090909);
+    box-shadow:0 0 25px rgba(212,175,55,.12)
+}
+.exam-hero h2{color:#F5D98B;font-size:32px;margin:0 0 12px}
+.exam-hero p{color:#ccc;line-height:1.8}
+.exam-card{
+    background:linear-gradient(145deg,#1c180e,#101010);
+    border:1px solid #76591e;border-radius:17px;padding:25px;margin-top:25px
+}
+.exam-card h3{color:#F5D98B;margin-top:0}
+.form-group{margin:18px 0}
+.form-group label{display:block;color:#e8d39b;margin-bottom:9px}
+.form-group select{
+    width:100%;padding:13px;border-radius:9px;
+    background:#090909;color:#fff;border:1px solid #A98735;font-size:15px
+}
+.gold-btn{
+    border:0;padding:13px 23px;border-radius:9px;
+    background:linear-gradient(135deg,#F5D98B,#B58A28);
+    color:#090909;font-weight:bold;cursor:pointer;font-size:15px
+}
+.gold-btn:hover{box-shadow:0 0 18px rgba(212,175,55,.4)}
+.question{padding:20px 0;border-bottom:1px solid #44371d}
+.question:last-child{border:0}
+.question h4{color:#F5D98B;line-height:1.8}
+.option{
+    display:block;padding:12px;margin:9px 0;border:1px solid #51411f;
+    border-radius:9px;cursor:pointer;color:#ddd
+}
+.option:hover{background:#30240e}
+.option input{margin-left:9px;accent-color:#D4AF37}
+#quizArea,#resultArea{display:none}
+#timer{color:#F5D98B;font-weight:bold;font-size:18px}
+.result-score{font-size:42px;color:#F5D98B;font-weight:bold}
+.result-message{color:#ddd;line-height:1.8}
+.review-item{padding:14px;margin:12px 0;border-radius:10px;background:#0b0b0b;line-height:1.9}
+.correct{border-right:4px solid #38a169}
+.wrong{border-right:4px solid #dc5555}
+.empty-message{color:#ccc;line-height:1.8}
+@media(max-width:600px){
+.exam-hero h2{font-size:25px}
+.exam-card{padding:18px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <h1>MH ONE</h1>
+        <span>BY MOHAMED HATEM</span>
+    </div>
+    <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="dashboard.html">لوحة التحكم</a>
+        <a href="courses.html">المواد الدراسية</a>
+        <a href="library.html">المكتبة</a>
+    </nav>
+    <div class="header-actions">
+        <a href="dashboard.html" class="login-btn">رجوع</a>
+    </div>
+</header>
+
+<main class="exam-main">
+
+    <section class="exam-hero">
+        <h2>📝 مركز الامتحانات</h2>
+        <p>اختبر معلوماتك، تابع مستواك، واكتشف مدى استعدادك للامتحانات.</p>
+    </section>
+
+    <section class="exam-card" id="setupArea">
+        <h3>🎯 إعداد الاختبار</h3>
+
+        <div class="form-group">
+            <label for="subjectSelect">اختر المادة</label>
+            <select id="subjectSelect">
+                <option value="production">إدارة الإنتاج والعمليات</option>
+                <option value="cost">محاسبة التكاليف</option>
+                <option value="marketing">إدارة التسويق</option>
+                <option value="english">لغة أجنبية 2</option>
+                <option value="economics">مبادئ الاقتصاد</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="questionCount">عدد الأسئلة</label>
+            <select id="questionCount">
+                <option value="5">5 أسئلة</option>
+                <option value="10">10 أسئلة</option>
+            </select>
+        </div>
+
+        <p class="empty-message">
+            كل سؤال عليه درجة واحدة. اختَر الإجابة المناسبة، وبعد الانتهاء اضغط على إنهاء الاختبار.
+        </p>
+
+        <button class="gold-btn" onclick="startExam()">ابدأ الاختبار</button>
+    </section>
+
+    <section class="exam-card" id="quizArea">
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <h3 id="quizTitle">الاختبار</h3>
+            <div id="timer">الأسئلة: 0</div>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <button class="gold-btn" onclick="submitExam()">إنهاء الاختبار</button>
+    </section>
+
+    <section class="exam-card" id="resultArea">
+        <h3>🏆 نتيجة الاختبار</h3>
+        <div class="result-score" id="scoreText">0/0</div>
+        <p class="result-message" id="resultMessage"></p>
+        <h3>مراجعة الإجابات</h3>
+        <div id="reviewContainer"></div>
+        <button class="gold-btn" onclick="restartExam()">اختبار جديد</button>
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 MH ONE - By Mohamed Hatem</p>
+</footer>
+
+<script>
+const questionBank = {
+production:[
+{q:"ما المقصود بإدارة الإنتاج؟",o:["تحويل المدخلات إلى مخرجات","بيع المنتجات فقط","تخزين الأموال","الإعلان فقط"],a:0},
+{q:"من عناصر النظام الإنتاجي؟",o:["المدخلات والعمليات والمخرجات","الإعلانات فقط","العملاء فقط","الأرباح فقط"],a:0},
+{q:"ما الهدف الأساسي من تخطيط الإنتاج؟",o:["زيادة الهدر","تنظيم استخدام الموارد","إلغاء الجودة","تقليل الإنتاج دائمًا"],a:1},
+{q:"أي مما يلي يعتبر من المدخلات؟",o:["المنتج النهائي","الخدمات المقدمة","المواد الخام","رضا العميل"],a:2},
+{q:"ماذا تعني الرقابة على الإنتاج؟",o:["متابعة الأداء ومقارنته بالخطة","إيقاف العمل","زيادة الأسعار","إلغاء التخطيط"],a:0},
+{q:"ما المقصود بالطاقة الإنتاجية؟",o:["القدرة على الإنتاج خلال فترة معينة","عدد العملاء فقط","تكلفة الإعلان","سعر البيع"],a:0},
+{q:"أي مما يلي من أهداف إدارة الجودة؟",o:["زيادة العيوب","تحقيق المواصفات المطلوبة","إهمال العميل","تقليل الرقابة"],a:1},
+{q:"اختيار موقع المصنع يؤثر على:",o:["تكاليف النقل والتشغيل","لون المنتج فقط","اسم الشركة فقط","الإعلانات فقط"],a:0},
+{q:"ما المقصود بجدولة الإنتاج؟",o:["تحديد توقيت تنفيذ الأنشطة","تحديد سعر السهم","اختيار شعار الشركة","إعداد الإعلانات"],a:0},
+{q:"المخزون هو:",o:["المواد والسلع المحتفظ بها للاستخدام أو البيع","الأرباح فقط","أجور العاملين","تكاليف الإعلان"],a:0}
+],
+cost:[
+{q:"ما المقصود بالتكلفة؟",o:["الموارد التي يتم التضحية بها للحصول على منفعة","الإيرادات فقط","رأس المال فقط","المبيعات فقط"],a:0},
+{q:"أي مما يلي يعتبر تكلفة مباشرة؟",o:["إيجار المصنع","الخشب المستخدم في صناعة الأثاث","راتب المدير العام","إعلان الشركة"],a:1},
+{q:"التكاليف الثابتة هي التي:",o:["تتغير مع كل وحدة","يبقى إجماليها ثابتًا في حدود الطاقة الملائمة","تساوي صفرًا","تزيد دائمًا مع الإنتاج"],a:1},
+{q:"التكاليف المتغيرة:",o:["يتغير إجماليها مع حجم النشاط","لا تتغير مطلقًا","لا ترتبط بالإنتاج","هي الإيجار دائمًا"],a:0},
+{q:"من أمثلة التكاليف الصناعية غير المباشرة:",o:["المواد المباشرة","أجور العمال المباشرين","كهرباء المصنع","المنتج المباع"],a:2},
+{q:"نظام تكاليف الأوامر يناسب:",o:["الإنتاج حسب طلبات أو أوامر محددة","الإنتاج المتجانس المستمر فقط","البيع بالتجزئة فقط","الخدمات المجانية"],a:0},
+{q:"نقطة التعادل هي النقطة التي عندها:",o:["الإيرادات تساوي التكاليف الكلية","الأرباح أكبر ما يمكن","التكاليف تساوي صفرًا","المبيعات تساوي صفرًا"],a:0},
+{q:"التكلفة الأولية تتكون من:",o:["المواد المباشرة والأجور المباشرة","الإيجار والإعلان","المصروفات الإدارية فقط","الضرائب فقط"],a:0},
+{q:"التكاليف الصناعية غير المباشرة تشمل:",o:["المواد والأجور المباشرة","عناصر التكلفة الصناعية غير المباشرة","تكاليف البيع فقط","المصروفات الشخصية"],a:1},
+{q:"الغرض من محاسبة التكاليف هو:",o:["توفير معلومات تساعد في التخطيط والرقابة واتخاذ القرار","تسجيل الإعلانات فقط","تحديد أسماء العملاء","إلغاء القوائم المالية"],a:0}
+],
+marketing:[
+{q:"ما المقصود بالتسويق؟",o:["فهم احتياجات العملاء وتقديم قيمة لهم","البيع فقط","الإنتاج فقط","التخزين فقط"],a:0},
+{q:"من عناصر المزيج التسويقي التقليدي 4Ps:",o:["المنتج والسعر والمكان والترويج","الإنتاج والتخزين والتمويل","الربح والخسارة فقط","الموظفون فقط"],a:0},
+{q:"بحوث التسويق تهدف إلى:",o:["جمع وتحليل المعلومات التسويقية","زيادة الأسعار فقط","إلغاء المنافسة","إيقاف البيع"],a:0},
+{q:"البيئة التسويقية تشمل:",o:["عوامل داخلية وخارجية تؤثر على المنشأة","الموظفين فقط","المنتجات فقط","المخازن فقط"],a:0},
+{q:"سلوك المستهلك يهتم بدراسة:",o:["كيفية اتخاذ الأفراد قرارات الشراء","إنتاج المصانع فقط","النقل فقط","المحاسبة فقط"],a:0},
+{q:"تقسيم السوق يعني:",o:["تقسيم العملاء إلى مجموعات متشابهة","إلغاء العملاء","رفع السعر","إيقاف الإعلان"],a:0},
+{q:"المنتج في التسويق هو:",o:["ما يقدم لإشباع حاجة أو رغبة","السعر فقط","الإعلان فقط","المكان فقط"],a:0},
+{q:"الترويج يهدف إلى:",o:["تعريف العملاء بالمنتج والتأثير في قراراتهم","تخزين المنتج","تصنيع المنتج","حساب الرواتب"],a:0},
+{q:"من أمثلة العوامل النفسية المؤثرة في المستهلك:",o:["الدوافع والإدراك والاتجاهات","المناخ فقط","الموقع الجغرافي فقط","النقل فقط"],a:0},
+{q:"المنافسة في السوق تعتبر من:",o:["عوامل البيئة التسويقية","عناصر التكلفة المباشرة","الأصول الثابتة","الموارد البشرية فقط"],a:0}
+],
+english:[
+{q:"Choose the correct sentence:",o:["She go to university.","She goes to university.","She going university.","She gone university."],a:1},
+{q:"What is the past form of 'write'?",o:["Writed","Written","Wrote","Writing"],a:2},
+{q:"Choose the correct word: I have lived here ___ 2020.",o:["for","since","at","from"],a:1},
+{q:"The opposite of 'expensive' is:",o:["Cheap","Large","Difficult","Modern"],a:0},
+{q:"Choose the correct sentence:",o:["They are studying now.","They studies now.","They studyed now.","They is studying now."],a:0},
+{q:"What does 'customer' mean?",o:["موظف","عميل","مدير","مورد"],a:1},
+{q:"Choose: If it rains, I ___ at home.",o:["stay","will stay","stayed","staying"],a:1},
+{q:"The plural of 'child' is:",o:["Childs","Childes","Children","Childrens"],a:2},
+{q:"Choose the correct word: She is interested ___ marketing.",o:["on","at","in","for"],a:2},
+{q:"What is the meaning of 'management'?",o:["إدارة","محاسبة","تسويق","إنتاج"],a:0}
+],
+economics:[
+{q:"علم الاقتصاد يدرس:",o:["كيفية تخصيص الموارد النادرة","الرسم فقط","الرياضة فقط","الطقس"],a:0},
+{q:"المشكلة الاقتصادية الأساسية تنتج عن:",o:["ندرة الموارد وتعدد الحاجات","وفرة الموارد بلا حدود","عدم وجود حاجات","ثبات الأسعار دائمًا"],a:0},
+{q:"المنفعة تعبر عن:",o:["الإشباع الذي يحصل عليه المستهلك","تكلفة الإنتاج","الأجور فقط","الضرائب"],a:0},
+{q:"المنفعة الحدية هي:",o:["التغير في المنفعة الكلية نتيجة استهلاك وحدة إضافية","إجمالي الإيرادات","تكلفة السلعة","سعر السوق"],a:0},
+{q:"قانون تناقص المنفعة الحدية يعني أن:",o:["المنفعة الحدية تميل للتناقص مع زيادة الاستهلاك","السعر يزيد دائمًا","المنفعة لا تتغير","الطلب يساوي العرض دائمًا"],a:0},
+{q:"من عناصر الإنتاج:",o:["الأرض والعمل ورأس المال والتنظيم","الإعلانات فقط","المبيعات فقط","الضرائب فقط"],a:0},
+{q:"الطلب يعبر عن:",o:["الرغبة والقدرة على الشراء","الرغبة فقط دون قدرة","الإنتاج فقط","العرض فقط"],a:0},
+{q:"عند ارتفاع سعر السلعة غالبًا تنخفض الكمية المطلوبة وفق:",o:["قانون الطلب","قانون العرض","قانون الإنتاج","قانون التكاليف"],a:0},
+{q:"العرض يعبر عن:",o:["الكميات التي يرغب المنتجون ويقدرون على بيعها","الكميات المستهلكة فقط","الأجور","المنفعة"],a:0},
+{q:"السوق هو:",o:["مجموعة العلاقات التي يتم من خلالها تبادل السلع والخدمات","المصنع فقط","المخزن فقط","المستهلك فقط"],a:0}
+]
+};
+
+let currentQuestions=[];
+let submitted=false;
+
+function startExam(){
+    const subject=document.getElementById("subjectSelect").value;
+    const count=Number(document.getElementById("questionCount").value);
+    const bank=questionBank[subject];
+
+    if(!bank||bank.length===0){
+        alert("لا توجد أسئلة متاحة لهذه المادة.");
+        return;
+    }
+
+    currentQuestions=[...bank]
+        .sort(()=>Math.random()-.5)
+        .slice(0,count);
+
+    submitted=false;
+
+    document.getElementById("setupArea").style.display="none";
+    document.getElementById("resultArea").style.display="none";
+    document.getElementById("quizArea").style.display="block";
+    document.getElementById("quizTitle").textContent=
+        "اختبار: "+document.getElementById("subjectSelect").selectedOptions[0].text;
+
+    document.getElementById("timer").textContent=
+        "عدد الأسئلة: "+currentQuestions.length;
+
+    const container=document.getElementById("questionsContainer");
+    container.innerHTML="";
+
+    currentQuestions.forEach((question,index)=>{
+        let html=`
+        <div class="question">
+            <h4>${index+1}. ${question.q}</h4>`;
+
+        question.o.forEach((option,optionIndex)=>{
+            html+=`
+            <label class="option">
+                <input type="radio" name="q${index}" value="${optionIndex}">
+                ${option}
+            </label>`;
+        });
+
+        html+="</div>";
+        container.innerHTML+=html;
+    });
+
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function submitExam(){
+    if(submitted)return;
+
+    const unanswered=currentQuestions.filter((q,index)=>
+        !document.querySelector(`input[name="q${index}"]:checked`)
+    ).length;
+
+    if(unanswered>0){
+        const confirmFinish=confirm(
+            "لسه فيه "+unanswered+" سؤال بدون إجابة. هل تريد إنهاء الاختبار؟"
+        );
+        if(!confirmFinish)return;
+    }
+
+    submitted=true;
+    let score=0;
+    const review=document.getElementById("reviewContainer");
+
+    review.innerHTML="";
+
+    currentQuestions.forEach((question,index)=>{
+        const selected=document.querySelector(
+            `input[name="q${index}"]:checked`
+        );
+
+        const answer=selected?Number(selected.value):-1;
+        const isCorrect=answer===question.a;
+
+        if(isCorrect)score++;
+
+        const chosen=answer===-1?"لم تتم الإجابة":question.o[answer];
+
+        const item=document.createElement("div");
+        item.className="review-item "+(isCorrect?"correct":"wrong");
+
+        const title=document.createElement("strong");
+        title.textContent=(index+1)+". "+question.q;
+
+        const chosenText=document.createElement("p");
+        chosenText.textContent="إجابتك: "+chosen;
+
+        const correctText=document.createElement("p");
+        correctText.textContent="الإجابة الصحيحة: "+question.o[question.a];
+
+        const status=document.createElement("strong");
+        status.textContent=isCorrect?"✓ إجابة صحيحة":"✗ إجابة غير صحيحة";
+
+        item.append(title,chosenText,correctText,status);
+        review.appendChild(item);
+    });
+
+    const percent=Math.round(score/currentQuestions.length*100);
+
+    document.getElementById("scoreText").textContent=
+        score+" / "+currentQuestions.length;
+
+    document.getElementById("resultMessage").textContent=
+        percent>=80?"ممتاز! أداء رائع، استمر في التقدم."
+        :percent>=60?"جيد! راجع الأخطاء وحاول مرة أخرى."
+        :"لا تقلق، راجع الدرس وحاول مرة أخرى.";
+
+    document.getElementById("quizArea").style.display="none";
+    document.getElementById("resultArea").style.display="block";
+
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function restartExam(){
+    document.getElementById("resultArea").style.display="none";
+    document.getElementById("setupArea").style.display="block";
+    window.scrollTo({top:0,behavior:"smooth"});
+}
+</script>
+
+<script src="script.js"></script>
+<script src="language.js"></script>
+
+</body>
+</html>

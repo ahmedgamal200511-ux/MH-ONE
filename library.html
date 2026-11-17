@@ -1,0 +1,772 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MH ONE | Study Library</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+*{box-sizing:border-box}
+body{background:#090909;color:#f5f5f5}
+.library-main{max-width:1250px;margin:auto;padding:35px 20px 60px}
+.library-hero{background:linear-gradient(120deg,#17130a,#30240c,#17130a);border:1px solid #b58b24;border-radius:22px;padding:38px;box-shadow:0 0 25px #d4af371c}
+.library-hero h2{color:#D4AF37;font-size:32px;margin-bottom:12px}
+.library-hero p{color:#c8c0ad;line-height:1.8}
+.library-stats{display:flex;gap:15px;flex-wrap:wrap;margin-top:25px}
+.stat{background:#17140d;border:1px solid #66501d;border-radius:12px;padding:15px 22px;min-width:135px}
+.stat strong{display:block;color:#D4AF37;font-size:25px}
+.stat span{color:#aaa;font-size:13px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin:35px 0 20px}
+.toolbar h2,.section-title{color:#D4AF37}
+.add-btn{background:linear-gradient(135deg,#D4AF37,#98721c);color:#100d06;border:0;padding:13px 22px;border-radius:10px;font-weight:bold;cursor:pointer}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:25px}
+.filters input,.filters select,.form-group input,.form-group select,.form-group textarea{width:100%;padding:13px;background:#151515;border:1px solid #51431f;border-radius:9px;color:white;outline:none}
+.filters input:focus,.filters select:focus,.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#D4AF37}
+.subject-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:17px;margin:18px 0 30px}
+.subject-card{background:#15130e;border:1px solid #51431f;border-radius:14px;padding:20px;cursor:pointer;transition:.25s}
+.subject-card:hover,.subject-card.active{border-color:#D4AF37;box-shadow:0 0 15px #d4af371f;transform:translateY(-3px)}
+.subject-card h3{color:#D4AF37;margin-bottom:8px}
+.subject-card p{color:#aaa;font-size:13px}
+.chapter-area{margin:25px 0}
+.chapter-list{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.chapter-btn{background:#17140d;border:1px solid #66501d;color:#d9cda9;padding:10px 16px;border-radius:20px;cursor:pointer}
+.chapter-btn.active,.chapter-btn:hover{background:#D4AF37;color:#111;border-color:#D4AF37}
+.files-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.chapter-group{grid-column:1/-1}
+.chapter-heading{color:#D4AF37;border-bottom:1px solid #51431f;padding-bottom:12px;margin:15px 0}
+.file-card{background:linear-gradient(145deg,#1a1812,#101010);border:1px solid #51431f;border-radius:15px;padding:20px;min-width:0}
+.file-icon{font-size:32px;margin-bottom:12px}
+.file-card h3{color:#e7c65f;font-size:17px;overflow-wrap:anywhere}
+.file-card p{color:#aaa;font-size:13px;line-height:1.7;margin:10px 0;overflow-wrap:anywhere}
+.file-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.file-actions button{border:1px solid #9d7c28;background:#211c10;color:#e6c65e;padding:9px 12px;border-radius:8px;cursor:pointer}
+.file-actions .delete-btn{color:#ff8585;border-color:#803b3b}
+.file-actions .edit-btn{color:#fff;border-color:#D4AF37;background:#493914}
+.empty-state{text-align:center;padding:40px 15px;border:1px dashed #66501d;border-radius:15px;color:#aaa;grid-column:1/-1}
+.modal{display:none;position:fixed;inset:0;background:#000d;z-index:9999;justify-content:center;align-items:center;padding:15px}
+.modal.show{display:flex}
+.modal-content{width:100%;max-width:520px;max-height:90vh;overflow-y:auto;background:#15130e;border:1px solid #D4AF37;border-radius:18px;padding:25px}
+.modal-content h2{color:#D4AF37;margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;margin-bottom:8px;color:#d9cda9}
+.form-group textarea{resize:vertical;min-height:80px}
+.form-buttons{display:flex;gap:10px;margin-top:20px}
+.form-buttons button{flex:1;padding:12px;border-radius:9px;cursor:pointer;font-weight:bold}
+.save-btn{background:#D4AF37;color:#111;border:0}
+.cancel-btn{background:#292929;color:white;border:1px solid #555}
+.current-file{color:#aaa;font-size:12px;margin-top:8px;line-height:1.7}
+.notice{color:#aaa;font-size:13px;line-height:1.8;margin-top:25px;padding:15px;border-right:3px solid #D4AF37;background:#15130e}
+@media(max-width:850px){.files-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.library-hero{padding:25px 20px}.library-hero h2{font-size:25px}.filters,.subject-grid,.files-grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <h1>MH ONE</h1>
+        <span>BY MOHAMED HATEM</span>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="courses.html">My Courses</a>
+        <a href="library.html">Study Library</a>
+    </nav>
+    <div class="header-actions">
+        <a href="dashboard.html" class="login-btn">Back</a>
+    </div>
+</header>
+
+<main class="library-main">
+
+<section class="library-hero">
+    <h2>Study Library</h2>
+    <p>Your university resources in one place. Organize lectures, notes and study files by subject and chapter.</p>
+    <div class="library-stats">
+        <div class="stat"><strong id="totalFiles">0</strong><span>Total Files</span></div>
+        <div class="stat"><strong id="totalSubjects">4</strong><span>Subjects</span></div>
+        <div class="stat"><strong id="pdfFiles">0</strong><span>PDF Files</span></div>
+    </div>
+</section>
+
+<div class="toolbar">
+    <h2>My University Library</h2>
+    <button class="add-btn" id="openModal">+ Add New File</button>
+</div>
+
+<div class="filters">
+    <input type="search" id="searchInput" placeholder="Search for a file or chapter...">
+    <select id="subjectFilter">
+        <option value="all">All Subjects</option>
+        <option value="production">Production Management</option>
+        <option value="cost">Cost Accounting</option>
+        <option value="marketing">Marketing Management</option>
+        <option value="english">Business English</option>
+    </select>
+    <select id="typeFilter">
+        <option value="all">All File Types</option>
+        <option value="pdf">PDF</option>
+        <option value="word">Word</option>
+        <option value="powerpoint">PowerPoint</option>
+        <option value="other">Other</option>
+    </select>
+</div>
+
+<h2 class="section-title">Choose a Subject</h2>
+
+<section class="subject-grid">
+    <div class="subject-card" data-subject="production">
+        <h3>Production Management</h3>
+        <p>إدارة الإنتاج والعمليات</p>
+    </div>
+    <div class="subject-card" data-subject="cost">
+        <h3>Cost Accounting</h3>
+        <p>محاسبة التكاليف</p>
+    </div>
+    <div class="subject-card" data-subject="marketing">
+        <h3>Marketing Management</h3>
+        <p>إدارة التسويق</p>
+    </div>
+    <div class="subject-card" data-subject="english">
+        <h3>Business English</h3>
+        <p>اللغة الأجنبية الثانية</p>
+    </div>
+</section>
+
+<section class="chapter-area">
+    <h2 class="section-title">Chapters</h2>
+    <div class="chapter-list" id="chapterList">
+        <p style="color:#aaa">Choose a subject to see its chapters.</p>
+    </div>
+</section>
+
+<h2 class="section-title">Library Files</h2>
+<section class="files-grid" id="filesGrid">
+    <div class="empty-state">Loading library...</div>
+</section>
+
+<div class="notice">
+    ملفاتك محفوظة في المتصفح على هذا الجهاز. احتفظ بنسخة من ملفاتك الأصلية، لأن مسح بيانات المتصفح قد يؤدي إلى فقدان الملفات.
+</div>
+
+</main>
+
+<footer>
+    <p>© 2026 MH ONE - By Mohamed Hatem</p>
+</footer>
+
+<div class="modal" id="fileModal">
+<div class="modal-content">
+    <h2 id="modalTitle">Add New Study File</h2>
+
+    <form id="fileForm">
+        <div class="form-group">
+            <label for="fileTitle">File Title</label>
+            <input type="text" id="fileTitle" placeholder="Example: Chapter One Summary" required>
+        </div>
+
+        <div class="form-group">
+            <label for="fileSubject">Choose Subject</label>
+            <select id="fileSubject" required>
+                <option value="">Select Subject</option>
+                <option value="production">Production Management</option>
+                <option value="cost">Cost Accounting</option>
+                <option value="marketing">Marketing Management</option>
+                <option value="english">Business English</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="fileChapter">Chapter Name / Number</label>
+            <input type="text" id="fileChapter" list="chapterSuggestions" placeholder="Example: Chapter One" required>
+            <datalist id="chapterSuggestions"></datalist>
+        </div>
+
+        <div class="form-group">
+            <label for="fileDescription">Description</label>
+            <textarea id="fileDescription" placeholder="Write a short description..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="fileUpload">Choose File</label>
+            <input type="file" id="fileUpload">
+            <p class="current-file" id="currentFileText">اختيار ملف مطلوب عند إضافة ملف جديد. عند التعديل يمكنك تركه فارغًا للاحتفاظ بالملف الحالي.</p>
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="save-btn" id="saveButton">Save File</button>
+            <button type="button" class="cancel-btn" id="closeModal">Cancel</button>
+        </div>
+    </form>
+</div>
+</div>
+
+<script>
+const DB_NAME = "MHONE_Study_Library";
+const DB_VERSION = 1;
+const STORE_NAME = "studyFiles";
+
+let db;
+let allFiles = [];
+let selectedSubject = "all";
+let selectedChapter = "all";
+let editingFileId = null;
+
+const subjectNames = {
+    production: "Production Management",
+    cost: "Cost Accounting",
+    marketing: "Marketing Management",
+    english: "Business English"
+};
+
+const modal = document.getElementById("fileModal");
+const fileForm = document.getElementById("fileForm");
+const filesGrid = document.getElementById("filesGrid");
+const fileUpload = document.getElementById("fileUpload");
+
+function openDatabase() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onupgradeneeded = event => {
+            const database = event.target.result;
+            if (!database.objectStoreNames.contains(STORE_NAME)) {
+                database.createObjectStore(STORE_NAME, {
+                    keyPath: "id",
+                    autoIncrement: true
+                });
+            }
+        };
+
+        request.onsuccess = event => resolve(event.target.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function getStore(mode = "readonly") {
+    return db.transaction(STORE_NAME, mode).objectStore(STORE_NAME);
+}
+
+function getAllFiles() {
+    return new Promise((resolve, reject) => {
+        const request = getStore().getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function saveFile(data) {
+    return new Promise((resolve, reject) => {
+        const request = getStore("readwrite").add(data);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function updateFile(data) {
+    return new Promise((resolve, reject) => {
+        const request = getStore("readwrite").put(data);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function deleteFile(id) {
+    return new Promise((resolve, reject) => {
+        const request = getStore("readwrite").delete(id);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+    });
+}
+
+function getFileType(name) {
+    const ext = name.split(".").pop().toLowerCase();
+    if (ext === "pdf") return "pdf";
+    if (["doc", "docx"].includes(ext)) return "word";
+    if (["ppt", "pptx"].includes(ext)) return "powerpoint";
+    return "other";
+}
+
+function getFileIcon(type) {
+    return {
+        pdf: "📕",
+        word: "📘",
+        powerpoint: "📙",
+        other: "📁"
+    }[type] || "📁";
+}
+
+function formatSize(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+}
+
+function updateStats() {
+    document.getElementById("totalFiles").textContent = allFiles.length;
+    document.getElementById("pdfFiles").textContent =
+        allFiles.filter(file => file.type === "pdf").length;
+}
+
+function getChapters(subject) {
+    return [...new Set(
+        allFiles
+            .filter(file => file.subject === subject)
+            .map(file => file.chapter || "غير محدد")
+    )].sort((a, b) => a.localeCompare(b, "ar"));
+}
+
+function renderChapters() {
+    const chapterList = document.getElementById("chapterList");
+    chapterList.replaceChildren();
+
+    if (selectedSubject === "all") {
+        chapterList.textContent = "Choose a subject to see its chapters.";
+        chapterList.style.color = "#aaa";
+        return;
+    }
+
+    chapterList.style.color = "";
+
+    const chapters = getChapters(selectedSubject);
+
+    const allButton = document.createElement("button");
+    allButton.className = "chapter-btn" +
+        (selectedChapter === "all" ? " active" : "");
+    allButton.textContent = "All Chapters";
+    allButton.addEventListener("click", () => {
+        selectedChapter = "all";
+        renderChapters();
+        renderFiles();
+    });
+    chapterList.appendChild(allButton);
+
+    chapters.forEach(chapter => {
+        const button = document.createElement("button");
+        button.className = "chapter-btn" +
+            (selectedChapter === chapter ? " active" : "");
+        button.textContent = chapter;
+
+        button.addEventListener("click", () => {
+            selectedChapter = chapter;
+            renderChapters();
+            renderFiles();
+        });
+
+        chapterList.appendChild(button);
+    });
+
+    if (chapters.length === 0) {
+        const message = document.createElement("span");
+        message.textContent = "No chapters yet. Add a file and enter its chapter name.";
+        message.style.color = "#aaa";
+        chapterList.appendChild(message);
+    }
+}
+
+function createFileCard(file) {
+    const card = document.createElement("article");
+    card.className = "file-card";
+
+    const icon = document.createElement("div");
+    icon.className = "file-icon";
+    icon.textContent = getFileIcon(file.type);
+
+    const title = document.createElement("h3");
+    title.textContent = file.title;
+
+    const subject = document.createElement("p");
+    subject.textContent = subjectNames[file.subject] || file.subject;
+
+    const chapter = document.createElement("p");
+    chapter.textContent = "Chapter: " + (file.chapter || "غير محدد");
+
+    const description = document.createElement("p");
+    description.textContent = file.description || "No description";
+
+    const details = document.createElement("p");
+    details.textContent = file.name + " • " + formatSize(file.size);
+
+    const actions = document.createElement("div");
+    actions.className = "file-actions";
+
+    const openButton = document.createElement("button");
+    openButton.textContent = file.type === "pdf" ? "Open PDF" : "Download";
+    openButton.addEventListener("click", () => openFile(file));
+
+    const downloadButton = document.createElement("button");
+    downloadButton.textContent = "Download";
+    downloadButton.addEventListener("click", () => downloadFile(file));
+
+    const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.className = "edit-btn";
+    editButton.addEventListener("click", () => editFile(file.id));
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.className = "delete-btn";
+    deleteButton.addEventListener("click", () => removeFile(file.id));
+
+    actions.append(openButton, downloadButton, editButton, deleteButton);
+    card.append(icon, title, subject, chapter, description, details, actions);
+
+    return card;
+}
+
+function renderFiles() {
+    filesGrid.replaceChildren();
+
+    const search = document.getElementById("searchInput")
+        .value.trim().toLowerCase();
+
+    const subjectFilter = document.getElementById("subjectFilter").value;
+    const typeFilter = document.getElementById("typeFilter").value;
+
+    const filtered = allFiles.filter(file => {
+        const chapterName = file.chapter || "غير محدد";
+
+        const matchesSearch =
+            file.title.toLowerCase().includes(search) ||
+            file.name.toLowerCase().includes(search) ||
+            chapterName.toLowerCase().includes(search) ||
+            (file.description || "").toLowerCase().includes(search);
+
+        const matchesSubject =
+            subjectFilter === "all" || file.subject === subjectFilter;
+
+        const matchesType =
+            typeFilter === "all" || file.type === typeFilter;
+
+        const matchesSelectedSubject =
+            selectedSubject === "all" || file.subject === selectedSubject;
+
+        const matchesChapter =
+            selectedChapter === "all" || chapterName === selectedChapter;
+
+        return matchesSearch && matchesSubject && matchesType &&
+            matchesSelectedSubject && matchesChapter;
+    });
+
+    if (filtered.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        empty.textContent = "No files found. Add your first study file!";
+        filesGrid.appendChild(empty);
+        return;
+    }
+
+    if (selectedSubject !== "all" && selectedChapter === "all") {
+        const groups = {};
+
+        filtered.forEach(file => {
+            const chapter = file.chapter || "غير محدد";
+            if (!groups[chapter]) groups[chapter] = [];
+            groups[chapter].push(file);
+        });
+
+        Object.keys(groups).sort((a,b) => a.localeCompare(b,"ar"))
+            .forEach(chapter => {
+                const heading = document.createElement("h3");
+                heading.className = "chapter-heading chapter-group";
+                heading.textContent = chapter;
+                filesGrid.appendChild(heading);
+
+                groups[chapter].forEach(file => {
+                    filesGrid.appendChild(createFileCard(file));
+                });
+            });
+    } else {
+        filtered.forEach(file => filesGrid.appendChild(createFileCard(file)));
+    }
+}
+
+function openFile(file) {
+    if (file.type !== "pdf") {
+        downloadFile(file);
+        return;
+    }
+
+    const url = URL.createObjectURL(file.blob);
+    const newWindow = window.open(url, "_blank");
+
+    if (!newWindow) {
+        URL.revokeObjectURL(url);
+        alert("Allow pop-ups in your browser to open PDF files.");
+        return;
+    }
+
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+function downloadFile(file) {
+    const url = URL.createObjectURL(file.blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = file.name;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function resetModal() {
+    editingFileId = null;
+    fileForm.reset();
+
+    document.getElementById("modalTitle").textContent = "Add New Study File";
+    document.getElementById("saveButton").textContent = "Save File";
+    document.getElementById("currentFileText").textContent =
+        "اختيار ملف مطلوب عند إضافة ملف جديد. عند التعديل يمكنك تركه فارغًا للاحتفاظ بالملف الحالي.";
+
+    fileUpload.required = true;
+}
+
+function editFile(id) {
+    const file = allFiles.find(item => item.id === id);
+    if (!file) {
+        alert("File not found.");
+        return;
+    }
+
+    editingFileId = id;
+
+    document.getElementById("modalTitle").textContent = "Edit Study File";
+    document.getElementById("saveButton").textContent = "Save Changes";
+
+    document.getElementById("fileTitle").value = file.title;
+    document.getElementById("fileSubject").value = file.subject;
+    document.getElementById("fileChapter").value = file.chapter || "";
+    document.getElementById("fileDescription").value = file.description || "";
+
+    fileUpload.value = "";
+    fileUpload.required = false;
+
+    document.getElementById("currentFileText").textContent =
+        "الملف الحالي: " + file.name + " — اترك خانة الملف فارغة للاحتفاظ به، أو اختر ملفًا جديدًا لاستبداله.";
+
+    updateChapterSuggestions(file.subject);
+    modal.classList.add("show");
+}
+
+function updateChapterSuggestions(subject) {
+    const suggestions = document.getElementById("chapterSuggestions");
+    suggestions.replaceChildren();
+
+    if (!subject) return;
+
+    getChapters(subject).forEach(chapter => {
+        const option = document.createElement("option");
+        option.value = chapter;
+        suggestions.appendChild(option);
+    });
+}
+
+async function removeFile(id) {
+    if (!confirm("Are you sure you want to delete this file?")) return;
+
+    try {
+        await deleteFile(id);
+        await refreshLibrary();
+    } catch (error) {
+        console.error(error);
+        alert("Could not delete this file.");
+    }
+}
+
+async function refreshLibrary() {
+    allFiles = await getAllFiles();
+
+    allFiles.forEach(file => {
+        if (!file.chapter) file.chapter = "غير محدد";
+    });
+
+    updateStats();
+    renderChapters();
+    renderFiles();
+}
+
+document.getElementById("openModal").addEventListener("click", () => {
+    resetModal();
+    modal.classList.add("show");
+});
+
+document.getElementById("closeModal").addEventListener("click", () => {
+    modal.classList.remove("show");
+    resetModal();
+});
+
+modal.addEventListener("click", event => {
+    if (event.target === modal) {
+        modal.classList.remove("show");
+        resetModal();
+    }
+});
+
+document.getElementById("fileSubject").addEventListener("change", event => {
+    updateChapterSuggestions(event.target.value);
+});
+
+fileForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const uploadedFile = fileUpload.files[0];
+
+    const title = document.getElementById("fileTitle").value.trim();
+    const subject = document.getElementById("fileSubject").value;
+    const chapter = document.getElementById("fileChapter").value.trim();
+    const description = document.getElementById("fileDescription").value.trim();
+
+    if (!title || !subject || !chapter) {
+        alert("Please complete the required fields.");
+        return;
+    }
+
+    try {
+        if (editingFileId !== null) {
+            const oldFile = allFiles.find(file => file.id === editingFileId);
+
+            if (!oldFile) {
+                alert("The file could not be found.");
+                return;
+            }
+
+            const updatedData = {
+                ...oldFile,
+                title,
+                subject,
+                chapter,
+                description,
+                updatedAt: new Date().toISOString()
+            };
+
+            if (uploadedFile) {
+                updatedData.name = uploadedFile.name;
+                updatedData.size = uploadedFile.size;
+                updatedData.type = getFileType(uploadedFile.name);
+                updatedData.blob = uploadedFile;
+            }
+
+            await updateFile(updatedData);
+
+            selectedSubject = subject;
+            selectedChapter = "all";
+
+            document.getElementById("subjectFilter").value = "all";
+            document.querySelectorAll(".subject-card").forEach(card => {
+                card.classList.toggle(
+                    "active",
+                    card.dataset.subject === selectedSubject
+                );
+            });
+
+            modal.classList.remove("show");
+            resetModal();
+
+            await refreshLibrary();
+            alert("File updated successfully!");
+        } else {
+            if (!uploadedFile) {
+                alert("Please choose a file.");
+                return;
+            }
+
+            const data = {
+                title,
+                subject,
+                chapter,
+                description,
+                name: uploadedFile.name,
+                size: uploadedFile.size,
+                type: getFileType(uploadedFile.name),
+                blob: uploadedFile,
+                addedAt: new Date().toISOString()
+            };
+
+            await saveFile(data);
+
+            selectedSubject = data.subject;
+            selectedChapter = "all";
+
+            document.getElementById("subjectFilter").value = "all";
+            document.querySelectorAll(".subject-card").forEach(card => {
+                card.classList.toggle(
+                    "active",
+                    card.dataset.subject === selectedSubject
+                );
+            });
+
+            modal.classList.remove("show");
+            resetModal();
+
+            await refreshLibrary();
+            alert("File added successfully!");
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Could not save the changes. Check available browser storage.");
+    }
+});
+
+document.getElementById("searchInput")
+    .addEventListener("input", renderFiles);
+
+document.getElementById("subjectFilter")
+    .addEventListener("change", event => {
+        selectedSubject = event.target.value;
+        selectedChapter = "all";
+
+        document.querySelectorAll(".subject-card").forEach(card => {
+            card.classList.toggle(
+                "active",
+                card.dataset.subject === selectedSubject
+            );
+        });
+
+        renderChapters();
+        renderFiles();
+    });
+
+document.getElementById("typeFilter")
+    .addEventListener("change", renderFiles);
+
+document.querySelectorAll(".subject-card").forEach(card => {
+    card.addEventListener("click", () => {
+        const subject = card.dataset.subject;
+
+        selectedSubject = selectedSubject === subject ? "all" : subject;
+        selectedChapter = "all";
+        document.getElementById("subjectFilter").value = "all";
+
+        document.querySelectorAll(".subject-card").forEach(item => {
+            item.classList.toggle(
+                "active",
+                item.dataset.subject === selectedSubject
+            );
+        });
+
+        renderChapters();
+        renderFiles();
+    });
+});
+
+async function startLibrary() {
+    try {
+        db = await openDatabase();
+        await refreshLibrary();
+    } catch (error) {
+        console.error(error);
+        filesGrid.textContent =
+            "The library could not start. Please open this page in a modern browser.";
+    }
+}
+
+startLibrary();
+</script>
+
+</body>
+</html>

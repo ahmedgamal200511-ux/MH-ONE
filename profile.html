@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | MH ONE</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .profile-hero {
+            background: linear-gradient(120deg, #8F6B12, #D4AF37);
+            color: white;
+            padding: 45px 30px;
+            border-radius: 22px;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .profile-hero h2 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .profile-hero p {
+            color: #F8F1DE;
+        }
+
+        .profile-card {
+            max-width: 850px;
+            margin: auto;
+            padding: 40px;
+            background: linear-gradient(145deg, #1E1A10, #11100C);
+            border-radius: 22px;
+            box-shadow: 0 10px 35px rgba(101,65,165,.09);
+        }
+
+        .profile-avatar-photo {
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center 25%;
+            border: 6px solid #D4AF37;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .profile-card > h2 {
+            text-align: center;
+            color: #D4AF37;
+            font-size: 28px;
+        }
+
+        .profile-role {
+            text-align: center;
+            color: #C8BEA6;
+            margin: 12px 0 30px;
+        }
+
+        .profile-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 35px;
+        }
+
+        .profile-badges span {
+            background: #302814;
+            color: #D4AF37;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .profile-section-title {
+            color: #D4AF37;
+            margin-bottom: 20px;
+            font-size: 21px;
+        }
+
+        .skills-section {
+            margin-top: 35px;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .skills-list span {
+            padding: 12px 20px;
+            background: #17150F;
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .profile-back {
+            margin-top: 35px;
+        }
+
+        @media(max-width:600px) {
+            .profile-card {
+                padding: 25px 18px;
+            }
+
+            .profile-hero h2 {
+                font-size: 26px;
+            }
+
+            .profile-avatar-photo {
+                width: 130px;
+                height: 130px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <h1>MH ONE</h1>
+        <span>BY MOHAMED HATEM</span>
+    </div>
+
+    <nav>
+        <a href="index.html" data-translate="home">Home</a>
+        <a href="dashboard.html" data-translate="dashboard">Dashboard</a>
+        <a href="profile.html" data-translate="profile">My Profile</a>
+        <a href="courses.html" data-translate="courses">My Courses</a>
+    </nav>
+
+    <div class="header-actions">
+        <button id="languageButton" type="button">العربية</button>
+        <a href="index.html" class="login-btn" data-translate="logout">Logout</a>
+    </div>
+
+</header>
+
+<main>
+
+    <section class="profile-hero">
+
+        <h2>My Personal Profile</h2>
+
+        <p>
+            Get to know more about me and my journey in programming.
+        </p>
+
+    </section>
+
+    <section class="profile-card">
+
+        <!-- Personal Photo -->
+
+        <img
+            src="images/profile.jpg"
+            alt="Mohamed Hatem"
+            class="profile-avatar-photo"
+        >
+
+        <!-- Personal Information -->
+
+        <h2 id="profileName">Mohamed Hatem</h2>
+
+        <p class="profile-role">
+            Programmer | MIS Student
+        </p>
+
+        <div class="profile-badges">
+            <span>Programmer</span>
+            <span>MIS Student</span>
+            <span>MH ONE Founder</span>
+        </div>
+
+        <!-- Student Information -->
+
+        <h3 class="profile-section-title">
+            Student Information
+        </h3>
+
+        <div class="profile-info">
+
+            <div class="info-item">
+                <span>Full Name</span>
+                <h3 id="nameInfo">-</h3>
+            </div>
+
+            <div class="info-item">
+                <span>Email Address</span>
+                <h3 id="emailInfo">-</h3>
+            </div>
+
+            <div class="info-item">
+                <span>College</span>
+                <h3 id="collegeInfo">-</h3>
+            </div>
+
+            <div class="info-item">
+                <span>Academic Year</span>
+                <h3 id="yearInfo">-</h3>
+            </div>
+
+        </div>
+
+        <!-- Programming Skills -->
+
+        <div class="skills-section">
+
+            <h3 class="profile-section-title">
+                Programming Skills
+            </h3>
+
+            <div class="skills-list">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JavaScript</span>
+                <span>Python</span>
+            </div>
+
+        </div>
+
+        <a href="dashboard.html" class="profile-back">
+            Back to Dashboard
+        </a>
+
+    </section>
+
+</main>
+
+<footer>
+    <p>© 2026 MH ONE - By Mohamed Hatem</p>
+</footer>
+
+<script src="profile.js"></script>
+<script src="language.js"></script>
+
+</body>
+</html>

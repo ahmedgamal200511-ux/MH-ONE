@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MH ONE | My Schedule</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+*{box-sizing:border-box}
+body{background:#090909;color:#f5f5f5}
+.schedule-main{max-width:1250px;margin:auto;padding:35px 20px 60px}
+.hero{background:linear-gradient(120deg,#17130a,#30240c,#17130a);border:1px solid #b58b24;border-radius:22px;padding:35px;box-shadow:0 0 25px #d4af371c}
+.hero h2{color:#D4AF37;font-size:32px;margin-bottom:12px}
+.hero p{color:#c8c0ad;line-height:1.8}
+.stats{display:flex;gap:15px;flex-wrap:wrap;margin-top:22px}
+.stat{background:#17140d;border:1px solid #66501d;border-radius:12px;padding:15px 22px;min-width:130px}
+.stat strong{display:block;color:#D4AF37;font-size:25px}
+.stat span{color:#aaa;font-size:13px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin:35px 0 20px}
+.toolbar h2,.section-title{color:#D4AF37}
+.add-btn{background:linear-gradient(135deg,#D4AF37,#98721c);color:#100d06;border:0;padding:13px 22px;border-radius:10px;font-weight:bold;cursor:pointer}
+.week-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.day-card{background:linear-gradient(145deg,#1a1812,#101010);border:1px solid #51431f;border-radius:15px;padding:20px;min-width:0}
+.day-card h3{color:#D4AF37;border-bottom:1px solid #51431f;padding-bottom:12px;margin-bottom:15px}
+.lecture{background:#211c10;border:1px solid #66501d;border-right:4px solid #D4AF37;border-radius:10px;padding:14px;margin-bottom:12px}
+.lecture h4{color:#e7c65f;font-size:17px;margin-bottom:8px}
+.lecture p{color:#bbb;font-size:13px;line-height:1.8;margin:4px 0}
+.lecture-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.lecture-actions button{border:1px solid #9d7c28;background:#17140d;color:#e6c65e;padding:7px 12px;border-radius:7px;cursor:pointer}
+.lecture-actions .delete{color:#ff8585;border-color:#803b3b}
+.empty{text-align:center;color:#888;padding:20px;border:1px dashed #66501d;border-radius:10px}
+.modal{display:none;position:fixed;inset:0;background:#000d;z-index:9999;justify-content:center;align-items:center;padding:15px}
+.modal.show{display:flex}
+.modal-content{width:100%;max-width:520px;max-height:90vh;overflow-y:auto;background:#15130e;border:1px solid #D4AF37;border-radius:18px;padding:25px}
+.modal-content h2{color:#D4AF37;margin-bottom:20px}
+.form-group{margin-bottom:15px}
+.form-group label{display:block;margin-bottom:8px;color:#d9cda9}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;background:#151515;border:1px solid #51431f;border-radius:9px;color:white;outline:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#D4AF37}
+.form-group textarea{resize:vertical;min-height:75px}
+.form-buttons{display:flex;gap:10px;margin-top:20px}
+.form-buttons button{flex:1;padding:12px;border-radius:9px;cursor:pointer;font-weight:bold}
+.save-btn{background:#D4AF37;color:#111;border:0}
+.cancel-btn{background:#292929;color:white;border:1px solid #555}
+.notice{color:#aaa;font-size:13px;line-height:1.8;margin-top:25px;padding:15px;border-right:3px solid #D4AF37;background:#15130e}
+@media(max-width:650px){.week-grid{grid-template-columns:1fr}.hero{padding:25px 20px}.hero h2{font-size:25px}}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <h1>MH ONE</h1>
+        <span>BY MOHAMED HATEM</span>
+    </div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="courses.html">My Courses</a>
+        <a href="library.html">Study Library</a>
+    </nav>
+    <div class="header-actions">
+        <a href="dashboard.html" class="login-btn">Back</a>
+    </div>
+</header>
+
+<main class="schedule-main">
+
+<section class="hero">
+    <h2>My Schedule</h2>
+    <p>Organize your university lectures and manage your weekly timetable in one place.</p>
+
+    <div class="stats">
+        <div class="stat">
+            <strong id="totalLectures">0</strong>
+            <span>Total Lectures</span>
+        </div>
+        <div class="stat">
+            <strong id="totalDays">0</strong>
+            <span>Study Days</span>
+        </div>
+    </div>
+</section>
+
+<div class="toolbar">
+    <h2>Weekly Timetable</h2>
+    <button class="add-btn" id="addLecture">+ Add Lecture</button>
+</div>
+
+<section class="week-grid" id="weekGrid"></section>
+
+<div class="notice">
+    يتم حفظ جدولك تلقائيًا في المتصفح على هذا الجهاز. احتفظ بنسخة من مواعيدك المهمة خارج الموقع أيضًا.
+</div>
+
+</main>
+
+<footer>
+    <p>© 2026 MH ONE - By Mohamed Hatem</p>
+</footer>
+
+<div class="modal" id="lectureModal">
+    <div class="modal-content">
+        <h2 id="modalTitle">Add New Lecture</h2>
+
+        <form id="lectureForm">
+
+            <div class="form-group">
+                <label for="lectureSubject">Subject</label>
+                <input type="text" id="lectureSubject" placeholder="Example: Cost Accounting" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lectureDay">Day</label>
+                <select id="lectureDay" required>
+                    <option value="">Choose Day</option>
+                    <option value="saturday">Saturday</option>
+                    <option value="sunday">Sunday</option>
+                    <option value="monday">Monday</option>
+                    <option value="tuesday">Tuesday</option>
+                    <option value="wednesday">Wednesday</option>
+                    <option value="thursday">Thursday</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="lectureStart">Start Time</label>
+                <input type="time" id="lectureStart" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lectureEnd">End Time</label>
+                <input type="time" id="lectureEnd" required>
+            </div>
+
+            <div class="form-group">
+                <label for="lectureLocation">Location / Room</label>
+                <input type="text" id="lectureLocation" placeholder="Example: Room 204">
+            </div>
+
+            <div class="form-group">
+                <label for="lectureNotes">Notes</label>
+                <textarea id="lectureNotes" placeholder="Add your notes..."></textarea>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="save-btn" id="saveButton">Save Lecture</button>
+                <button type="button" class="cancel-btn" id="closeModal">Cancel</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+const STORAGE_KEY = "MHONE_Weekly_Schedule";
+
+const days = [
+    {id:"saturday",name:"Saturday"},
+    {id:"sunday",name:"Sunday"},
+    {id:"monday",name:"Monday"},
+    {id:"tuesday",name:"Tuesday"},
+    {id:"wednesday",name:"Wednesday"},
+    {id:"thursday",name:"Thursday"}
+];
+
+let lectures = [];
+let editingId = null;
+
+const weekGrid = document.getElementById("weekGrid");
+const modal = document.getElementById("lectureModal");
+const form = document.getElementById("lectureForm");
+
+function loadSchedule(){
+    try{
+        const saved = localStorage.getItem(STORAGE_KEY);
+        lectures = saved ? JSON.parse(saved) : [];
+
+        if(!Array.isArray(lectures)) lectures = [];
+    }catch(error){
+        console.error(error);
+        lectures = [];
+    }
+
+    renderSchedule();
+}
+
+function saveSchedule(){
+    try{
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(lectures));
+        return true;
+    }catch(error){
+        console.error(error);
+        alert("Could not save the schedule in browser storage.");
+        return false;
+    }
+}
+
+function updateStats(){
+    document.getElementById("totalLectures").textContent = lectures.length;
+
+    const studyDays = new Set(lectures.map(item=>item.day));
+    document.getElementById("totalDays").textContent = studyDays.size;
+}
+
+function formatTime(time){
+    if(!time) return "";
+    const [hour,minute] = time.split(":");
+    const date = new Date();
+    date.setHours(Number(hour),Number(minute),0,0);
+
+    return date.toLocaleTimeString("en-US",{
+        hour:"numeric",
+        minute:"2-digit",
+        hour12:true
+    });
+}
+
+function renderSchedule(){
+    weekGrid.replaceChildren();
+
+    days.forEach(day=>{
+        const card = document.createElement("div");
+        card.className = "day-card";
+
+        const heading = document.createElement("h3");
+        heading.textContent = day.name;
+
+        card.appendChild(heading);
+
+        const dayLectures = lectures
+            .filter(item=>item.day===day.id)
+            .sort((a,b)=>a.start.localeCompare(b.start));
+
+        if(dayLectures.length===0){
+            const empty = document.createElement("div");
+            empty.className = "empty";
+            empty.textContent = "No lectures scheduled.";
+            card.appendChild(empty);
+        }else{
+            dayLectures.forEach(lecture=>{
+                card.appendChild(createLectureCard(lecture));
+            });
+        }
+
+        weekGrid.appendChild(card);
+    });
+
+    updateStats();
+}
+
+function createLectureCard(lecture){
+    const box = document.createElement("article");
+    box.className = "lecture";
+
+    const title = document.createElement("h4");
+    title.textContent = lecture.subject;
+
+    const time = document.createElement("p");
+    time.textContent = "🕒 " + formatTime(lecture.start) + " - " + formatTime(lecture.end);
+
+    const location = document.createElement("p");
+    location.textContent = "📍 " + (lecture.location || "Location not specified");
+
+    const notes = document.createElement("p");
+    notes.textContent = "📝 " + (lecture.notes || "No notes");
+
+    const actions = document.createElement("div");
+    actions.className = "lecture-actions";
+
+    const edit = document.createElement("button");
+    edit.textContent = "Edit";
+    edit.addEventListener("click",()=>editLecture(lecture.id));
+
+    const remove = document.createElement("button");
+    remove.textContent = "Delete";
+    remove.className = "delete";
+    remove.addEventListener("click",()=>deleteLecture(lecture.id));
+
+    actions.append(edit,remove);
+    box.append(title,time,location,notes,actions);
+
+    return box;
+}
+
+function openModal(){
+    editingId = null;
+    form.reset();
+
+    document.getElementById("modalTitle").textContent = "Add New Lecture";
+    document.getElementById("saveButton").textContent = "Save Lecture";
+
+    modal.classList.add("show");
+}
+
+function closeModal(){
+    modal.classList.remove("show");
+    editingId = null;
+    form.reset();
+}
+
+function editLecture(id){
+    const lecture = lectures.find(item=>item.id===id);
+    if(!lecture) return;
+
+    editingId = id;
+
+    document.getElementById("modalTitle").textContent = "Edit Lecture";
+    document.getElementById("saveButton").textContent = "Save Changes";
+
+    document.getElementById("lectureSubject").value = lecture.subject;
+    document.getElementById("lectureDay").value = lecture.day;
+    document.getElementById("lectureStart").value = lecture.start;
+    document.getElementById("lectureEnd").value = lecture.end;
+    document.getElementById("lectureLocation").value = lecture.location || "";
+    document.getElementById("lectureNotes").value = lecture.notes || "";
+
+    modal.classList.add("show");
+}
+
+function deleteLecture(id){
+    if(!confirm("Are you sure you want to delete this lecture?")) return;
+
+    const oldLectures = [...lectures];
+    lectures = lectures.filter(item=>item.id!==id);
+
+    if(saveSchedule()){
+        renderSchedule();
+    }else{
+        lectures = oldLectures;
+    }
+}
+
+document.getElementById("addLecture").addEventListener("click",openModal);
+document.getElementById("closeModal").addEventListener("click",closeModal);
+
+modal.addEventListener("click",event=>{
+    if(event.target===modal) closeModal();
+});
+
+form.addEventListener("submit",event=>{
+    event.preventDefault();
+
+    const subject = document.getElementById("lectureSubject").value.trim();
+    const day = document.getElementById("lectureDay").value;
+    const start = document.getElementById("lectureStart").value;
+    const end = document.getElementById("lectureEnd").value;
+    const location = document.getElementById("lectureLocation").value.trim();
+    const notes = document.getElementById("lectureNotes").value.trim();
+
+    if(!subject || !day || !start || !end){
+        alert("Please complete the required fields.");
+        return;
+    }
+
+    if(end<=start){
+        alert("End time must be later than start time.");
+        return;
+    }
+
+    const oldLectures = [...lectures];
+
+    if(editingId!==null){
+        lectures = lectures.map(item=>{
+            if(item.id===editingId){
+                return {...item,subject,day,start,end,location,notes};
+            }
+            return item;
+        });
+    }else{
+        lectures.push({
+            id:Date.now(),
+            subject,
+            day,
+            start,
+            end,
+            location,
+            notes
+        });
+    }
+
+    if(saveSchedule()){
+        closeModal();
+        renderSchedule();
+    }else{
+        lectures = oldLectures;
+    }
+});
+
+loadSchedule();
+</script>
+
+</body>
+</html>
